@@ -27,8 +27,10 @@
 
   if (startBtn && storyInput) {
     startBtn.addEventListener("click", function () {
-      storyInput.focus({ preventScroll: false });
-      storyInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (typeof LandingPages !== "undefined") {
+        LandingPages.goTo("create");
+      }
+      storyInput.focus({ preventScroll: true });
       const panel = document.getElementById("studio");
       if (panel) {
         panel.classList.add("is-focused");

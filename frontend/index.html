@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
   <link href="css/tokens.css?v=2" rel="stylesheet" />
-  <link href="css/landing.css?v=16" rel="stylesheet" />
+  <link href="css/landing.css?v=17" rel="stylesheet" />
   <link href="css/app.css?v=27" rel="stylesheet" />
 </head>
 <body class="landing-body">
@@ -22,7 +22,7 @@
   <div class="wind-overlay wind-overlay--global" aria-hidden="true"></div>
   <div class="petal-overlay petal-overlay--global" aria-hidden="true"></div>
 
-  <div id="landing-view">
+  <div id="landing-view" class="landing-pages">
     <header class="site-nav" id="site-nav">
       <a class="site-nav__brand" href="#top">
         <span class="site-nav__wordmark">
@@ -45,8 +45,9 @@
       </div>
     </header>
 
-    <main id="top">
-      <section class="hero" aria-label="首屏">
+    <div class="landing-pages__viewport" id="landing-pages-viewport">
+    <main id="top" class="landing-pages__track">
+      <section class="hero landing-page" data-page="top" aria-label="首屏">
         <div class="hero__media" data-parallax="0.22">
           <img
             class="hero__img"
@@ -79,13 +80,13 @@
           </div>
         </div>
 
-        <a class="hero__scroll" href="#features" aria-label="向下滚动">
+        <button type="button" class="hero__scroll" id="hero-next-btn" aria-label="下一页：能力介绍">
           <span class="hero__scroll-line"></span>
-          <span class="hero__scroll-text">Explore</span>
-        </a>
+          <span class="hero__scroll-text">Next</span>
+        </button>
       </section>
 
-      <section id="features" class="features" aria-labelledby="features-title">
+      <section id="features" class="features landing-page" data-page="features" aria-labelledby="features-title">
         <div class="section-head reveal">
           <p class="section-head__kicker">Capabilities</p>
           <h2 id="features-title" class="section-head__title">从文本到可玩叙事</h2>
@@ -131,7 +132,7 @@
         </div>
       </section>
 
-      <section id="how" class="how" aria-labelledby="how-title">
+      <section id="how" class="how landing-page" data-page="how" aria-labelledby="how-title">
         <div class="section-head reveal">
           <p class="section-head__kicker">Pipeline</p>
           <h2 id="how-title" class="section-head__title">三步进入故事</h2>
@@ -153,7 +154,7 @@
         </div>
       </section>
 
-      <section id="create" class="workshop" aria-labelledby="workshop-title">
+      <section id="create" class="workshop landing-page" data-page="create" aria-labelledby="workshop-title">
         <div class="workshop__bg" aria-hidden="true"></div>
         <div class="workshop__glow" aria-hidden="true"></div>
 
@@ -243,13 +244,24 @@
 
           <p class="workshop__error" id="studio-error" hidden role="alert"></p>
         </div>
+
+        <footer class="site-footer landing-page__footer">
+          <p class="site-footer__brand" data-brand="footerLine">2711 EDITOR · 2711编辑器</p>
+          <p class="site-footer__copy">v0.2.5 · AI 辅助创作 · 内容仅供体验</p>
+        </footer>
       </section>
     </main>
+    </div>
 
-    <footer class="site-footer">
-      <p class="site-footer__brand" data-brand="footerLine">2711 EDITOR · 2711编辑器</p>
-      <p class="site-footer__copy">v0.2.5 · AI 辅助创作 · 内容仅供体验</p>
-    </footer>
+    <nav class="page-nav" id="page-nav" aria-label="全屏分页导航">
+      <button type="button" class="page-nav__btn page-nav__btn--prev" id="page-nav-prev" aria-label="上一页" disabled>
+        <span class="page-nav__chev" aria-hidden="true">‹</span>
+      </button>
+      <div class="page-nav__dots" id="page-nav-dots" role="tablist" aria-label="页面指示"></div>
+      <button type="button" class="page-nav__btn page-nav__btn--next" id="page-nav-next" aria-label="下一页">
+        <span class="page-nav__chev" aria-hidden="true">›</span>
+      </button>
+    </nav>
   </div>
 
   <div class="magic-modal" id="history-modal" role="dialog" aria-modal="true" aria-labelledby="history-modal-title" hidden>
@@ -311,8 +323,9 @@
   <script src="js/scene-images.js?v=8"></script>
   <script src="js/mood.js?v=15"></script>
   <script src="js/game.js?v=14"></script>
-  <script src="js/landing-motion.js?v=2"></script>
-  <script src="js/reveal.js?v=8"></script>
+  <script src="js/landing-pages.js?v=1"></script>
+  <script src="js/landing-motion.js?v=3"></script>
+  <script src="js/reveal.js?v=9"></script>
   <script src="js/lib/api-errors.js?v=1"></script>
   <script src="js/lib/sse.js?v=1"></script>
   <script src="js/workshop/EditorInput.js?v=2"></script>

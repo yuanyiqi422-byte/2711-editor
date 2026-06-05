@@ -5,7 +5,6 @@
   function initStudio() {
     const studioError = document.getElementById("studio-error");
     let currentHistoryId = null;
-    let workshopScrollY = 0;
 
     function setError(msg) {
       const { formatApiDetail } = global.ApiErrors;
@@ -67,10 +66,12 @@
 
     NarrativeGame.init({
       onBack: function () {
-        window.scrollTo({ top: workshopScrollY || 0, behavior: "smooth" });
+        if (typeof LandingPages !== "undefined") {
+          LandingPages.goTo("create");
+        }
       },
       onEnter: function () {
-        workshopScrollY = window.scrollY;
+        /* 全屏分页模式下无需记录滚动位置 */
       },
     });
 

@@ -1,4 +1,4 @@
-/** 滚动显现 + 导航 + 轻量视差 */
+/** 滚动显现 + 导航 + 分页联动 */
 (function () {
   const nav = document.getElementById("site-nav");
   const menu = document.getElementById("site-nav-menu");
@@ -31,40 +31,45 @@
     });
   }
 
-  if (nav) {
-    window.addEventListener(
-      "scroll",
-      function () {
-        nav.classList.toggle("is-scrolled", window.scrollY > 24);
-      },
-      { passive: true }
-    );
+  function setActiveNav(slug) {
+    navLinks.forEach(function (link) {
+      link.classList.toggle("is-active", link.getAttribute("data-nav") === slug);
+    });
   }
 
-  if (navLinks.length) {
-    const sections = ["features", "how", "create"]
-      .map(function (id) { return document.getElementById(id); })
-      .filter(Boolean);
+  function revealInPage(page) {
+    if (!page) return;
+    page.querySelectorAll(".reveal:not(.is-visible)").forEach(function (el) {
+      if (el.classList.contains("feature-card")) return;
+      el.classList.add("is-visible");
+    });
+  }
 
-    if (sections.length) {
-      const spy = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (e) {
-            if (!e.isIntersecting) return;
-            const id = e.target.id;
-            navLinks.forEach(function (link) {
-              link.classList.toggle("is-active", link.getAttribute("data-nav") === id);
-            });
-          });
-        },
-        { rootMargin: "-42% 0px -48% 0px", threshold: 0.01 }
-      );
-      sections.forEach(function (el) { spy.observe(el); });
+  function handlePageChange(detail) {
+    if (nav) {
+      nav.classList.toggle("is-scrolled", detail.index > 0);
     }
+    if (detail.slug && detail.slug !== "top") {
+      setActiveNav(detail.slug);
+    } else {
+      navLinks.forEach(function (link) { link.classList.remove("is-active"); });
+    }
+    revealInPage(detail.page);
+  }
+
+  if (typeof LandingPages !== "undefined") {
+    LandingPages.onChange(handlePageChange);
+    handlePageChange({
+      index: LandingPages.getCurrent(),
+      slug: LandingPages.getSlug(),
+      page: document.querySelector(".landing-page.is-active"),
+    });
   }
 
   const reveals = document.querySelectorAll(".reveal");
-  if (reveals.length && !reduced) {
+  if (reveals.length && reduced) {
+    reveals.forEach(function (el) { el.classList.add("is-visible"); });
+  } else if (reveals.length && typeof LandingPages === "undefined") {
     const io = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (e) {
@@ -80,8 +85,8 @@
       if (el.classList.contains("feature-card")) return;
       io.observe(el);
     });
-  } else {
-    reveals.forEach(function (el) { el.classList.add("is-visible"); });
+  } else if (reveals.length) {
+    const hero = document.querySelector(".landing-page.hero");
+    if (hero) revealInPage(hero);
   }
-
 })();
