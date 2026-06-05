@@ -1,0 +1,214 @@
+"""Generate landing page SVG art (rich Ghibli watercolor style)."""
+from __future__ import annotations
+
+import random
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent / "frontend" / "images"
+
+
+def _cloud_cluster(rng: random.Random, cx: int, cy: int, scale: float, op: float) -> str:
+    parts = []
+    for i in range(5):
+        dx = rng.randint(-int(70 * scale), int(70 * scale))
+        dy = rng.randint(-int(22 * scale), int(18 * scale))
+        rx = int(rng.randint(55, 120) * scale)
+        ry = int(rng.randint(20, 42) * scale)
+        fill = "#faf6ed" if i % 2 == 0 else "#eef5e8"
+        parts.append(
+            f'<ellipse cx="{cx + dx}" cy="{cy + dy}" rx="{rx}" ry="{ry}" '
+            f'fill="{fill}" opacity="{op:.2f}"/>'
+        )
+    return "\n  ".join(parts)
+
+
+def hero_svg() -> str:
+    rng = random.Random(42)
+    clouds = "\n  ".join(
+        _cloud_cluster(rng, cx, cy, 1.0 + i * 0.1, 0.28 + i * 0.04)
+        for i, (cx, cy) in enumerate([(280, 220), (620, 180), (1100, 200), (1480, 240)])
+    )
+    trees = []
+    for x in (180, 320, 1580, 1720):
+        trees.append(
+            f'<rect x="{x - 7}" y="720" width="14" height="90" rx="3" fill="#5a4a38" opacity="0.6"/>'
+            f'<ellipse cx="{x}" cy="690" rx="55" ry="80" fill="#6b8e6b" opacity="0.55"/>'
+            f'<ellipse cx="{x - 20}" cy="700" rx="38" ry="55" fill="#8ab898" opacity="0.4"/>'
+        )
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-label="风旅物语 Hero">
+  <defs>
+    <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a8d4ff"/>
+      <stop offset="38%" stop-color="#b8d4c8"/>
+      <stop offset="62%" stop-color="#8ab898"/>
+      <stop offset="100%" stop-color="#eef5e8"/>
+    </linearGradient>
+    <radialGradient id="hero-sun" cx="78%" cy="14%" r="34%">
+      <stop offset="0%" stop-color="#ffc8dd" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#ffc8dd" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ffc8dd" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#hero-sky)"/>
+  <rect width="1920" height="1080" fill="url(#hero-sun)"/>
+  {clouds}
+  <path d="M0,520 Q320,460 640,500 T1280,480 T1920,510 L1920,1080 L0,1080 Z" fill="#6b8e6b" opacity="0.38"/>
+  <path d="M0,620 Q400,580 820,610 T1920,590 L1920,1080 L0,1080 Z" fill="#8ab898" opacity="0.42"/>
+  <path d="M0,780 Q480,740 960,770 T1920,750 L1920,1080 L0,1080 Z" fill="#6b8e6b" opacity="0.55"/>
+  {"  ".join(trees)}
+  <rect x="520" y="640" width="120" height="100" rx="6" fill="#faf6ed" opacity="0.65"/>
+  <polygon points="520,640 580,590 640,640" fill="#c45c6a" opacity="0.5"/>
+  <rect x="560" y="680" width="28" height="40" rx="3" fill="#e8dcc8" opacity="0.45"/>
+  <rect x="0" y="830" width="1920" height="6" fill="#4a4038" opacity="0.4"/>
+  <rect x="380" y="770" width="280" height="62" rx="10" fill="#7eb8ff" opacity="0.72"/>
+  <rect x="400" y="782" width="70" height="40" rx="6" fill="#faf6ed" opacity="0.45"/>
+  <rect x="490" y="782" width="70" height="40" rx="6" fill="#faf6ed" opacity="0.42"/>
+  <rect x="580" y="782" width="60" height="40" rx="6" fill="#ffc8dd" opacity="0.4"/>
+  <rect x="1380" y="560" width="60" height="180" rx="6" fill="#faf6ed" opacity="0.6"/>
+  <circle cx="1410" cy="520" r="14" fill="#8a9098" opacity="0.55"/>
+  <ellipse cx="1410" cy="480" rx="16" ry="70" fill="#eef5e8" opacity="0.45" transform="rotate(0 1410 520)"/>
+  <ellipse cx="1410" cy="480" rx="16" ry="70" fill="#eef5e8" opacity="0.45" transform="rotate(90 1410 520)"/>
+  <ellipse cx="1410" cy="480" rx="16" ry="70" fill="#eef5e8" opacity="0.45" transform="rotate(45 1410 520)"/>
+  <ellipse cx="1410" cy="480" rx="16" ry="70" fill="#eef5e8" opacity="0.45" transform="rotate(135 1410 520)"/>
+  <path d="M860,920 Q960,860 1060,920" fill="none" stroke="#faf6ed" stroke-width="36" opacity="0.25"/>
+  <circle cx="420" cy="860" r="5" fill="#ffc8dd" opacity="0.6"/>
+  <circle cx="680" cy="890" r="4" fill="#f8a8c8" opacity="0.55"/>
+  <circle cx="1200" cy="870" r="5" fill="#ffc8dd" opacity="0.58"/>
+</svg>
+"""
+
+
+FEATURES = {
+    "feature-branches": ("#6b8e6b", "#a8d4ff", "#ffc8dd", "tree"),
+    "feature-transform": ("#7eb8ff", "#faf6ed", "#f8a8c8", "book"),
+    "feature-play": ("#8ab898", "#ffc8dd", "#a8d4ff", "window"),
+    "workshop-atmosphere": ("#f5f0e4", "#eef5e8", "#a8d4ff", "studio"),
+}
+
+
+def feature_svg(name: str, c1: str, c2: str, c3: str, kind: str) -> str:
+    rng = random.Random(sum(ord(c) for c in name))
+    clouds = _cloud_cluster(rng, 580, 80, 0.9, 0.32)
+    hills = (
+        f'<path d="M0,380 Q200,340 400,370 T800,350 L800,500 L0,500 Z" fill="{c1}" opacity="0.4"/>'
+        f'<path d="M0,420 Q250,390 500,410 T800,400 L800,500 L0,500 Z" fill="{c2}" opacity="0.35"/>'
+    )
+    extra = ""
+    if kind == "tree":
+        extra = (
+            f'<rect x="280" y="300" width="12" height="80" fill="#5a4a38" opacity="0.55"/>'
+            f'<ellipse cx="286" cy="260" rx="70" ry="90" fill="{c1}" opacity="0.55"/>'
+            f'<ellipse cx="250" cy="280" rx="45" ry="60" fill="#8ab898" opacity="0.4"/>'
+            f'<path d="M120,400 Q200,360 280,390 Q360,420 440,380 Q520,340 600,400" '
+            f'fill="none" stroke="#ffc8dd" stroke-width="3" opacity="0.45"/>'
+            f'<circle cx="180" cy="370" r="8" fill="{c3}" opacity="0.5"/>'
+            f'<circle cx="360" cy="390" r="7" fill="{c3}" opacity="0.48"/>'
+            f'<circle cx="500" cy="360" r="8" fill="{c3}" opacity="0.52"/>'
+        )
+    elif kind == "book":
+        extra = (
+            f'<rect x="260" y="240" width="280" height="180" rx="14" fill="#faf6ed" opacity="0.75"/>'
+            f'<rect x="280" y="260" width="240" height="14" rx="4" fill="{c3}" opacity="0.5"/>'
+            f'<rect x="280" y="290" width="200" height="10" rx="3" fill="{c2}" opacity="0.35"/>'
+            f'<rect x="280" y="315" width="220" height="10" rx="3" fill="{c2}" opacity="0.3"/>'
+            f'<circle cx="520" cy="280" r="40" fill="{c3}" opacity="0.25"/>'
+            f'<path d="M200,380 Q300,340 400,380 Q500,420 600,360" fill="none" stroke="{c1}" '
+            f'stroke-width="2" opacity="0.35" stroke-dasharray="8 12"/>'
+        )
+    elif kind == "window":
+        extra = (
+            f'<rect x="220" y="160" width="360" height="260" rx="18" fill="#faf6ed" opacity="0.6"/>'
+            f'<rect x="240" y="180" width="320" height="220" rx="10" fill="{c3}" opacity="0.35"/>'
+            f'<line x1="400" y1="180" x2="400" y2="400" stroke="#faf6ed" stroke-width="4" opacity="0.5"/>'
+            f'<line x1="240" y1="290" x2="560" y2="290" stroke="#faf6ed" stroke-width="4" opacity="0.5"/>'
+            f'<circle cx="320" cy="240" r="28" fill="#ffc8dd" opacity="0.35"/>'
+            f'<ellipse cx="480" cy="340" rx="40" ry="25" fill="#6b8e6b" opacity="0.4"/>'
+        )
+    else:
+        extra = (
+            f'<rect x="180" y="280" width="440" height="160" rx="12" fill="{c2}" opacity="0.45"/>'
+            f'<rect x="220" y="320" width="80" height="100" rx="4" fill="{c1}" opacity="0.4"/>'
+            f'<rect x="340" y="300" width="120" height="120" rx="6" fill="#faf6ed" opacity="0.35"/>'
+            f'<circle cx="520" cy="340" r="36" fill="{c3}" opacity="0.3"/>'
+            f'<rect x="600" y="260" width="60" height="180" rx="4" fill="#e8dcc8" opacity="0.4"/>'
+        )
+    bokeh = "\n  ".join(
+        f'<circle cx="{rng.randint(40, 760)}" cy="{rng.randint(60, 420)}" r="{rng.randint(6, 28)}" '
+        f'fill="{c3}" opacity="0.1"/>'
+        for _ in range(8)
+    )
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="{name}">
+  <defs>
+    <linearGradient id="fg-{name}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="{c1}"/>
+      <stop offset="45%" stop-color="{c2}"/>
+      <stop offset="100%" stop-color="{c3}"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#fg-{name})"/>
+  {clouds}
+  {hills}
+  {bokeh}
+  {extra}
+  <ellipse cx="400" cy="440" rx="360" ry="50" fill="{c2}" opacity="0.32"/>
+</svg>
+"""
+
+
+OVERLAY_PETALS = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" aria-hidden="true">
+  <ellipse cx="180" cy="120" rx="14" ry="8" fill="#ffc8dd" opacity="0.35" transform="rotate(25 180 120)"/>
+  <ellipse cx="420" cy="240" rx="12" ry="7" fill="#f8a8c8" opacity="0.32" transform="rotate(-15 420 240)"/>
+  <ellipse cx="680" cy="160" rx="16" ry="9" fill="#ffc8dd" opacity="0.38" transform="rotate(40 680 160)"/>
+  <ellipse cx="920" cy="320" rx="11" ry="6" fill="#f8a8c8" opacity="0.3" transform="rotate(10 920 320)"/>
+  <ellipse cx="1180" cy="200" rx="15" ry="8" fill="#ffc8dd" opacity="0.34" transform="rotate(-30 1180 200)"/>
+  <ellipse cx="1420" cy="280" rx="13" ry="7" fill="#f8a8c8" opacity="0.33" transform="rotate(55 1420 280)"/>
+  <ellipse cx="1680" cy="140" rx="14" ry="8" fill="#ffc8dd" opacity="0.36" transform="rotate(-8 1680 140)"/>
+  <ellipse cx="260" cy="480" rx="12" ry="7" fill="#f8a8c8" opacity="0.28" transform="rotate(20 260 480)"/>
+  <ellipse cx="560" cy="520" rx="14" ry="8" fill="#ffc8dd" opacity="0.3" transform="rotate(-22 560 520)"/>
+  <ellipse cx="860" cy="440" rx="11" ry="6" fill="#f8a8c8" opacity="0.27" transform="rotate(35 860 440)"/>
+  <ellipse cx="1240" cy="500" rx="13" ry="7" fill="#ffc8dd" opacity="0.31" transform="rotate(-18 1240 500)"/>
+  <ellipse cx="1540" cy="420" rx="12" ry="7" fill="#f8a8c8" opacity="0.29" transform="rotate(48 1540 420)"/>
+  <ellipse cx="320" cy="720" rx="14" ry="8" fill="#ffc8dd" opacity="0.25" transform="rotate(-12 320 720)"/>
+  <ellipse cx="780" cy="680" rx="11" ry="6" fill="#f8a8c8" opacity="0.24" transform="rotate(28 780 680)"/>
+  <ellipse cx="1100" cy="760" rx="13" ry="7" fill="#ffc8dd" opacity="0.26" transform="rotate(-40 1100 760)"/>
+  <ellipse cx="1760" cy="640" rx="12" ry="7" fill="#f8a8c8" opacity="0.27" transform="rotate(15 1760 640)"/>
+</svg>
+"""
+
+OVERLAY_WIND = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" aria-hidden="true">
+  <defs>
+    <linearGradient id="wind-g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a8d4ff" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#faf6ed" stop-opacity="0.22"/>
+      <stop offset="55%" stop-color="#ffc8dd" stop-opacity="0.16"/>
+      <stop offset="80%" stop-color="#eef5e8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#a8d4ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#wind-g)"/>
+  <path d="M-40,380 Q280,340 580,390 Q880,440 1180,370 Q1480,300 1960,360" fill="none" stroke="#faf6ed" stroke-width="2.5" opacity="0.28"/>
+  <path d="M-60,480 Q320,440 680,490 Q1040,540 1400,460 T1960,500" fill="none" stroke="#ffc8dd" stroke-width="2" opacity="0.22"/>
+  <path d="M0,580 Q400,550 800,590 Q1200,630 1600,560 T1920,600" fill="none" stroke="#eef5e8" stroke-width="2.2" opacity="0.2"/>
+  <path d="M100,680 Q500,650 900,690 Q1300,730 1700,660 T1920,700" fill="none" stroke="#a8d4ff" stroke-width="1.8" opacity="0.18"/>
+  <ellipse cx="420" cy="420" rx="80" ry="12" fill="#faf6ed" opacity="0.12" transform="rotate(-8 420 420)"/>
+  <ellipse cx="980" cy="520" rx="100" ry="14" fill="#ffc8dd" opacity="0.1" transform="rotate(5 980 520)"/>
+  <ellipse cx="1480" cy="440" rx="90" ry="13" fill="#eef5e8" opacity="0.11" transform="rotate(-4 1480 440)"/>
+  <circle cx="640" cy="360" r="3" fill="#faf6ed" opacity="0.35"/>
+  <circle cx="1120" cy="400" r="2.5" fill="#ffc8dd" opacity="0.32"/>
+  <circle cx="1620" cy="380" r="3" fill="#eef5e8" opacity="0.3"/>
+</svg>
+"""
+
+
+def main() -> None:
+    ROOT.mkdir(parents=True, exist_ok=True)
+    (ROOT / "hero-ghibli.svg").write_text(hero_svg(), encoding="utf-8")
+    for fname, colors in FEATURES.items():
+        (ROOT / f"{fname}.svg").write_text(feature_svg(fname, *colors), encoding="utf-8")
+    (ROOT / "overlay-petals.svg").write_text(OVERLAY_PETALS, encoding="utf-8")
+    (ROOT / "overlay-wind.svg").write_text(OVERLAY_WIND, encoding="utf-8")
+    print("Landing + overlay SVGs written to", ROOT)
+
+
+if __name__ == "__main__":
+    main()

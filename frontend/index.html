@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta name="theme-color" content="#a8d8ff" />
+  <meta name="color-scheme" content="light" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="2711编辑器 — 您的故事，即刻互动。将文本转化为带分支选择与场景画面的视觉小说，支持 TXT、Word、PDF、EPUB。" />
+  <title>2711编辑器 · 2711 Editor</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+  <link href="css/tokens.css?v=2" rel="stylesheet" />
+  <link href="css/landing.css?v=16" rel="stylesheet" />
+  <link href="css/app.css?v=27" rel="stylesheet" />
+</head>
+<body class="landing-body">
+  <a class="skip-link" href="#studio">跳到主内容</a>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="wind-overlay wind-overlay--global" aria-hidden="true"></div>
+  <div class="petal-overlay petal-overlay--global" aria-hidden="true"></div>
+
+  <div id="landing-view">
+    <header class="site-nav" id="site-nav">
+      <a class="site-nav__brand" href="#top">
+        <span class="site-nav__wordmark">
+          <span class="site-nav__zh" data-brand="name">2711编辑器</span>
+          <span class="site-nav__en" data-brand="nameEnShort">2711 EDITOR</span>
+        </span>
+      </a>
+      <button type="button" class="site-nav__toggle" id="site-nav-toggle" aria-expanded="false" aria-controls="site-nav-menu" aria-label="打开导航菜单">
+        <span class="site-nav__toggle-bar"></span>
+        <span class="site-nav__toggle-bar"></span>
+        <span class="site-nav__toggle-bar"></span>
+      </button>
+      <div class="site-nav__menu" id="site-nav-menu">
+        <ul class="site-nav__links">
+          <li><a class="site-nav__link" href="#features" data-nav="features">能力</a></li>
+          <li><a class="site-nav__link" href="#how" data-nav="how">流程</a></li>
+          <li><a class="site-nav__link" href="#create" data-nav="create">创作</a></li>
+        </ul>
+        <a class="site-nav__cta" href="#create">开始创作</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-label="首屏">
+        <div class="hero__media" data-parallax="0.22">
+          <img
+            class="hero__img"
+            src="images/hero-ghibli.svg?v=1"
+            alt="吉卜力风格水彩丘陵与天空，象征故事世界的广阔可能"
+            width="1920"
+            height="1080"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="hero__clouds" aria-hidden="true"></div>
+        <div class="hero__wind" aria-hidden="true"></div>
+        <div class="hero__petals" aria-hidden="true"></div>
+        <div class="hero__mesh" aria-hidden="true"></div>
+        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="hero__frame" aria-hidden="true"></div>
+
+        <div class="hero__content">
+          <p class="hero__eyebrow reveal" data-brand="eyebrow">V 0.2.5 · Interactive Story Studio</p>
+          <h1 class="hero__title reveal reveal--delay-1">
+            <span class="hero__title-en" data-brand="nameEnShort">2711 Editor</span>
+            <span class="hero__title-zh" data-brand="name">2711编辑器</span>
+          </h1>
+          <p class="hero__tagline reveal reveal--delay-2" data-brand="tagline">您的故事，即刻互动</p>
+          <p class="hero__sub reveal reveal--delay-2" data-brand="taglineSub">上传小说或粘贴章节 · 选择视觉风格 · 自动生成分支剧情与场景画面</p>
+          <div class="hero__actions reveal reveal--delay-3">
+            <a class="btn-landing btn-landing--primary btn-landing--lg" href="#create">开始创作</a>
+            <button type="button" class="btn-landing btn-landing--ghost btn-landing--lg" id="hero-demo-btn">浏览演示 Demo</button>
+          </div>
+        </div>
+
+        <a class="hero__scroll" href="#features" aria-label="向下滚动">
+          <span class="hero__scroll-line"></span>
+          <span class="hero__scroll-text">Explore</span>
+        </a>
+      </section>
+
+      <section id="features" class="features" aria-labelledby="features-title">
+        <div class="section-head reveal">
+          <p class="section-head__kicker">Capabilities</p>
+          <h2 id="features-title" class="section-head__title">从文本到可玩叙事</h2>
+          <p class="section-head__sub">不是简单摘要，而是可点击、可分支、可收束结局的互动体验</p>
+        </div>
+
+        <div class="features__grid">
+          <article class="feature-card feature-card--hero reveal">
+            <div class="feature-card__visual">
+              <img src="images/feature-branches.svg?v=1" alt="分支叙事插画" width="800" height="500" loading="lazy" decoding="async" />
+              <div class="feature-card__visual-veil"></div>
+            </div>
+            <div class="feature-card__body">
+              <p class="feature-card__num">01 · BRANCHING</p>
+              <h3 class="feature-card__title">多分支剧情树</h3>
+              <p class="feature-card__desc">AI 从原文提炼冲突与抉择点，生成多场景节点与多种结局，每一次选择都推动故事走向不同方向。</p>
+            </div>
+          </article>
+
+          <article class="feature-card reveal reveal--delay-1">
+            <div class="feature-card__visual feature-card__visual--compact">
+              <img src="images/feature-transform.svg?v=1" alt="AI 叙事转化插画" width="800" height="500" loading="lazy" decoding="async" />
+              <div class="feature-card__visual-veil feature-card__visual-veil--soft"></div>
+            </div>
+            <div class="feature-card__body">
+              <p class="feature-card__num">02 · TRANSFORM</p>
+              <h3 class="feature-card__title">一键叙事转化</h3>
+              <p class="feature-card__desc">粘贴或上传 TXT、Word、PDF、EPUB，选择古风仙侠、都市言情等风格，自动构建故事圣经与分支图谱。</p>
+            </div>
+          </article>
+
+          <article class="feature-card reveal reveal--delay-2">
+            <div class="feature-card__visual feature-card__visual--compact">
+              <img src="images/feature-play.svg?v=1" alt="沉浸式视觉小说体验插画" width="800" height="500" loading="lazy" decoding="async" />
+              <div class="feature-card__visual-veil feature-card__visual-veil--soft"></div>
+            </div>
+            <div class="feature-card__body">
+              <p class="feature-card__num">03 · IMMERSIVE</p>
+              <h3 class="feature-card__title">视觉小说式游玩</h3>
+              <p class="feature-card__desc">全屏吉卜力风场景背景、旁白与选项面板一体呈现；支持 Demo 秒开试玩与历史记录载入。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="how" class="how" aria-labelledby="how-title">
+        <div class="section-head reveal">
+          <p class="section-head__kicker">Pipeline</p>
+          <h2 id="how-title" class="section-head__title">三步进入故事</h2>
+          <p class="section-head__sub">透明管线进度，让你知道 AI 正在做什么</p>
+        </div>
+        <div class="how__steps">
+          <div class="how-step reveal">
+            <h3 class="how-step__title">注入文本</h3>
+            <p class="how-step__desc">粘贴或上传故事，选择视觉风格 preset，建立故事圣经。</p>
+          </div>
+          <div class="how-step reveal reveal--delay-1">
+            <h3 class="how-step__title">构建分支</h3>
+            <p class="how-step__desc">分析人物与冲突，生成场景节点、选项与结局图谱。</p>
+          </div>
+          <div class="how-step reveal reveal--delay-2">
+            <h3 class="how-step__title">沉浸游玩</h3>
+            <p class="how-step__desc">进入视觉小说界面，点击选项推进剧情，探索属于你的结局。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="create" class="workshop" aria-labelledby="workshop-title">
+        <div class="workshop__bg" aria-hidden="true"></div>
+        <div class="workshop__glow" aria-hidden="true"></div>
+
+        <div class="workshop__head section-head reveal">
+          <p class="section-head__kicker">Studio</p>
+          <h2 id="workshop-title" class="section-head__title">创作工坊</h2>
+          <p class="section-head__sub">在此输入你的故事，启动叙事转化管线</p>
+        </div>
+
+        <div id="studio" class="workshop__panel reveal">
+          <div class="workshop__card">
+            <label class="workshop__label" for="story-input">
+              <span class="workshop__label-tag">INPUT</span>
+              输入源 · 小说文本
+            </label>
+            <div class="workshop__toolbar">
+              <label class="workshop-btn workshop-btn--outline workshop-btn--upload" id="upload-dropzone" for="file-input">上传文件</label>
+              <span class="workshop__hint" id="char-count">全文 0 字</span>
+            </div>
+            <p class="workshop__formats" id="upload-formats">支持 TXT · Word · PDF · EPUB · 最大 50MB</p>
+            <p class="workshop__onboard" id="workshop-onboard">粘贴至少 80 字故事，或上传文件开始创作。</p>
+            <textarea
+              id="story-input"
+              class="workshop__textarea"
+              placeholder="粘贴或填入文本"
+              spellcheck="false"
+              aria-describedby="workshop-onboard char-count upload-formats"
+            ></textarea>
+            <input
+              type="file"
+              id="file-input"
+              accept=".txt,.md,.markdown,.doc,.docx,.pdf,.rtf,.epub,text/plain,application/epub+zip"
+              hidden
+            />
+          </div>
+
+          <div class="workshop__card">
+            <p class="workshop__label">
+              <span class="workshop__label-tag">PRESET</span>
+              视觉风格
+            </p>
+            <div class="preset-row" role="group" aria-label="视觉风格">
+              <button type="button" class="preset-btn" data-style="xianxia">
+                <span class="preset-btn__name">古风仙侠</span>
+                <span class="preset-btn__desc">宗门 · 秘境</span>
+              </button>
+              <button type="button" class="preset-btn preset-btn--active" data-style="urban_romance">
+                <span class="preset-btn__name">都市言情</span>
+                <span class="preset-btn__desc">都市 · 多线</span>
+              </button>
+              <button type="button" class="preset-btn" data-style="mystery">
+                <span class="preset-btn__name">悬疑推理</span>
+                <span class="preset-btn__desc">线索 · 反转</span>
+              </button>
+              <button type="button" class="preset-btn" data-style="campus">
+                <span class="preset-btn__name">校园青春</span>
+                <span class="preset-btn__desc">社团 · 成长</span>
+              </button>
+            </div>
+          </div>
+
+          <p class="workshop__upload-status" id="upload-status" hidden role="status"></p>
+          <div class="upload-progress" id="upload-progress" hidden role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="upload-progress__fill" id="upload-progress-fill"></div>
+          </div>
+
+          <div class="workshop__actions">
+            <button type="button" id="demo-btn" class="workshop-btn workshop-btn--outline">试玩 Demo</button>
+            <button type="button" id="load-btn" class="workshop-btn workshop-btn--outline">加载历史</button>
+            <button type="button" id="create-btn" class="workshop-btn workshop-btn--primary workshop-btn--create">
+              <span class="btn__label">一键生成互动游戏</span>
+              <span class="btn__spinner" hidden aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <section class="pipeline" id="pipeline" hidden>
+            <div class="pipeline__head">
+              <span class="pipeline__tag">生成进度</span>
+              <span class="pipeline__pct" id="pipeline-pct">0%</span>
+            </div>
+            <div class="pipeline__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="pipeline__fill" id="pipeline-fill"></div>
+            </div>
+            <p class="pipeline__msg" id="pipeline-msg">等待开始…</p>
+            <div class="pipeline__bible" id="bible-preview" hidden></div>
+          </section>
+
+          <p class="workshop__error" id="studio-error" hidden role="alert"></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p class="site-footer__brand" data-brand="footerLine">2711 EDITOR · 2711编辑器</p>
+      <p class="site-footer__copy">v0.2.5 · AI 辅助创作 · 内容仅供体验</p>
+    </footer>
+  </div>
+
+  <div class="magic-modal" id="history-modal" role="dialog" aria-modal="true" aria-labelledby="history-modal-title" hidden>
+    <div class="magic-modal__dialog">
+      <div class="magic-modal__head">
+        <h3 class="magic-modal__title" id="history-modal-title">加载历史记录</h3>
+        <button type="button" class="magic-modal__close" id="history-modal-close" aria-label="关闭">×</button>
+      </div>
+      <div class="magic-modal__body workshop__history">
+        <p class="workshop__formats">上传与生成自动保存，可载入文本或直接游玩。</p>
+        <ul class="history-list" id="history-list" aria-label="历史记录列表"></ul>
+        <p class="history-empty" id="history-empty">暂无记录。上传文件或完成一次转化后，作品将自动保存在此处。</p>
+        <p class="history-loading" id="history-loading" hidden role="status">正在加载历史记录…</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="game" class="game" hidden>
+    <div class="vn-stage" id="vn-stage">
+      <div class="game__scene-bg" id="scene-bg">
+        <div class="game__scene-bg__layer is-active" id="scene-bg-a" aria-hidden="true"></div>
+        <div class="game__scene-bg__layer" id="scene-bg-b" aria-hidden="true"></div>
+      </div>
+      <div class="game__scene-veil"></div>
+
+      <header class="game__hud">
+        <button type="button" class="game__back" id="back-studio" title="返回工作室" aria-label="返回工作室">← 返回</button>
+        <div class="game__meta">
+          <span class="game__style" id="game-style"></span>
+          <h2 class="game__title" id="game-title"></h2>
+        </div>
+        <span class="game__scene-tag" id="scene-tag"></span>
+        <button type="button" class="game__replay" id="game-replay" title="从头再玩" aria-label="从头再玩" hidden>↺</button>
+      </header>
+
+      <div class="vn-portrait vn-portrait--left" id="portrait-left" aria-hidden="true" hidden></div>
+      <div class="vn-portrait vn-portrait--right" id="portrait-right" aria-hidden="true" hidden></div>
+
+      <div class="vn-dialogue" id="vn-dialogue" role="log" aria-live="assertive" aria-atomic="true" aria-relevant="additions text">
+        <div class="vn-name" id="speaker">旁白</div>
+        <div class="vn-text" id="narrative"></div>
+        <div class="vn-continue" id="continue-hint">点击继续 ▸</div>
+      </div>
+
+      <div class="vn-choices-panel" id="choices-panel" hidden>
+        <p class="vn-choices-label">◆ 请做出选择</p>
+        <nav class="vn-choices" id="choices" aria-label="剧情选项"></nav>
+      </div>
+
+      <footer class="vn-ending" id="ending-banner" hidden>
+        <p class="vn-ending__label" id="ending-label"></p>
+        <button type="button" class="workshop-btn workshop-btn--outline" id="restart-btn">再玩一次</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/brand.js?v=9"></script>
+  <script src="js/demo.js?v=10"></script>
+  <script src="js/scene-images.js?v=8"></script>
+  <script src="js/mood.js?v=15"></script>
+  <script src="js/game.js?v=14"></script>
+  <script src="js/landing-motion.js?v=2"></script>
+  <script src="js/reveal.js?v=8"></script>
+  <script src="js/lib/api-errors.js?v=1"></script>
+  <script src="js/lib/sse.js?v=1"></script>
+  <script src="js/workshop/EditorInput.js?v=2"></script>
+  <script src="js/workshop/StylePresets.js?v=1"></script>
+  <script src="js/workshop/PipelineView.js?v=1"></script>
+  <script src="js/workshop/CreateFlow.js?v=2"></script>
+  <script src="js/history.js?v=6"></script>
+  <script src="js/workshop/StudioController.js?v=2"></script>
+  <script src="js/magic-editor.js?v=4"></script>
+  <script src="js/app.js?v=27"></script>
+</body>
+</html>

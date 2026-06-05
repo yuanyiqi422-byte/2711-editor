@@ -1,0 +1,108 @@
+/**
+ * 2711 Editor · 全站设计令牌（单一来源）
+ * 由 index.html 最先以 <link> 引入，landing.css / app.css 共用
+ */
+:root {
+  /* Color — 蓝粉绿治愈系 */
+  --sky: #7eb8ff;
+  --sky-soft: #a8d4ff;
+  --sky-deep: #5a8fc8;
+  --sakura: #f8a8c8;
+  --sakura-soft: #ffc8dd;
+  --lavender: #c8b8e8;
+  --meadow: #6b8e6b;
+  --meadow-soft: #8ab898;
+  --meadow-light: #b8d4c8;
+  --forest: #4a6850;
+  --wheat: #e8dcc8;
+  --cream: #faf6ed;
+  --cream-warm: #f5f0e4;
+  --on-accent: #fff;
+  --paper: rgba(250, 246, 237, 0.92);
+  --ink: #3a3548;
+  --ink-soft: #5a5068;
+  --ink-muted: rgba(90, 80, 104, 0.72);
+  --surface: rgba(250, 246, 237, 0.88);
+  --surface-card: #faf6ed;
+  --surface-2: #f5f0e4;
+  --border-soft: rgba(107, 142, 107, 0.28);
+  --border: rgba(107, 142, 107, 0.38);
+  --shadow-soft: 0 12px 40px rgba(107, 142, 107, 0.14);
+  --shadow-card: 0 8px 28px rgba(107, 142, 107, 0.1);
+  --danger: #c45c6a;
+  --accent: #7eb8ff;
+  --accent-pink: #f8a8c8;
+  --accent-green: #6b8e6b;
+  --accent-dim: rgba(107, 142, 107, 0.14);
+  --bg: #eef5e8;
+  --text: #3a3548;
+  --text-soft: #5a5068;
+  --muted: #6a7068;
+  --vn-panel: #faf6ed;
+  --vn-ink: #2a2438;
+  --vn-ink-soft: #4a4058;
+
+  --gradient-hero: linear-gradient(165deg, #a8d4ff 0%, #b8d4c8 32%, #6b8e6b 58%, #faf6ed 100%);
+  --gradient-btn: linear-gradient(135deg, #6b8e6b 0%, #7eb8ff 42%, #f8a8c8 100%);
+  --gradient-game-stage: linear-gradient(180deg, var(--sky-soft) 0%, var(--meadow-light) 38%, var(--accent-green) 62%, var(--cream) 100%);
+  --gradient-sunset: linear-gradient(180deg, #a8d4ff 0%, #b8d4c8 35%, rgba(248, 168, 200, 0.22) 65%, #eef5e8 100%);
+
+  /* Typography */
+  --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display-cn: "ZCOOL XiaoWei", var(--font-body);
+  --font-display-en: "Outfit", var(--font-body);
+  --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+
+  --text-xs: clamp(0.6875rem, 1.4vw, 0.75rem);
+  --text-sm: clamp(0.8125rem, 1.8vw, 0.875rem);
+  --text-base: clamp(1rem, 2.2vw, 1.0625rem);
+  --text-md: clamp(1.0625rem, 2.4vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 2.8vw, 1.25rem);
+  --text-xl: clamp(1.375rem, 3.8vw, 1.625rem);
+  --text-2xl: clamp(1.625rem, 4.8vw, 2.125rem);
+  --text-hero: clamp(2.75rem, 11vw, 4.25rem);
+
+  --leading-tight: 1.3;
+  --leading-snug: 1.5;
+  --leading-normal: 1.65;
+  --leading-relaxed: 1.75;
+  --leading-dialogue: 1.82;
+
+  --tracking-tight: -0.01em;
+  --tracking-body: 0.02em;
+  --tracking-ui: 0.04em;
+  --tracking-wide: 0.08em;
+  --tracking-brand: 0.06em;
+  --tracking-en: 0.12em;
+
+  /* Layout */
+  --nav-h: 60px;
+  --content-max: 1080px;
+  --section-pad: clamp(64px, 10vw, 120px);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Radius — 统一圆角体系 */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 18px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-pill: 999px;
+  --radius: var(--radius-lg);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --transition-fast: 0.2s var(--ease-out);
+  --transition-base: 0.25s var(--ease-out);
+  --transition-slow: 0.35s var(--ease-out);
+}

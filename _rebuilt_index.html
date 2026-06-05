@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="叙事引擎 — 将小说文本转化为沉浸式分支互动游戏。上传故事，选择风格，进入多结局的视觉小说世界。" />
+  <title>叙事引擎 · Narrative Engine</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="css/landing.css?v=1" rel="stylesheet" />
+  <link href="css/app.css?v=5" rel="stylesheet" />
+</head>
+<body class="landing-body">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div id="landing-view">
+    <header class="site-nav" id="site-nav">
+      <a class="site-nav__brand" href="#top">
+        <span class="site-nav__mark" aria-hidden="true">✦</span>
+        <span>Narrative Engine</span>
+      </a>
+      <ul class="site-nav__links">
+        <li><a href="#features">能力</a></li>
+        <li><a href="#how">流程</a></li>
+        <li><a href="#create">创作</a></li>
+      </ul>
+      <a class="site-nav__cta" href="#create">开始创作</a>
+    </header>
+
+    <main id="top">
+      <!-- Hero -->
+      <section class="hero" aria-label="首屏">
+        <div class="hero__media" data-parallax="0.22">
+          <img
+            class="hero__img"
+            src="images/hero-narrative.png"
+            alt="古书与金色分支叙事路径，象征互动故事的无数可能"
+            width="1920"
+            height="1080"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="hero__frame" aria-hidden="true"></div>
+
+        <div class="hero__content">
+          <p class="hero__eyebrow reveal">V 0.1 · Interactive Fiction Engine</p>
+          <h1 class="hero__title reveal reveal--delay-1">
+            <span class="hero__title-en">Narrative Engine</span>
+            <span class="hero__title-zh">叙事引擎</span>
+          </h1>
+          <p class="hero__tagline reveal reveal--delay-2">
+            把小说与故事，铸成可游玩的分支世界
+          </p>
+          <p class="hero__sub reveal reveal--delay-2">
+            上传文本 · 选择风格 · AI 生成分支剧情与场景 · 多结局沉浸体验
+          </p>
+          <div class="hero__actions reveal reveal--delay-3">
+            <a class="btn-landing btn-landing--primary btn-landing--lg" href="#create">开始创作</a>
+            <button type="button" class="btn-landing btn-landing--ghost btn-landing--lg" id="hero-demo-btn">立即试玩 Demo</button>
+          </div>
+        </div>
+
+        <a class="hero__scroll" href="#features" aria-label="向下滚动">
+          <span class="hero__scroll-line"></span>
+          <span class="hero__scroll-text">Explore</span>
+        </a>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="features" aria-labelledby="features-title">
+        <div class="section-head reveal">
+          <p class="section-head__kicker">Capabilities</p>
+          <h2 id="features-title" class="section-head__title">从文本到可玩叙事</h2>
+          <p class="section-head__sub">
+            不是简单摘要，而是可点击、可分支、可收束结局的互动体验
+          </p>
+        </div>
+
+        <div class="features__grid">
+          <article class="feature-card feature-card--hero reveal">
+            <div class="feature-card__visual">
+              <img src="images/feature-branches.png" alt="羽毛笔分出三条发光的故事分支" width="800" height="500" loading="lazy" decoding="async" />
+              <div class="feature-card__visual-veil"></div>
+            </div>
+            <div class="feature-card__body">
+              <p class="feature-card__num">01 · BRANCHING</p>
+              <h3 class="feature-card__title">多分支剧情树</h3>
+              <p class="feature-card__desc">
+                AI 从原文提炼冲突与抉择点，生成 8～12 个场景节点、2～3 种结局，每一次选择都推动故事走向不同方向。
+              </p>
+            </div>
+          </article>
+
+          <article class="feature-card reveal reveal--delay-1">
+            <div class="feature-card__body">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                <path d="M8 7h8M8 11h6"/>
+              </svg>
+              <p class="feature-card__num">02 · SOURCE</p>
+              <h3 class="feature-card__title">任意故事输入</h3>
+              <p class="feature-card__desc">
+                粘贴小说节选、上传 .txt，或加载赛博朋克 / 诡秘 / 史诗神话等风格预设，快速进入创作管线。
+              </p>
+            </div>
+          </article>
+
+          <article class="feature-card reveal reveal--delay-2">
+            <div class="feature-card__body">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+                <circle cx="12" cy="10" r="2.5"/>
+              </svg>
+              <p class="feature-card__num">03 · IMMERSIVE</p>
+              <h3 class="feature-card__title">橙光式游玩</h3>
+              <p class="feature-card__desc">
+                每句对白配场景画面，点击翻页推进剧情；仅在关键抉择点弹出选项，流畅如视觉小说。
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section id="how" class="how" aria-labelledby="how-title">
+        <div class="section-head reveal">
+          <p class="section-head__kicker">Pipeline</p>
+          <h2 id="how-title" class="section-head__title">三步进入故事</h2>
+          <p class="section-head__sub">透明管线进度，让你知道 AI 正在做什么</p>
+        </div>
+        <div class="how__steps">
+          <div class="how-step reveal">
+            <h3 class="how-step__title">注入文本</h3>
+            <p class="how-step__desc">粘贴或上传故事，选择视觉风格 preset，建立故事圣经。</p>
+          </div>
+          <div class="how-step reveal reveal--delay-1">
+            <h3 class="how-step__title">构建分支</h3>
+            <p class="how-step__desc">分析人物与冲突，生成场景节点、选项与结局图谱。</p>
+          </div>
+          <div class="how-step reveal reveal--delay-2">
+            <h3 class="how-step__title">沉浸游玩</h3>
+            <p class="how-step__desc">进入视觉小说界面，点击选项推进剧情，探索属于你的结局。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Workshop / Studio -->
+      <section id="create" class="workshop" aria-labelledby="workshop-title">
+        <div class="workshop__head section-head reveal">
+          <p class="section-head__kicker">Studio</p>
+          <h2 id="workshop-title" class="section-head__title">创作工坊</h2>
+          <p class="section-head__sub">在此输入你的故事，启动叙事转化管线</p>
+        </div>
+
+        <div id="studio" class="workshop__panel reveal">
+          <div class="workshop__card">
+            <label class="workshop__label" for="story-input">
+              <span class="workshop__label-tag">INPUT</span>
+              输入源 · 小说文本
+            </label>
+            <div class="workshop__toolbar">
+              <label class="workshop-btn workshop-btn--outline workshop-btn--upload">
+                <input
+                  type="file"
+                  id="file-input"
+                  accept=".txt,.md,.markdown,.docx,.pdf,.rtf,text/plain"
+                  hidden
+                />
+                上传文件
+              </label>
+              <span class="workshop__hint" id="char-count">0 字</span>
+            </div>
+            <p class="workshop__formats" id="upload-formats">支持 TXT · Markdown · Word (.docx) · PDF · RTF · 最大 50MB</p>
+            <p class="workshop__upload-status" id="upload-status" hidden role="status"></p>
+            <textarea
+              id="story-input"
+              class="workshop__textarea"
+              placeholder="粘贴故事文本，或上传 TXT / Word / PDF 等大文件（自动提取正文）。长篇小说会智能截取用于生成。"
+              spellcheck="false"
+            ></textarea>
+          </div>
+
+          <div class="workshop__card">
+            <p class="workshop__label">
+              <span class="workshop__label-tag">PRESET</span>
+              视觉风格
+            </p>
+            <div class="preset-row" role="group" aria-label="风格预设">
+              <button type="button" class="preset-btn" data-preset="cyberpunk" data-style="cyberpunk">
+                <span class="preset-btn__name">赛博朋克</span>
+                <span class="preset-btn__desc">霓虹 · 义体 · 公司阴谋</span>
+              </button>
+              <button type="button" class="preset-btn preset-btn--active" data-preset="lovecraft" data-style="lovecraft">
+                <span class="preset-btn__name">诡秘之主</span>
+                <span class="preset-btn__desc">雾都 · 神秘学 · 序列</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="odyssey" data-style="odyssey">
+                <span class="preset-btn__name">奥德赛</span>
+                <span class="preset-btn__desc">史诗 · 海洋 · 试炼</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="workshop__actions">
+            <button type="button" id="demo-btn" class="workshop-btn workshop-btn--outline">试玩 Demo</button>
+            <button type="button" id="create-btn" class="workshop-btn workshop-btn--primary workshop-btn--create">
+              <span class="btn__label">开始转化</span>
+              <span class="btn__spinner" hidden aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <section class="pipeline" id="pipeline" hidden>
+            <div class="pipeline__head">
+              <span class="pipeline__tag">生成进度</span>
+              <span class="pipeline__pct" id="pipeline-pct">0%</span>
+            </div>
+            <div class="pipeline__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="pipeline__fill" id="pipeline-fill"></div>
+            </div>
+            <p class="pipeline__msg" id="pipeline-msg">等待开始…</p>
+            <div class="pipeline__bible" id="bible-preview" hidden></div>
+          </section>
+
+          <p class="workshop__error" id="studio-error" hidden role="alert"></p>
+
+          <div class="workshop__card workshop__history">
+            <p class="workshop__label">
+              <span class="workshop__label-tag">HISTORY</span>
+              历史记录
+            </p>
+            <p class="workshop__formats">上传与生成自动保存，下次可载入文本或直接游玩，无需重复上传。</p>
+            <ul class="history-list" id="history-list" aria-label="历史记录列表"></ul>
+            <p class="history-empty" id="history-empty">暂无记录，上传文件或完成一次转化后会出现在这里。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p class="site-footer__brand">NARRATIVE ENGINE · 叙事引擎</p>
+      <p class="site-footer__copy">MVP 0.1 · 本地运行 · AI 生成内容仅供体验</p>
+    </footer>
+  </div>
+
+  <!-- 橙光式游戏全屏层 -->
+  <div id="game" class="game" hidden>
+    <div class="vn-stage" id="vn-stage">
+      <div class="game__scene-bg" id="scene-bg"></div>
+      <div class="game__scene-veil"></div>
+
+      <header class="game__hud">
+        <button type="button" class="game__back" id="back-studio" title="返回">← 返回</button>
+        <div class="game__meta">
+          <span class="game__style" id="game-style"></span>
+          <h2 class="game__title" id="game-title"></h2>
+        </div>
+        <span class="game__scene-tag" id="scene-tag"></span>
+      </header>
+
+      <div class="vn-portrait vn-portrait--left" id="portrait-left" aria-hidden="true"></div>
+      <div class="vn-portrait vn-portrait--right" id="portrait-right" aria-hidden="true"></div>
+
+      <div class="vn-dialogue" id="vn-dialogue">
+        <div class="vn-name" id="speaker">旁白</div>
+        <div class="vn-text" id="narrative"></div>
+        <div class="vn-continue" id="continue-hint">点击继续 ▸</div>
+      </div>
+
+      <div class="vn-choices-panel" id="choices-panel" hidden>
+        <p class="vn-choices-label">◆ 请做出选择</p>
+        <nav class="vn-choices" id="choices" aria-label="剧情选项"></nav>
+      </div>
+
+      <footer class="vn-ending" id="ending-banner" hidden>
+        <p class="vn-ending__label" id="ending-label"></p>
+        <button type="button" class="workshop-btn workshop-btn--outline" id="restart-btn">再玩一次</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/demo.js?v=7"></script>
+  <script src="js/mood.js?v=7"></script>
+  <script src="js/game.js?v=7"></script>
+  <script src="js/reveal.js?v=1"></script>
+  <script src="js/app.js?v=7"></script>
+</body>
+</html>

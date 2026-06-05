@@ -1,0 +1,681 @@
+{
+  "ui": [
+    {
+      "id": "sky-bg",
+      "file": "images/sky-bg.png",
+      "source": "reference-crop",
+      "prompt": "Full reference background gradient with clouds and petals"
+    },
+    {
+      "id": "header-plaque",
+      "file": "images/header-plaque.png",
+      "source": "reference-crop",
+      "prompt": "Wooden banner with 2711 Editor title, feathers, gears, crystals"
+    },
+    {
+      "id": "hero-scroll-island",
+      "file": "images/hero-scroll-island.png",
+      "source": "reference-crop",
+      "prompt": "Decorative magic scroll floating above castle island"
+    },
+    {
+      "id": "floating-island-castle",
+      "file": "images/floating-island-castle.png",
+      "source": "reference-crop",
+      "prompt": "Clean floating island with medieval castle at bottom"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "ai_data_core",
+      "file": "images/scenes/ai_data_core.png"
+    },
+    {
+      "id": "airport_sunset",
+      "file": "images/scenes/airport_sunset.png"
+    },
+    {
+      "id": "alchemy_explosion",
+      "file": "images/scenes/alchemy_explosion.png"
+    },
+    {
+      "id": "alchemy_last_seal",
+      "file": "images/scenes/alchemy_last_seal.png"
+    },
+    {
+      "id": "auction_booth",
+      "file": "images/scenes/auction_booth.png"
+    },
+    {
+      "id": "autumn_road",
+      "file": "images/scenes/autumn_road.png"
+    },
+    {
+      "id": "balcony_night",
+      "file": "images/scenes/balcony_night.png"
+    },
+    {
+      "id": "bamboo_grove",
+      "file": "images/scenes/bamboo_grove.png"
+    },
+    {
+      "id": "bamboo_rain",
+      "file": "images/scenes/bamboo_rain.png"
+    },
+    {
+      "id": "bank_vip_room",
+      "file": "images/scenes/bank_vip_room.png"
+    },
+    {
+      "id": "bar_booth_drink",
+      "file": "images/scenes/bar_booth_drink.png"
+    },
+    {
+      "id": "beach_wind",
+      "file": "images/scenes/beach_wind.png"
+    },
+    {
+      "id": "bio_lab_embryo",
+      "file": "images/scenes/bio_lab_embryo.png"
+    },
+    {
+      "id": "black_market_stall",
+      "file": "images/scenes/black_market_stall.png"
+    },
+    {
+      "id": "blackout_study_hall",
+      "file": "images/scenes/blackout_study_hall.png"
+    },
+    {
+      "id": "blind_date_restaurant",
+      "file": "images/scenes/blind_date_restaurant.png"
+    },
+    {
+      "id": "border_rally_war",
+      "file": "images/scenes/border_rally_war.png"
+    },
+    {
+      "id": "bronze_coffin_stars",
+      "file": "images/scenes/bronze_coffin_stars.png"
+    },
+    {
+      "id": "bunker_red_alarm",
+      "file": "images/scenes/bunker_red_alarm.png"
+    },
+    {
+      "id": "cafeteria_serving",
+      "file": "images/scenes/cafeteria_serving.png"
+    },
+    {
+      "id": "calm_meadow",
+      "file": "images/scenes/calm_meadow.png"
+    },
+    {
+      "id": "campsite",
+      "file": "images/scenes/campsite.png"
+    },
+    {
+      "id": "campus_field",
+      "file": "images/scenes/campus_field.png"
+    },
+    {
+      "id": "canal_twilight",
+      "file": "images/scenes/canal_twilight.png"
+    },
+    {
+      "id": "candle_room",
+      "file": "images/scenes/candle_room.png"
+    },
+    {
+      "id": "castle_clouds",
+      "file": "images/scenes/castle_clouds.png"
+    },
+    {
+      "id": "cave_glow",
+      "file": "images/scenes/cave_glow.png"
+    },
+    {
+      "id": "ceo_elevator",
+      "file": "images/scenes/ceo_elevator.png"
+    },
+    {
+      "id": "charity_gala",
+      "file": "images/scenes/charity_gala.png"
+    },
+    {
+      "id": "cherry_tunnel",
+      "file": "images/scenes/cherry_tunnel.png"
+    },
+    {
+      "id": "city_lights",
+      "file": "images/scenes/city_lights.png"
+    },
+    {
+      "id": "classroom_drowse",
+      "file": "images/scenes/classroom_drowse.png"
+    },
+    {
+      "id": "cliff_leap",
+      "file": "images/scenes/cliff_leap.png"
+    },
+    {
+      "id": "cliff_lighthouse",
+      "file": "images/scenes/cliff_lighthouse.png"
+    },
+    {
+      "id": "clock_tower",
+      "file": "images/scenes/clock_tower.png"
+    },
+    {
+      "id": "cold_palace_body",
+      "file": "images/scenes/cold_palace_body.png"
+    },
+    {
+      "id": "colosseum_cyber_arm",
+      "file": "images/scenes/colosseum_cyber_arm.png"
+    },
+    {
+      "id": "corridor_punishment",
+      "file": "images/scenes/corridor_punishment.png"
+    },
+    {
+      "id": "crowded_subway",
+      "file": "images/scenes/crowded_subway.png"
+    },
+    {
+      "id": "crystal_spring",
+      "file": "images/scenes/crystal_spring.png"
+    },
+    {
+      "id": "cursed_bus_ride",
+      "file": "images/scenes/cursed_bus_ride.png"
+    },
+    {
+      "id": "cyberpunk_alley_gun",
+      "file": "images/scenes/cyberpunk_alley_gun.png"
+    },
+    {
+      "id": "desert_oasis",
+      "file": "images/scenes/desert_oasis.png"
+    },
+    {
+      "id": "dragon_nest_egg",
+      "file": "images/scenes/dragon_nest_egg.png"
+    },
+    {
+      "id": "empress_unveil_night",
+      "file": "images/scenes/empress_unveil_night.png"
+    },
+    {
+      "id": "enchanted_grove",
+      "file": "images/scenes/enchanted_grove.png"
+    },
+    {
+      "id": "er_waiting_room",
+      "file": "images/scenes/er_waiting_room.png"
+    },
+    {
+      "id": "exam_rank_board",
+      "file": "images/scenes/exam_rank_board.png"
+    },
+    {
+      "id": "execution_scaffold",
+      "file": "images/scenes/execution_scaffold.png"
+    },
+    {
+      "id": "farm_pardon_edict",
+      "file": "images/scenes/farm_pardon_edict.png"
+    },
+    {
+      "id": "floating_isles",
+      "file": "images/scenes/floating_isles.png"
+    },
+    {
+      "id": "flower_field",
+      "file": "images/scenes/flower_field.png"
+    },
+    {
+      "id": "forest_path",
+      "file": "images/scenes/forest_path.png"
+    },
+    {
+      "id": "gate_white_stairs",
+      "file": "images/scenes/gate_white_stairs.png"
+    },
+    {
+      "id": "ghost_mansion",
+      "file": "images/scenes/ghost_mansion.png"
+    },
+    {
+      "id": "ghost_wedding_hall",
+      "file": "images/scenes/ghost_wedding_hall.png"
+    },
+    {
+      "id": "grad_backstage",
+      "file": "images/scenes/grad_backstage.png"
+    },
+    {
+      "id": "greenhouse",
+      "file": "images/scenes/greenhouse.png"
+    },
+    {
+      "id": "guild_quest_board",
+      "file": "images/scenes/guild_quest_board.png"
+    },
+    {
+      "id": "hall_disciple_fight",
+      "file": "images/scenes/hall_disciple_fight.png"
+    },
+    {
+      "id": "hallway_rainstorm",
+      "file": "images/scenes/hallway_rainstorm.png"
+    },
+    {
+      "id": "harbor_dawn",
+      "file": "images/scenes/harbor_dawn.png"
+    },
+    {
+      "id": "haunted_toilet_crack",
+      "file": "images/scenes/haunted_toilet_crack.png"
+    },
+    {
+      "id": "highway_ammo",
+      "file": "images/scenes/highway_ammo.png"
+    },
+    {
+      "id": "hospital_blood_elevator",
+      "file": "images/scenes/hospital_blood_elevator.png"
+    },
+    {
+      "id": "hospital_hall",
+      "file": "images/scenes/hospital_hall.png"
+    },
+    {
+      "id": "hot_spring",
+      "file": "images/scenes/hot_spring.png"
+    },
+    {
+      "id": "hot_spring_mist",
+      "file": "images/scenes/hot_spring_mist.png"
+    },
+    {
+      "id": "hotel_hangover",
+      "file": "images/scenes/hotel_hangover.png"
+    },
+    {
+      "id": "indoor_warm",
+      "file": "images/scenes/indoor_warm.png"
+    },
+    {
+      "id": "infinite_white_orb",
+      "file": "images/scenes/infinite_white_orb.png"
+    },
+    {
+      "id": "infirmary_curtain",
+      "file": "images/scenes/infirmary_curtain.png"
+    },
+    {
+      "id": "insomnia_rental",
+      "file": "images/scenes/insomnia_rental.png"
+    },
+    {
+      "id": "jianghu_inn",
+      "file": "images/scenes/jianghu_inn.png"
+    },
+    {
+      "id": "lakeside_dock",
+      "file": "images/scenes/lakeside_dock.png"
+    },
+    {
+      "id": "landlord_rent",
+      "file": "images/scenes/landlord_rent.png"
+    },
+    {
+      "id": "lantern_festival",
+      "file": "images/scenes/lantern_festival.png"
+    },
+    {
+      "id": "late_bbq_street",
+      "file": "images/scenes/late_bbq_street.png"
+    },
+    {
+      "id": "library_aisle",
+      "file": "images/scenes/library_aisle.png"
+    },
+    {
+      "id": "library_sweeping_monk",
+      "file": "images/scenes/library_sweeping_monk.png"
+    },
+    {
+      "id": "library_window_nap",
+      "file": "images/scenes/library_window_nap.png"
+    },
+    {
+      "id": "luxury_counter",
+      "file": "images/scenes/luxury_counter.png"
+    },
+    {
+      "id": "magic_academy",
+      "file": "images/scenes/magic_academy.png"
+    },
+    {
+      "id": "manor_kneeling_punish",
+      "file": "images/scenes/manor_kneeling_punish.png"
+    },
+    {
+      "id": "market_alley",
+      "file": "images/scenes/market_alley.png"
+    },
+    {
+      "id": "mars_greenhouse_patch",
+      "file": "images/scenes/mars_greenhouse_patch.png"
+    },
+    {
+      "id": "meadow_windmill",
+      "file": "images/scenes/meadow_windmill.png"
+    },
+    {
+      "id": "mech_hangar_weld",
+      "file": "images/scenes/mech_hangar_weld.png"
+    },
+    {
+      "id": "mist_beast_forest",
+      "file": "images/scenes/mist_beast_forest.png"
+    },
+    {
+      "id": "moon_bridge",
+      "file": "images/scenes/moon_bridge.png"
+    },
+    {
+      "id": "mystery_fog",
+      "file": "images/scenes/mystery_fog.png"
+    },
+    {
+      "id": "netcafe_allnight",
+      "file": "images/scenes/netcafe_allnight.png"
+    },
+    {
+      "id": "nether_bridge",
+      "file": "images/scenes/nether_bridge.png"
+    },
+    {
+      "id": "newyear_crowd",
+      "file": "images/scenes/newyear_crowd.png"
+    },
+    {
+      "id": "night_bazaar",
+      "file": "images/scenes/night_bazaar.png"
+    },
+    {
+      "id": "night_stars",
+      "file": "images/scenes/night_stars.png"
+    },
+    {
+      "id": "noon_gate_kneeling",
+      "file": "images/scenes/noon_gate_kneeling.png"
+    },
+    {
+      "id": "nunnery_well",
+      "file": "images/scenes/nunnery_well.png"
+    },
+    {
+      "id": "observatory",
+      "file": "images/scenes/observatory.png"
+    },
+    {
+      "id": "office_midnight",
+      "file": "images/scenes/office_midnight.png"
+    },
+    {
+      "id": "pagoda_mist",
+      "file": "images/scenes/pagoda_mist.png"
+    },
+    {
+      "id": "pantry_gossip",
+      "file": "images/scenes/pantry_gossip.png"
+    },
+    {
+      "id": "paper_doll_village",
+      "file": "images/scenes/paper_doll_village.png"
+    },
+    {
+      "id": "parking_ambush",
+      "file": "images/scenes/parking_ambush.png"
+    },
+    {
+      "id": "pharmacy_search_antidote",
+      "file": "images/scenes/pharmacy_search_antidote.png"
+    },
+    {
+      "id": "plane_door_fall",
+      "file": "images/scenes/plane_door_fall.png"
+    },
+    {
+      "id": "plum_garden_snow",
+      "file": "images/scenes/plum_garden_snow.png"
+    },
+    {
+      "id": "poem_on_painted_boat",
+      "file": "images/scenes/poem_on_painted_boat.png"
+    },
+    {
+      "id": "police_mediation",
+      "file": "images/scenes/police_mediation.png"
+    },
+    {
+      "id": "prison_cell_taunt",
+      "file": "images/scenes/prison_cell_taunt.png"
+    },
+    {
+      "id": "rabbit_lantern_fair",
+      "file": "images/scenes/rabbit_lantern_fair.png"
+    },
+    {
+      "id": "rainy_street",
+      "file": "images/scenes/rainy_street.png"
+    },
+    {
+      "id": "rebellion_sandbox",
+      "file": "images/scenes/rebellion_sandbox.png"
+    },
+    {
+      "id": "rice_terraces",
+      "file": "images/scenes/rice_terraces.png"
+    },
+    {
+      "id": "roast_chicken_spirit",
+      "file": "images/scenes/roast_chicken_spirit.png"
+    },
+    {
+      "id": "romance_cafe",
+      "file": "images/scenes/romance_cafe.png"
+    },
+    {
+      "id": "rooftop_secret",
+      "file": "images/scenes/rooftop_secret.png"
+    },
+    {
+      "id": "rooftop_sky",
+      "file": "images/scenes/rooftop_sky.png"
+    },
+    {
+      "id": "royal_hunt_arrow",
+      "file": "images/scenes/royal_hunt_arrow.png"
+    },
+    {
+      "id": "ruins_vine",
+      "file": "images/scenes/ruins_vine.png"
+    },
+    {
+      "id": "sakura_river",
+      "file": "images/scenes/sakura_river.png"
+    },
+    {
+      "id": "sand_battlefield",
+      "file": "images/scenes/sand_battlefield.png"
+    },
+    {
+      "id": "school_corridor",
+      "file": "images/scenes/school_corridor.png"
+    },
+    {
+      "id": "school_prank_fly",
+      "file": "images/scenes/school_prank_fly.png"
+    },
+    {
+      "id": "sect_arena",
+      "file": "images/scenes/sect_arena.png"
+    },
+    {
+      "id": "shrine_path",
+      "file": "images/scenes/shrine_path.png"
+    },
+    {
+      "id": "silk_shop_ledger",
+      "file": "images/scenes/silk_shop_ledger.png"
+    },
+    {
+      "id": "sky_tram",
+      "file": "images/scenes/sky_tram.png"
+    },
+    {
+      "id": "snack_shop_rush",
+      "file": "images/scenes/snack_shop_rush.png"
+    },
+    {
+      "id": "snow_shrine",
+      "file": "images/scenes/snow_shrine.png"
+    },
+    {
+      "id": "sports_parade",
+      "file": "images/scenes/sports_parade.png"
+    },
+    {
+      "id": "storm_coast",
+      "file": "images/scenes/storm_coast.png"
+    },
+    {
+      "id": "storm_no_ride",
+      "file": "images/scenes/storm_no_ride.png"
+    },
+    {
+      "id": "submarine_sonar",
+      "file": "images/scenes/submarine_sonar.png"
+    },
+    {
+      "id": "subway_night",
+      "file": "images/scenes/subway_night.png"
+    },
+    {
+      "id": "sunny_basketball",
+      "file": "images/scenes/sunny_basketball.png"
+    },
+    {
+      "id": "sunset_duty",
+      "file": "images/scenes/sunset_duty.png"
+    },
+    {
+      "id": "sunset_hill",
+      "file": "images/scenes/sunset_hill.png"
+    },
+    {
+      "id": "supermarket_siege",
+      "file": "images/scenes/supermarket_siege.png"
+    },
+    {
+      "id": "sword_grave",
+      "file": "images/scenes/sword_grave.png"
+    },
+    {
+      "id": "tea_house",
+      "file": "images/scenes/tea_house.png"
+    },
+    {
+      "id": "teahouse_spy_story",
+      "file": "images/scenes/teahouse_spy_story.png"
+    },
+    {
+      "id": "temple_ruins_array",
+      "file": "images/scenes/temple_ruins_array.png"
+    },
+    {
+      "id": "tense_meeting",
+      "file": "images/scenes/tense_meeting.png"
+    },
+    {
+      "id": "throne_hall_debate",
+      "file": "images/scenes/throne_hall_debate.png"
+    },
+    {
+      "id": "thunder_field",
+      "file": "images/scenes/thunder_field.png"
+    },
+    {
+      "id": "tomb_wall_script",
+      "file": "images/scenes/tomb_wall_script.png"
+    },
+    {
+      "id": "train_countryside",
+      "file": "images/scenes/train_countryside.png"
+    },
+    {
+      "id": "trial_tower_99",
+      "file": "images/scenes/trial_tower_99.png"
+    },
+    {
+      "id": "tribulation_peak",
+      "file": "images/scenes/tribulation_peak.png"
+    },
+    {
+      "id": "underground_arena",
+      "file": "images/scenes/underground_arena.png"
+    },
+    {
+      "id": "village_dusk",
+      "file": "images/scenes/village_dusk.png"
+    },
+    {
+      "id": "volcano_dusk",
+      "file": "images/scenes/volcano_dusk.png"
+    },
+    {
+      "id": "warship_planet_burst",
+      "file": "images/scenes/warship_planet_burst.png"
+    },
+    {
+      "id": "wasteland_can_market",
+      "file": "images/scenes/wasteland_can_market.png"
+    },
+    {
+      "id": "wasteland_radar",
+      "file": "images/scenes/wasteland_radar.png"
+    },
+    {
+      "id": "waterfall_rainbow",
+      "file": "images/scenes/waterfall_rainbow.png"
+    },
+    {
+      "id": "wedding_room_alone",
+      "file": "images/scenes/wedding_room_alone.png"
+    },
+    {
+      "id": "wet_market_haggle",
+      "file": "images/scenes/wet_market_haggle.png"
+    },
+    {
+      "id": "windy_hill",
+      "file": "images/scenes/windy_hill.png"
+    },
+    {
+      "id": "winter_snow",
+      "file": "images/scenes/winter_snow.png"
+    },
+    {
+      "id": "xianxia_peaks",
+      "file": "images/scenes/xianxia_peaks.png"
+    }
+  ],
+  "count": 162,
+  "version": 8,
+  "art_style": "scripts/art-style.json"
+}

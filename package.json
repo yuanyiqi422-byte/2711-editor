@@ -1,0 +1,24 @@
+{
+  "name": "2711-editor",
+  "private": true,
+  "version": "0.2.5",
+  "description": "2711 Editor v0.2.5 — interactive story creation platform",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/frontend-build.mjs",
+    "validate": "node scripts/frontend-build.mjs",
+    "lint": "eslint frontend/js scripts --max-warnings 50",
+    "lint:fix": "eslint frontend/js scripts --fix",
+    "format": "prettier --write \"frontend/**/*.{js,css,html}\" \"scripts/**/*.mjs\"",
+    "format:check": "prettier --check \"frontend/**/*.{js,css,html}\" \"scripts/**/*.mjs\"",
+    "smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-test.ps1",
+    "test:backend": ".venv\\Scripts\\python -m pytest backend/tests -q",
+    "test": "npm run validate && npm run test:backend"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.17.0",
+    "eslint": "9.17.0",
+    "globals": "15.14.0",
+    "prettier": "3.4.2"
+  }
+}

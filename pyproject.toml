@@ -1,0 +1,57 @@
+[project]
+name = "2711-editor"
+version = "0.2.4"
+description = "2711 Editor — interactive story creation platform"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = [
+    "ignore::DeprecationWarning:fastapi.*",
+]
+
+[tool.coverage.run]
+source = ["backend"]
+omit = ["backend/tests/*", "backend/data/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["backend"]
+exclude = [
+    "backend/data",
+    "__pycache__",
+]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "I", "UP", "B", "SIM", "RUF",
+]
+ignore = [
+    "E501",
+    "B008",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["document_extract", "env_check", "history_models", "history_service", "image_service", "ingest_models", "llm", "models", "narrative_service", "prompts"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+files = ["backend"]
+namespace_packages = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+strict_optional = true
+disallow_untyped_defs = false

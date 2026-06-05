@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="8" fill="#faf6ed"/>
+  <circle cx="16" cy="16" r="14" fill="#f0f6ec" opacity="0.9"/>
+  <defs>
+    <linearGradient id="f-leaf" x1="6" y1="26" x2="26" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6b8e6b"/>
+      <stop offset="55%" stop-color="#7eb8ff"/>
+      <stop offset="100%" stop-color="#8ab898"/>
+    </linearGradient>
+    <linearGradient id="f-petal" x1="19" y1="5" x2="27" y2="13" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffc8dd"/>
+      <stop offset="100%" stop-color="#f8a8c8"/>
+    </linearGradient>
+  </defs>
+  <path d="M9 22c2.8-6 6-8.5 10-8.5 1.8 0 3.4.5 4.8 1.4-1.4-4.6-3.8-7.2-7.8-7.4-4.2-.2-7.4 3-9 7.8 1.4-.6 2.9-1 4.4-.9-2.2 3-3.6 5-2.8 7.6z" fill="url(#f-leaf)"/>
+  <circle cx="22.5" cy="9.5" r="2.6" fill="url(#f-petal)"/>
+  <path d="M21 17c2-.2 4.2 1 6 2.8" stroke="#a8d4ff" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+</svg>

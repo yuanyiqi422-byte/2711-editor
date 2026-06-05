@@ -1,0 +1,16 @@
+backend/.env
+backend/data/
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

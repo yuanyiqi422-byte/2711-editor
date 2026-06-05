@@ -1,0 +1,402 @@
+[
+  {
+    "id": "ai_data_core",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. AI data center blue fiber veins, giant holographic girl smiling mechanically at intruder"
+  },
+  {
+    "id": "alchemy_explosion",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. steampunk alchemy lab gears and tubes, muffled bang, soot black face coughing from smoke"
+  },
+  {
+    "id": "alchemy_last_seal",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. blazing alchemy room trembling bronze cauldron, sweat drenched alchemist forming final pill hand seal"
+  },
+  {
+    "id": "auction_booth",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. treasure pavilion crystal VIP booth, calm bidder pressing bell driving rival to ruin"
+  },
+  {
+    "id": "bank_vip_room",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. elegant bank VIP lounge, branch manager bowing pouring tea presenting premium wealth plan"
+  },
+  {
+    "id": "bar_booth_drink",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. loud bar with flashing lights, lonely figure in corner booth drinking shot after shot"
+  },
+  {
+    "id": "bio_lab_embryo",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. secret bio lab green tank, mutated embryo with tentacles opening pure black eyes at observer"
+  },
+  {
+    "id": "black_market_stall",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. underground black market corner stall junk pile, system alert vibrating as protagonist stops"
+  },
+  {
+    "id": "blackout_study_hall",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. evening self-study classroom plunged into sudden darkness, students cheering, silhouettes in moonlit windows"
+  },
+  {
+    "id": "blind_date_restaurant",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. upscale restaurant blind date, partner cutting steak while interrogating about salary and property"
+  },
+  {
+    "id": "border_rally_war",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. border muster platform torn flags wind, general sword to sky, hundred thousand troops roaring war"
+  },
+  {
+    "id": "bronze_coffin_stars",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. vast silent star road inside drifting giant bronze coffin, lone figure sitting in cosmic void"
+  },
+  {
+    "id": "bunker_red_alarm",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. underground bunker corridor flashing red alarm, claws scraping in ventilation shaft"
+  },
+  {
+    "id": "cafeteria_serving",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. long cafeteria queue, server shaking ladle so meat falls back into tray, disappointed student at window"
+  },
+  {
+    "id": "ceo_elevator",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. private CEO elevator ascending fast, only two people breathing close in tight space, tension"
+  },
+  {
+    "id": "charity_gala",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. glittering charity ball center stage, protagonist in borrowed gown alone in corner watching hypocrisy"
+  },
+  {
+    "id": "classroom_drowse",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. sleepy humid afternoon Japanese classroom, teacher at blackboard, student hiding behind tall textbook stack secretly reading phone, warm sunbeams"
+  },
+  {
+    "id": "cliff_leap",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. desperate cliff edge villains closing in, bloodied hero smirks and leaps into abyss"
+  },
+  {
+    "id": "cold_palace_body",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. narrow cold palace passage never sees sun, two eunuchs carrying straw wrapped body to mass grave"
+  },
+  {
+    "id": "colosseum_cyber_arm",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. wasteland colosseum undercarriage rest room, machining fusion battery into mechanical right arm"
+  },
+  {
+    "id": "corridor_punishment",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. student punished standing in hallway outside classroom window, watching classmates inside, wry smile with friend"
+  },
+  {
+    "id": "crowded_subway",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. packed rush hour subway, bodies pressed together, awkward foot step on businessman's shoe as train sways"
+  },
+  {
+    "id": "cursed_bus_ride",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. midnight cursed bus route, protagonist staring ahead pretending not to see faceless passenger in funeral robe"
+  },
+  {
+    "id": "cyberpunk_alley_gun",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. cyberpunk rainy neon alley holographic fish overhead, cyborg mercenaries laser firefight"
+  },
+  {
+    "id": "dragon_nest_egg",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. dragon nest mountain of gold, sneaking protagonist hugging huge egg while dragon snores fiery breath"
+  },
+  {
+    "id": "empress_unveil_night",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. silent empress chamber night removing heavy phoenix crown before mirror, eunuch reports emperor at concubine"
+  },
+  {
+    "id": "er_waiting_room",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. 3am emergency room waiting bench, pale face holding bills, gurney wheels echoing in corridor"
+  },
+  {
+    "id": "exam_rank_board",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. exam results bulletin board crowded with anxious students, someone gasping at top rank, another clutching paper in back"
+  },
+  {
+    "id": "execution_scaffold",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. execution ground prisoner kneeling, executioner spraying liquor on huge blade, magistrate reaching for token"
+  },
+  {
+    "id": "farm_pardon_edict",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. misty dawn farm fields exiled protagonist in hemp clothes hoeing, dust horse bearing pardon edict"
+  },
+  {
+    "id": "gate_white_stairs",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. mysterious sect gate endless white jade stairs to clouds, youths crawling upward under crushing pressure"
+  },
+  {
+    "id": "ghost_wedding_hall",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. horror copy ancient wedding hall yin wind, lifting bride red veil reveals paper white face"
+  },
+  {
+    "id": "grad_backstage",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. chaotic graduation party backstage, costumes and stage call lights, emotional farewell behind prop curtain"
+  },
+  {
+    "id": "guild_quest_board",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. gothic adventurer guild hall quest board, scarred mercenaries grabbing fresh dragon slayer bounty"
+  },
+  {
+    "id": "hall_disciple_fight",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. grand sect hall smoke and gold, white-haired elders fighting over taking protagonist as disciple"
+  },
+  {
+    "id": "hallway_rainstorm",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. school building entrance hall during sudden downpour, students sheltering, wet courtyard visible, hesitant shared umbrella moment"
+  },
+  {
+    "id": "haunted_toilet_crack",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. dusty old school girls toilet stall, peeking through door crack at backwards walking feet"
+  },
+  {
+    "id": "highway_ammo",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. abandoned highway jam of rusted cars, mutant birds overhead, wiping last bullets in SUV"
+  },
+  {
+    "id": "hospital_blood_elevator",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. horror game hospital elevator at night, floor numbers flickering, fresh blood dripping from vent"
+  },
+  {
+    "id": "hot_spring_mist",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. spiritual hot spring mist peach petals, clothes folded on bank, accidental encounter with saintess cultivating"
+  },
+  {
+    "id": "hotel_hangover",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. presidential suite morning hangover, silk sheets, stranger's hand from blanket, splitting headache"
+  },
+  {
+    "id": "infinite_white_orb",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. infinite flow pure white void space, giant god-light orb judging reward points"
+  },
+  {
+    "id": "infirmary_curtain",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. school infirmary with white bed curtain, antiseptic smell, resting student hears gossip whisper beyond curtain"
+  },
+  {
+    "id": "insomnia_rental",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. tiny rental apartment bed at night, phone glow on anxious sleepless face, unread messages"
+  },
+  {
+    "id": "jianghu_inn",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. misty Jiangnan xianxia inn, travelers drinking, hooded table plotting ambush tonight"
+  },
+  {
+    "id": "landlord_rent",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy.  shabby rental iron door hammered from outside, landlady shouting overdue rent through door"
+  },
+  {
+    "id": "late_bbq_street",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. neon dim late night street BBQ stall, office workers drinking skewers venting about bosses and life"
+  },
+  {
+    "id": "library_sweeping_monk",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. scripture pavilion bottom floor dusty corner, old sweeping monk speaks one line solving cultivation bottleneck"
+  },
+  {
+    "id": "library_window_nap",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. quiet library corner by window, dappled leaf sunlight on books, girl napping, boy gently closing curtain"
+  },
+  {
+    "id": "luxury_counter",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. luxury boutique counter, snobbish clerk sizing up plain clothes customer until black card appears"
+  },
+  {
+    "id": "magic_academy",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. magic academy meditation hall floating elemental light particles, merging fire and water at center"
+  },
+  {
+    "id": "manor_kneeling_punish",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. snow sealed side hall candle flicker, mistress sipping tea, concubine daughter kneeling on cold brick"
+  },
+  {
+    "id": "mars_greenhouse_patch",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. Mars base greenhouse meteor punctures film, pressure dropping, scrambling for space tape"
+  },
+  {
+    "id": "mech_hangar_weld",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. massive mech hangar robotic arms welding hundred meter red white humanoid mech sparks flying"
+  },
+  {
+    "id": "mist_beast_forest",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. poison mist ancient forest, giant beast crushing trees, protagonist hiding in bushes holding breath"
+  },
+  {
+    "id": "netcafe_allnight",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. dim smoky internet cafe booth at night, roommates gaming side by side, monitor glow on excited faces"
+  },
+  {
+    "id": "nether_bridge",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. underworld Naihe bridge ghost queue whipped by guards, protagonist hiding living aura to rescue soul"
+  },
+  {
+    "id": "newyear_crowd",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. new year countdown plaza crush, balloons rising, lovers separated in crowd at ten second mark"
+  },
+  {
+    "id": "noon_gate_kneeling",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. Noon Gate white jade steps torrential rain, protagonist kowtowing blood washing down for imperial mercy"
+  },
+  {
+    "id": "nunnery_well",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. peach blossom nunnery backyard heroine drawing water at well, heavy knocks of palace guard outside"
+  },
+  {
+    "id": "office_midnight",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. only lit office floor at 2am, rejected proposal drafts, cold takeout boxes, frantic keyboard typing"
+  },
+  {
+    "id": "pantry_gossip",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. office pantry coffee machine humming, two employees whispering corporate politics and scandal"
+  },
+  {
+    "id": "paper_doll_village",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. eerie deserted village white lanterns, forced stay in courtyard full of smiling paper effigies"
+  },
+  {
+    "id": "parking_ambush",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. dim underground parking, unlock beep, masked figures with iron bars emerging from pillars"
+  },
+  {
+    "id": "pharmacy_search_antidote",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. imperial pharmacy boiling furnaces steam, frantic search scattered herbs for emperor antidote"
+  },
+  {
+    "id": "plane_door_fall",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. transport plane tail smoke open cargo door, pushed out into cloud layer without parachute"
+  },
+  {
+    "id": "plum_garden_snow",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. snowy imperial plum garden, heroine reaching red branch suddenly meets emperor in black fox fur"
+  },
+  {
+    "id": "poem_on_painted_boat",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. Qinhuai painted boat musicians, poets around courtesan, corner figure recites poem stunning all"
+  },
+  {
+    "id": "police_mediation",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. bright police mediation room, families shouting across table, officer slamming desk demanding silence"
+  },
+  {
+    "id": "prison_cell_taunt",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. deepest dungeon heavy chains on straw, protagonist mocking victorious enemy through iron bars"
+  },
+  {
+    "id": "rabbit_lantern_fair",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. lantern festival street sea of lights riddle stall, two hands touch same rabbit lantern"
+  },
+  {
+    "id": "rebellion_sandbox",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. prince mansion secret room candle maps on wall, black clad advisers around terrain sandbox coup plan"
+  },
+  {
+    "id": "roast_chicken_spirit",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. spirit beast cliff tree hollow, protagonist waving sizzling roast drumstick tempting baby qilin"
+  },
+  {
+    "id": "rooftop_secret",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. school rooftop behind rusty door, two figures leaning on railing, secret talk or confession, overcast sky"
+  },
+  {
+    "id": "royal_hunt_arrow",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. royal hunting grounds mist, arrow pierces bullseye hundred paces, noble ladies gasp"
+  },
+  {
+    "id": "sand_battlefield",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. yellow sand frontier two armies of cultivators banners blocking sun, killing intent warping space"
+  },
+  {
+    "id": "school_prank_fly",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. ancient private school master reciting eyes closed, rear row noble son dropping dead fly into classmate ink"
+  },
+  {
+    "id": "sect_arena",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. xianxia sect tournament on blue stone arena, crowd mocking, lone hero preparing to challenge genius"
+  },
+  {
+    "id": "silk_shop_ledger",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. Jiangnan silk merchant account room abacus clatter, teen protagonist exposes decade hidden fraud one glance"
+  },
+  {
+    "id": "snack_shop_rush",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. crowded school snack shop rush after bell, students squeezing in for grilled sausage and iced drinks, energetic chaos"
+  },
+  {
+    "id": "sports_parade",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. school sports day opening parade, class formation passing review stand, girl holding class sign, crowd whispering"
+  },
+  {
+    "id": "storm_no_ride",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. stormy crossroads, ride app showing 300 queue, soaked protagonist watching taxi splash mud away"
+  },
+  {
+    "id": "submarine_sonar",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. submarine control room sonar ping, massive red dot bigger than whale rushing toward hull"
+  },
+  {
+    "id": "sunny_basketball",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. school sports field under blazing sun, boys playing basketball, girls under tree shade holding water bottle, youth romance mood"
+  },
+  {
+    "id": "sunset_duty",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. empty classroom at golden hour after school, long desk shadows, lone student sweeping floor, volleyball sounds outside window"
+  },
+  {
+    "id": "supermarket_siege",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. supermarket rolling shutter dented by zombies outside, survivors pushing shelves against door"
+  },
+  {
+    "id": "sword_grave",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. silent sword grave millions of rusted blades trembling and screaming as protagonist enters"
+  },
+  {
+    "id": "teahouse_spy_story",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. busy capital teahouse second floor storyteller gavel, spy exchanging intel through peephole"
+  },
+  {
+    "id": "temple_ruins_array",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. rainy ruined temple altar suddenly glowing purple array tearing space among broken walls"
+  },
+  {
+    "id": "tense_meeting",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. frozen corporate boardroom, angry boss slamming table, managers heads down barely breathing"
+  },
+  {
+    "id": "throne_hall_debate",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. imperial throne hall young emperor on dragon seat, civil and military officials fiercely debating memorial"
+  },
+  {
+    "id": "tomb_wall_script",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. deep ancient tomb torchlight on carved wall revealing lost supreme cultivation manual"
+  },
+  {
+    "id": "trial_tower_99",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. sect trial tower 99th floor collapsing void, bones creaking under hundredfold gravity last step"
+  },
+  {
+    "id": "tribulation_peak",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. lonely peak under swirling purple thundercloud vortex, cultivator bare chest meditating for ninth lightning tribulation"
+  },
+  {
+    "id": "underground_arena",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. underground iron cage arena, frenzied crowd, one hand choking three meter half-beast opponent"
+  },
+  {
+    "id": "warship_planet_burst",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. starship command deck red alerts, curved window showing blue planet tearing apart"
+  },
+  {
+    "id": "wasteland_can_market",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. radiation dust underground survivor market, trading spam cans and bullets for scrap parts"
+  },
+  {
+    "id": "wasteland_radar",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. scorched wasteland squatting with broken radar catching faint old era broadcast music"
+  },
+  {
+    "id": "wedding_room_alone",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. festive prince mansion bridal chamber alone on bed edge, dragon phoenix candles burning out unseen groom"
+  },
+  {
+    "id": "wet_market_haggle",
+    "prompt": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy. wet noisy outdoor market stall, haggling over cilantro price in dialect, humble protagonist"
+  }
+]

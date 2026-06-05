@@ -1,0 +1,25 @@
+---
+description: 风旅物语 dev workflow — auto-reload, no manual restart prompts
+globs:
+  - "**/*"
+---
+
+# 2711编辑器 · Agent 规则
+
+## 重启策略
+
+1. 后端已配置 `uvicorn --reload --reload-include .env`；Python 与 `.env` 变更会自动重启。
+2. **Agent 修改 backend 后**：主动执行 `scripts/restart-server.ps1` 或 `restart.bat`，勿要求用户手动重启。
+3. **禁止**在回复中写「请双击 start.bat 重启」，除非端口冲突无法自动解决或环境未安装。
+
+## 命令
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/restart-server.ps1
+```
+
+验证：`/api/health` 返回 200。
+
+## 前端
+
+- 改 JS/CSS 后用户普通刷新即可；不要默认要求 Ctrl+F5。

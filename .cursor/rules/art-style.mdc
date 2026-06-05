@@ -1,0 +1,104 @@
+---
+description: 2711编辑器 · 全站视觉与 AI 生图风格指南 — 2D 吉卜力系治愈风，蓝粉绿，奇幻游戏 UI
+alwaysApply: true
+---
+
+# 2711编辑器 · 美术风格指南
+
+本规则定义 **2711编辑器 / 小说沉浸式游戏** 的全站视觉语言。涉及 UI、插画、场景图、GenerateImage、素材生成时 **必须遵循**，并与 `frontend/css/tokens.css` 设计令牌保持一致。
+
+## 禁止项
+
+- **禁止 3D 渲染风**：不要写 `3D render`、`Unreal Engine`、`CGI`、`photorealistic`、`octane render` 等
+- 不要写实摄影风、赛博朋克霓虹、暗黑哥特、默认 Tailwind 蓝
+- 纯风景壁纸不算完成 — 需体现 **游戏 UI / 互动界面** 语境
+
+---
+
+## 1. 核心画风 · 2D 日系动画
+
+**基调**：手绘感 **2D 动画**，非 3D。
+
+| 用途 | 英文关键词（生图 prompt 直接复用） |
+|------|-----------------------------------|
+| 主风格 | `2D anime art style`, `Japanese animation`, `Studio Ghibli style`, `masterpiece`, `highly detailed` |
+| 背景 | `watercolor background`, `soft painted scenery`, `hand-drawn illustration` |
+| 天空/光（可选） | `Makoto Shinkai style`, `dramatic sky`, `volumetric clouds`, `ethereal light rays` |
+
+**Agent 执行要点**：
+- 插画、场景图、hero 图一律按 **2D 动画 / 吉卜力系** 描述
+- 需要天空、云层、逆光时，可叠加 Makoto Shinkai 关键词，但主体仍保持 2D 手绘感
+
+---
+
+## 2. 色彩与氛围 · 治愈蓝粉绿
+
+**基调**： pastel 治愈系，梦幻、温暖、可亲近。
+
+| 维度 | 英文关键词 |
+|------|-----------|
+| 色板 | `pastel color palette`, `soft blue`, `pale pink`, `mint green` |
+| 光感 | `ethereal lighting`, `soft diffused light`, `dreamy atmosphere` |
+| 情绪 | `healing and cozy atmosphere`, `whimsical`, `gentle`, `serene` |
+
+**CSS 令牌对照**（`tokens.css`）：
+- 天蓝 `--sky` / `--sky-soft` · 樱粉 `--sakura` · 薄荷绿 `--meadow` / `--meadow-light`
+- 纸感背景 `--cream` / `--paper` · 文字 `--ink`
+
+UI 改色时优先用现有 token，勿引入冲突色系。
+
+---
+
+## 3. 游戏 UI 元素 · 界面设计非纯风景
+
+**基调**：这是 **奇幻 RPG 互动界面 / Web 游戏 UI**，不是无 UI 的 landscape。
+
+| 元素 | 英文关键词 |
+|------|-----------|
+| 整体 | `fantasy game UI design`, `web design`, `RPG interface`, `visual novel UI` |
+| 材质 | `parchment paper texture`, `aged scroll paper`, `soft paper grain` |
+| 装饰 | `ornate metallic borders`, `filigree frame`, `subtle gold trim` |
+| 交互 | `glowing buttons`, `soft glow hover state`, `magical UI accents` |
+
+**Agent 执行要点**：
+- 做页面/组件时：羊皮纸面板、金属描边、发光按钮/选项卡
+- 生场景图时：画面中应含 **UI 框架、对话框、选项按钮、进度条** 等至少一类界面元素
+- 与 `design-playbook` / `auto-assets` skill 配合：需要图时直接 GenerateImage，勿用灰色 placeholder
+
+---
+
+## 4. 主题元素 · 奇幻叙事符号
+
+项目标志性视觉母题（hero、空状态、loading、feature 图可复用）：
+
+| 母题 | 英文关键词 |
+|------|-----------|
+| 浮空岛 | `magical floating island`, `floating islands in the sky` |
+| 书卷/故事 | `giant open scroll`, `unfurled story scroll`, `floating text pages` |
+| 机械/魔法 | `floating gears`, `clockwork motifs`, `magical mechanisms` |
+| 晶体/羽毛 | `glowing crystals`, `magical feathers`, `sparkling particles` |
+
+---
+
+## 5. 即用型生图 Prompt 模板
+
+生成插画、hero、场景、UI mockup 时，以下方模板为底，按场景替换 `[SUBJECT]`：
+
+```
+[SUBJECT], 2D anime art style, Japanese animation, Studio Ghibli style, watercolor background, masterpiece, highly detailed, pastel color palette, soft blue, pale pink, mint green, ethereal lighting, healing and cozy atmosphere, dreamy, fantasy game UI design, web design, RPG interface, parchment paper texture, ornate metallic borders, glowing buttons, magical floating island, giant open scroll, floating gears, glowing crystals, magical feathers, soft diffused light, hand-drawn illustration, NOT 3D, no photorealistic, no CGI
+```
+
+**变体示例**：
+- **Hero 主视觉**：`[SUBJECT]` → `visual novel editor landing hero, open scroll with branching story paths, floating UI panels`
+- **游戏场景**：`[SUBJECT]` → `interactive story game screen, dialogue box and choice buttons over painted scenery`
+- **空状态/功能图**：`[SUBJECT]` → `workshop empty state illustration, upload novel icon on parchment panel`
+
+可选追加（天空特写时）：`, Makoto Shinkai style sky, volumetric clouds, light rays`
+
+---
+
+## 6. 与现有资产的关系
+
+- 现有 SVG 场景见 `frontend/images/scenes/`（如 `floating_isles.svg`、`castle_clouds.svg`）
+- 品牌名：**2711编辑器**（`frontend/js/brand.js`）
+- 新图风格须与上述 SVG 及 `tokens.css` 色板统一；入库路径遵循 `auto-assets` skill（`frontend/images/` 或 `public/assets/images/`）

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "notes_zh": "2711 编辑器统一视觉规范 — 2D 吉卜力水彩动漫，非 3D 渲染",
+  "style_prefix": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy.",
+  "ui_prefix": "Fantasy game UI design, web design, RPG interface, parchment paper texture, ornate metallic borders, glowing buttons, magical floating island, giant open scroll, floating gears, glowing crystals, magical feathers.",
+  "landing_prefix": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, pastel blue pink mint green, ethereal lighting, dreamy, fantasy game UI design, parchment scroll, floating island castle, magical gears and crystals.",
+  "negative": "3D render, CGI, photorealistic, low detail, flat vector, minimalist icon, clip art, blurry, watermark, text overlay",
+  "palette": {
+    "soft_blue": "#a8d8ff",
+    "pale_pink": "#f8c8dc",
+    "mint_green": "#9fd4a8"
+  }
+}
