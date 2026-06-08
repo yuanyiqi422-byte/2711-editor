@@ -26,6 +26,13 @@ def _env_int(name: str, default: str, *, zero_unlimited: bool = False) -> int:
 
 
 MAX_UPLOAD_BYTES = _env_int("MAX_UPLOAD_MB", "50") * 1024 * 1024
+
+
+def upload_max_mb() -> int:
+    """Return max upload size in MB for health API."""
+    return MAX_UPLOAD_BYTES // (1024 * 1024)
+
+
 MAX_EXTRACT_CHARS = _env_int("MAX_EXTRACT_CHARS", "10000000")
 # 创建/展开 API 正文硬上限（与提取上限独立，默认与 MAX_EXTRACT_CHARS 对齐）
 MAX_CREATE_CHARS = _env_int("MAX_CREATE_CHARS", str(MAX_EXTRACT_CHARS))
