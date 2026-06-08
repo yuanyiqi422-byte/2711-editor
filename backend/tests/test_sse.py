@@ -19,6 +19,14 @@ async def test_create_stream_rejects_empty_text(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
+async def test_sse_keepalive_comment() -> None:
+    from main import _SSE_KEEPALIVE
+
+    assert _SSE_KEEPALIVE.startswith(": ")
+    assert _SSE_KEEPALIVE.endswith("\n\n")
+
+
+@pytest.mark.asyncio
 async def test_sse_helper_format() -> None:
     """Unit-level: _sse produces valid event-stream line format."""
     from main import _sse

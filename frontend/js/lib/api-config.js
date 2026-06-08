@@ -11,6 +11,9 @@
   var BACKEND_UNAVAILABLE_MSG =
     "故事解析服务暂时不可用。请稍后重试；若持续失败，请检查 Render 后端是否在线。";
 
+  var STREAM_INCOMPLETE_MSG =
+    "生成流意外结束，未收到完整游戏数据。常见原因：网络中断、Netlify 代理截断长连接，或 AI 接口超时。请刷新后重试；若仍失败，稍等 Render 唤醒后再试。";
+
 
 
   function normalizeBase(base) {
@@ -318,6 +321,8 @@
     backendColdStartMessage: BACKEND_COLD_START_MSG,
 
     backendProxyMisconfigMessage: BACKEND_PROXY_MISCONFIG_MSG,
+
+    streamIncompleteMessage: STREAM_INCOMPLETE_MSG,
 
   };
 

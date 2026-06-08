@@ -2,9 +2,9 @@
 /**
  * Inject production API config into frontend before Netlify deploy.
  * Env vars (Netlify UI → Site settings → Environment variables):
- *   API_BACKEND_URL — backend origin, e.g. https://2711-editor-api.onrender.com
- *                     generates frontend/_redirects + netlify.toml API proxy (preferred)
- *   API_BASE_URL    — optional direct API origin (skips proxy; needs CORS on backend)
+ *   API_BACKEND_URL — backend origin, e.g. https://two711-editor-api.onrender.com
+ *                     sets __API_BASE__ for browser direct calls (required for SSE)
+ *   API_BASE_URL    — override direct API origin (skips Netlify /api proxy entirely)
  */
 import { readFileSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -25,10 +25,11 @@ function escapeRegExp(text) {
   return String(text).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-const apiBase = stripSlash(process.env.API_BASE_URL || process.env.VITE_API_BASE || "");
 const backendProxy = stripSlash(
   process.env.API_BACKEND_URL || process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || ""
 );
+// Netlify /api rewrite proxy truncates long SSE streams — prefer direct backend URL.
+const apiBase = stripSlash(process.env.API_BASE_URL || process.env.VITE_API_BASE || "") || backendProxy;
 
 const envConfig = `/** Auto-generated — do not edit manually */
 (function (g) {

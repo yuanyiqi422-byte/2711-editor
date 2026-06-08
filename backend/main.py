@@ -1,14 +1,18 @@
+import asyncio
+import hashlib
 import json
+import logging
 import os
+import time
 from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, Field, ValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from starlette.middleware.base import BaseHTTPMiddleware
-from fastapi.staticfiles import StaticFiles
+from static_cache import VERSIONED_EXTS, VersionedStaticFiles
 
 from document_extract import (
     ALLOWED_EXTENSIONS,
@@ -19,6 +23,7 @@ from document_extract import (
     MAX_EXTRACT_CHARS,
     MAX_PDF_PAGES,
     MAX_UPLOAD_BYTES,
+    upload_max_mb,
     PDF_PAGE_HARD_CAP,
     effective_llm_limit,
     extract_from_bytes,
@@ -28,8 +33,19 @@ from env_check import validate_env
 from ingest_models import IngestFileResponse
 from llm import LLMError
 from models import CreateGameRequest, ExpandNodeRequest, GamePack, STYLE_LABELS
-from history_models import HistoryDetail, HistoryItem, HistorySaveRequest
-from history_service import delete_entry, get_entry, list_entries, refresh_history_count, save_entry
+from history_models import HistoryDetail, HistoryItem, HistoryProgress, HistorySaveRequest
+from history_service import (
+    delete_entry,
+    ensure_share_token,
+    get_entry,
+    get_entry_by_share_token,
+    list_entries,
+    load_progress,
+    refresh_history_count,
+    save_entry,
+    save_progress,
+    touch_entry,
+)
 from image_service import (
     cache_id_for,
     generate_scene_image,
@@ -38,8 +54,36 @@ from image_service import (
 )
 from narrative_service import analyze_story, estimate_play_minutes, expand_branch, generate_game_nodes
 
+logger = logging.getLogger(__name__)
+
+# 圣经分析缓存：同文本+风格重复提交时跳过 analyze（TTL 秒）
+_BIBLE_CACHE_TTL = int(os.getenv("BIBLE_CACHE_TTL", "1800"))
+_bible_cache: dict[str, tuple[float, object]] = {}
+
+
+def _bible_cache_key(text: str, style: str) -> str:
+    digest = hashlib.sha256((text + "|" + style).encode("utf-8")).hexdigest()
+    return digest
+
+
+async def _cached_analyze_story(text: str, style, source_char_count: int):
+    key = _bible_cache_key(text, style)
+    now = time.time()
+    cached = _bible_cache.get(key)
+    if cached and now - cached[0] < _BIBLE_CACHE_TTL:
+        logger.info("bible cache hit (%s chars)", source_char_count)
+        return cached[1]
+    t0 = time.perf_counter()
+    bible = await analyze_story(text, style, source_char_count=source_char_count)
+    logger.info("analyze_story (no cache) %.1fs", time.perf_counter() - t0)
+    _bible_cache[key] = (now, bible)
+    if len(_bible_cache) > 32:
+        oldest = min(_bible_cache, key=lambda k: _bible_cache[k][0])
+        _bible_cache.pop(oldest, None)
+    return bible
+
 ENV_PATH = Path(__file__).resolve().parent / ".env"
-APP_VERSION = "0.2.5"
+APP_VERSION = "0.2.6"
 _startup_issues: list[str] = []
 _history_count_cache: int = 0
 
@@ -81,10 +125,47 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class StaticCacheMiddleware(BaseHTTPMiddleware):
+    """PERF-001: HTML no-cache; ?v= static assets long-lived immutable."""
+
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/api/"):
+            return response
+        path = request.url.path
+        query = request.url.query
+        ext = Path(path).suffix.lower()
+        ctype = response.headers.get("content-type", "")
+
+        if path.endswith(".html") or path.rstrip("/") == "" or "text/html" in ctype:
+            response.headers["Cache-Control"] = "no-cache"
+        elif "v=" in query and ext in VERSIONED_EXTS:
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        elif ext in VERSIONED_EXTS:
+            response.headers["Cache-Control"] = "public, max-age=3600"
+        return response
+
+
+app.add_middleware(StaticCacheMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
+def _cors_origins() -> list[str]:
+    origins = [
+        "http://127.0.0.1:8010",
+        "http://localhost:8010",
+        "https://2711editor.netlify.app",
+    ]
+    extra = os.getenv("CORS_ORIGINS", "").strip()
+    if extra:
+        for part in extra.split(","):
+            o = part.strip().rstrip("/")
+            if o and o not in origins:
+                origins.append(o)
+    return origins
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8010", "http://localhost:8010"],
+    allow_origins=_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -110,7 +191,7 @@ async def health():
         "styles": STYLE_LABELS,
         "env_issues": _startup_issues,
         "upload": {
-            "max_mb": MAX_UPLOAD_BYTES // (1024 * 1024),
+            "max_mb": upload_max_mb(),
             "formats": sorted(ALLOWED_EXTENSIONS),
         },
         "extract": {
@@ -131,16 +212,17 @@ async def health():
 async def ingest_file(file: UploadFile = File(...)):
     filename = file.filename or "upload.txt"
     try:
-        if file.size is not None and file.size > MAX_UPLOAD_BYTES:
-            raise HTTPException(
-                status_code=413,
-                detail=f"文件过大，最大 {MAX_UPLOAD_BYTES // (1024 * 1024)}MB",
-            )
+        if MAX_UPLOAD_BYTES > 0:
+            if file.size is not None and file.size > MAX_UPLOAD_BYTES:
+                raise HTTPException(
+                    status_code=413,
+                    detail=f"文件过大，最大 {upload_max_mb()}MB",
+                )
         data = await file.read()
-        if len(data) > MAX_UPLOAD_BYTES:
+        if MAX_UPLOAD_BYTES > 0 and len(data) > MAX_UPLOAD_BYTES:
             raise HTTPException(
                 status_code=413,
-                detail=f"文件过大，最大 {MAX_UPLOAD_BYTES // (1024 * 1024)}MB",
+                detail=f"文件过大，最大 {upload_max_mb()}MB",
             )
         result = extract_from_bytes(data, filename)
         return IngestFileResponse(
@@ -167,13 +249,27 @@ def _sse(event: str, payload: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
 
 
+_SSE_KEEPALIVE = ": keepalive\n\n"
+_SSE_HEARTBEAT_SEC = float(os.getenv("SSE_HEARTBEAT_SEC", "12"))
+
+
+async def _await_with_sse_heartbeats(coro):
+    """Yield SSE comment keepalives while waiting on a long LLM call."""
+    task = asyncio.create_task(coro)
+    while not task.done():
+        _done, _ = await asyncio.wait({task}, timeout=_SSE_HEARTBEAT_SEC)
+        if not task.done():
+            yield _SSE_KEEPALIVE
+    yield await task
+
+
 PIPELINE_STEPS = [
-    (5, "正在读取输入文本…"),
-    (15, "正在分析人物与冲突…"),
-    (35, "正在构思剧情大纲…"),
-    (55, "正在生成分支节点…"),
-    (75, "正在校验叙事图谱…"),
-    (90, "正在打包可玩内容…"),
+    (5, "正在构筑世界……"),
+    (15, "✓ 阅读原著"),
+    (35, "✓ 编织剧情"),
+    (55, "✓ 生成命运分支"),
+    (75, "✓ 准备场景"),
+    (90, "故事正在成形…"),
 ]
 
 
@@ -181,8 +277,8 @@ PIPELINE_STEPS = [
 async def create_game_stream(body: CreateGameRequest):
     async def events():
         try:
-            for progress, msg in PIPELINE_STEPS[:2]:
-                yield _sse("status", {"progress": progress, "msg": msg})
+            yield _sse("status", {"progress": 5, "msg": "正在构筑世界……", "step": "read"})
+            yield _sse("status", {"progress": 15, "msg": "✓ 阅读原著", "step": "read"})
 
             source_char_count = len(body.text)
             llm_text, truncated, trunc_note = prepare_llm_text(body.text)
@@ -191,58 +287,93 @@ async def create_game_stream(body: CreateGameRequest):
                     "status",
                     {
                         "progress": 12,
-                        "msg": trunc_note[:240] + ("…" if len(trunc_note) > 240 else ""),
+                        "msg": "✓ 阅读原著 · " + trunc_note[:200] + ("…" if len(trunc_note) > 200 else ""),
+                        "step": "read",
                     },
                 )
 
-            bible = await analyze_story(llm_text, body.style, source_char_count=source_char_count)
-            yield _sse("bible", bible.model_dump())
+            bible = None
+            async for chunk in _await_with_sse_heartbeats(
+                _cached_analyze_story(llm_text, body.style, source_char_count=source_char_count)
+            ):
+                if isinstance(chunk, str):
+                    yield chunk
+                else:
+                    bible = chunk
             yield _sse(
                 "status",
                 {
                     "progress": 40,
-                    "msg": "故事圣经完成 · 正在铺陈分支场景（目标 15～25 节点）…",
+                    "msg": "✓ 编织剧情 · " + (bible.title or "未命名"),
+                    "step": "weave",
                 },
             )
 
-            yield _sse("status", {"progress": 55, "msg": "正在生成分支节点与选项…"})
-            game = await generate_game_nodes(bible, body.style, source_char_count=source_char_count)
+            progress_queue: asyncio.Queue = asyncio.Queue()
+
+            async def on_progress(pct: int, msg: str) -> None:
+                await progress_queue.put({"progress": pct, "msg": msg})
+
+            gen_task = asyncio.create_task(
+                generate_game_nodes(
+                    bible,
+                    body.style,
+                    source_char_count=source_char_count,
+                    on_progress=on_progress,
+                )
+            )
+
+            idle_ticks = 0
+            while not gen_task.done():
+                try:
+                    upd = progress_queue.get_nowait()
+                    idle_ticks = 0
+                    yield _sse("status", upd)
+                except asyncio.QueueEmpty:
+                    idle_ticks += 1
+                    if idle_ticks * 0.2 >= _SSE_HEARTBEAT_SEC:
+                        yield _SSE_KEEPALIVE
+                        idle_ticks = 0
+                    await asyncio.sleep(0.2)
+
+            while not progress_queue.empty():
+                yield _sse("status", progress_queue.get_nowait())
+
+            game = await gen_task
 
             node_count = len(game.nodes)
-            yield _sse(
-                "status",
-                {
-                    "progress": 72,
-                    "msg": "已生成 " + str(node_count) + " 个场景节点 · 正在校验叙事图谱…",
-                    "node_count": node_count,
-                },
-            )
             ending_count = sum(1 for n in game.nodes.values() if n.is_ending)
-            play_minutes = estimate_play_minutes(game)
-
+            branch_count = sum(len(n.choices) for n in game.nodes.values())
             yield _sse(
                 "status",
                 {
-                    "progress": 85,
-                    "msg": "正在校验叙事图谱…",
-                    "node_count": node_count,
+                    "progress": 88,
+                    "msg": "✓ 准备场景 · 已规划 " + str(branch_count) + " 条命运分支",
+                    "step": "scene",
+                    "branch_count": branch_count,
+                    "ending_count": ending_count,
                 },
             )
+            play_minutes = estimate_play_minutes(game)
 
             yield _sse(
                 "status",
                 {
                     "progress": 100,
                     "msg": (
-                        f"完成 · 共 {node_count} 场景 · 预计游玩 {play_minutes} 分钟 · "
-                        f"{ending_count} 个结局"
+                        f"故事成形 · {branch_count} 条命运分支 · {ending_count} 种结局 · "
+                        f"约 {play_minutes} 分钟"
                     ),
+                    "step": "done",
+                    "branch_count": branch_count,
+                    "ending_count": ending_count,
                 },
             )
             done_payload = game.model_dump()
             done_payload["meta"] = {
                 "node_count": node_count,
                 "ending_count": ending_count,
+                "branch_count": branch_count,
                 "play_minutes": play_minutes,
                 "source_char_count": source_char_count,
                 "llm_char_count": len(llm_text),
@@ -250,7 +381,17 @@ async def create_game_stream(body: CreateGameRequest):
             yield _sse("done", done_payload)
         except LLMError as exc:
             yield _sse("error", {"detail": str(exc)})
+        except ValidationError as exc:
+            logger.warning("game generation validation failed: %s", exc)
+            yield _sse(
+                "error",
+                {
+                    "detail": "故事结构数据格式异常，请重试生成。",
+                    "debug": str(exc),
+                },
+            )
         except Exception as exc:
+            logger.exception("game generation failed")
             yield _sse("error", {"detail": f"生成过程出错：{exc}"})
 
     return StreamingResponse(
@@ -287,6 +428,81 @@ async def history_delete(entry_id: str):
     delete_entry(entry_id)
     _history_count_cache = refresh_history_count()
     return {"ok": True}
+
+
+@app.put("/api/history/{entry_id}/progress", response_model=HistoryItem)
+async def history_save_progress(entry_id: str, body: HistoryProgress):
+    try:
+        return save_progress(entry_id, body)
+    except HTTPException:
+        raise
+    except ValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/history/{entry_id}/touch", response_model=HistoryItem)
+async def history_touch(entry_id: str):
+    return touch_entry(entry_id)
+
+
+class CharacterPreviewRequest(BaseModel):
+    text: str = Field(..., min_length=20)
+
+
+@app.post("/api/characters/preview")
+async def characters_preview(body: CharacterPreviewRequest):
+    from character_extract import extract_protagonist_candidates_enhanced
+
+    result = await extract_protagonist_candidates_enhanced(body.text)
+    return result
+
+
+@app.post("/api/history/{entry_id}/share")
+async def history_share(entry_id: str):
+    token = ensure_share_token(entry_id)
+    return {"share_token": token, "url": f"/?play={token}"}
+
+
+@app.get("/api/share/{token}")
+async def share_get(token: str):
+    detail = get_entry_by_share_token(token)
+    return {
+        "item": detail.item.model_dump(),
+        "game": detail.game.model_dump() if detail.game else None,
+        "text": detail.text[:8000] if detail.text else "",
+    }
+
+
+class GameAssetsRequest(BaseModel):
+    title: str = ""
+    synopsis: str = ""
+    style: str = "urban_romance"
+
+
+@app.post("/api/game-assets/cover")
+async def game_cover(body: GameAssetsRequest):
+    """生成游戏封面；未配置生图 API 时返回风格预设图路径。"""
+    style = body.style or "urban_romance"
+    # Source art: 古风仙侠→xianxia, 都市言情→urban_romance, 悬疑推理→mystery, 校园青春→campus
+    preset_paths = {
+        "xianxia": "/images/workbench/world-xianxia.png",
+        "urban_romance": "/images/workbench/world-urban-romance.png",
+        "mystery": "/images/workbench/world-mystery.png",
+        "campus": "/images/workbench/world-campus.png",
+    }
+    fallback = preset_paths.get(style, preset_paths["urban_romance"])
+    prompt = (
+        f"Visual novel game cover, title mood: {body.title or 'story'}. "
+        f"{body.synopsis[:120] if body.synopsis else 'interactive fiction'}. "
+        "2D anime art style, watercolor, pastel, no text, no watermark."
+    )
+    if not is_image_gen_configured():
+        return {"url": fallback, "generated": False}
+    raw = await generate_scene_image(prompt, style)
+    if not raw:
+        return {"url": fallback, "generated": False}
+    cache_id = cache_id_for(prompt, style)
+    return {"url": f"/api/scene-image/{cache_id}.png", "generated": True}
 
 
 class SceneImageRequest(BaseModel):
@@ -344,6 +560,6 @@ if not frontend_dir.is_dir():
 
 app.mount(
     "/",
-    StaticFiles(directory=str(frontend_dir), html=True),
+    VersionedStaticFiles(directory=str(frontend_dir), html=True),
     name="frontend",
 )

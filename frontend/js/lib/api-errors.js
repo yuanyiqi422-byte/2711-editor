@@ -83,6 +83,32 @@
     return String(detail);
   }
 
+  function classifyLlmError(text) {
+    if (!text || typeof text !== "string") return "";
+    if (text.indexOf("未配置 AI_API_KEY") !== -1 || text.indexOf("AI_API_KEY") !== -1) {
+      return "AI 密钥未配置。请在 Render 环境变量中设置 AI_API_KEY 后重新部署后端。";
+    }
+    if (text.indexOf("HTTP 401") !== -1 || text.indexOf("HTTP 403") !== -1) {
+      return "AI 接口鉴权失败（密钥无效或已过期）。请检查 Render 上的 AI_API_KEY 是否正确。";
+    }
+    if (text.indexOf("HTTP 404") !== -1 && text.indexOf("model") !== -1) {
+      return "AI 模型名称无效。请检查 Render 上的 AI_MODEL 是否与接口提供商一致。";
+    }
+    if (text.indexOf("HTTP 429") !== -1) {
+      return "AI 接口请求过于频繁，请稍后再试。";
+    }
+    if (text.indexOf("HTTP 5") !== -1 || text.indexOf("AI 接口请求失败") !== -1) {
+      return text;
+    }
+    if (text.indexOf("连接中断") !== -1 || text.indexOf("Timeout") !== -1 || text.indexOf("timeout") !== -1) {
+      return "AI 接口响应超时。长故事可能需要数分钟，请稍后重试；若持续失败可缩短文本。";
+    }
+    if (text.indexOf("JSON") !== -1 || text.indexOf("模型返回") !== -1) {
+      return text;
+    }
+    return "";
+  }
+
   function errorMessage(err, fallback) {
     if (err == null) return fallback || "操作失败";
     const backendMsg = friendlyBackendMessage(err);
@@ -95,6 +121,8 @@
     if (err instanceof Error) {
       const m = err.message;
       if (m && m !== "[object Object]") {
+        const llm = classifyLlmError(m);
+        if (llm) return llm;
         return friendlyValidationMessage(m) || m;
       }
     }
@@ -111,6 +139,7 @@
   global.ApiErrors = {
     formatApiDetail: formatApiDetail,
     errorMessage: errorMessage,
+    classifyLlmError: classifyLlmError,
     friendlyValidationMessage: friendlyValidationMessage,
     isHtmlJsonParseError: isHtmlJsonParseError,
     friendlyBackendMessage: friendlyBackendMessage,

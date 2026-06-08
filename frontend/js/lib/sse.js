@@ -46,6 +46,12 @@
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
+    const meta = {
+      receivedDone: false,
+      receivedError: false,
+      lastEvent: null,
+      eventCount: 0,
+    };
 
     while (true) {
       if (signal && signal.aborted) break;
@@ -60,13 +66,30 @@
       while ((sep = buffer.indexOf("\n\n")) !== -1) {
         const part = buffer.slice(0, sep);
         buffer = buffer.slice(sep + 2);
-        dispatchBlock(part, onEvent);
+        if (part.trim().startsWith(":")) continue;
+        dispatchBlock(part, function (event, data) {
+          meta.eventCount += 1;
+          meta.lastEvent = event;
+          if (event === "done") meta.receivedDone = true;
+          if (event === "error") meta.receivedError = true;
+          onEvent(event, data);
+        });
       }
     }
 
     if (buffer.trim()) {
-      dispatchBlock(buffer, onEvent);
+      if (!buffer.trim().startsWith(":")) {
+        dispatchBlock(buffer, function (event, data) {
+          meta.eventCount += 1;
+          meta.lastEvent = event;
+          if (event === "done") meta.receivedDone = true;
+          if (event === "error") meta.receivedError = true;
+          onEvent(event, data);
+        });
+      }
     }
+
+    return meta;
   }
 
   global.SseClient = { consume: consumeSSE };

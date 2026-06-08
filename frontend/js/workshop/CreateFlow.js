@@ -165,7 +165,7 @@
         }
 
         let gamePack = null;
-        await consumeSSE(res, function (event, data) {
+        const sseMeta = await consumeSSE(res, function (event, data) {
           if (event === "status") {
             lastProgressAt = Date.now();
             let msg = data.msg || "处理中…";
@@ -197,9 +197,13 @@
         }, createAbort.signal);
 
         if (!gamePack) {
-          throw new Error(
-            "生成流意外结束，未收到完整游戏数据。请检查网络是否稳定、AI 接口是否可用后重试。"
-          );
+          const incompleteMsg =
+            (global.ApiConfig && global.ApiConfig.streamIncompleteMessage) ||
+            "生成流意外结束，未收到完整游戏数据。请检查网络是否稳定、AI 接口是否可用后重试。";
+          if (sseMeta && sseMeta.eventCount > 0 && !sseMeta.receivedError) {
+            console.error("[CreateFlow] SSE ended early", sseMeta);
+          }
+          throw new Error(incompleteMsg);
         }
         if (!gamePack.nodes || !Object.keys(gamePack.nodes).length) {
           throw new Error("未生成有效场景，请缩短文本后重试。");
