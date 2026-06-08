@@ -39,15 +39,27 @@ const envConfig = `/** Auto-generated — do not edit manually */
 writeFileSync(join(FRONTEND, "js", "env-config.js"), envConfig, "utf8");
 console.log("[inject-env-config] __API_BASE__ =", apiBase || "(empty → same-origin /api)");
 
-function updateNetlifyToml(proxyUrl) {
-  if (!existsSync(NETLIFY_TOML)) return;
-  let content = readFileSync(NETLIFY_TOML, "utf8");
+function stripInjectedProxyBlocks(content) {
   const markerEscaped = escapeRegExp(INJECT_MARKER);
   const blockRe = new RegExp(
-    "\\n" + markerEscaped + "[\\s\\S]*?(?=\\n\\[\\[redirects\\]\\]\\n  from = \"/\\*\")",
-    "m"
+    "\\n?" + markerEscaped + "[\\s\\S]*?(?=\\n(?:\\[\\[redirects\\]\\]|" + markerEscaped + "|\\[build\\]|\\[headers\\]|$))",
+    "g"
   );
-  content = content.replace(blockRe, "\n");
+  let next = content;
+  let prev;
+  do {
+    prev = next;
+    next = next.replace(blockRe, "\n");
+  } while (next !== prev);
+  const apiBlockRe =
+    /\n\[\[redirects\]\]\r?\n  from = "\/api\/\*"[\s\S]*?force = true\r?\n/g;
+  next = next.replace(apiBlockRe, "\n");
+  return next.replace(/\n{3,}/g, "\n\n");
+}
+
+function updateNetlifyToml(proxyUrl) {
+  if (!existsSync(NETLIFY_TOML)) return;
+  let content = stripInjectedProxyBlocks(readFileSync(NETLIFY_TOML, "utf8"));
 
   if (proxyUrl && !apiBase) {
     const block =

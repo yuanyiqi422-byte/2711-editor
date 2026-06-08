@@ -2,284 +2,438 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Cache-Control" content="no-cache" />
-  <meta name="theme-color" content="#a8d8ff" />
-  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#0a0e14" />
+  <meta name="color-scheme" content="dark" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="2711编辑器 — 您的故事，即刻互动。将文本转化为带分支选择与场景画面的视觉小说，支持 TXT、Word、PDF、EPUB。" />
-  <title>2711编辑器 · 2711 Editor</title>
+  <meta name="description" content="2711编辑器 — 视觉小说启动器。将小说化为可推开的互动世界，携分支抉择与场景画面步入故事旅程。" />
+  <title>2711编辑器 · 视觉小说启动器</title>
+
+  <!-- SEO-001 · Open Graph / Twitter Card（分享链接预览） -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:site_name" content="2711编辑器" />
+  <meta property="og:title" content="2711编辑器 · 视觉小说启动器" />
+  <meta property="og:description" content="2711编辑器 — 视觉小说启动器。将小说化为可推开的互动世界，携分支抉择与场景画面步入故事旅程。" />
+  <meta property="og:url" content="/" />
+  <meta property="og:image" content="/images/workbench/homepage-bg.jpg?v=11" />
+  <meta property="og:image:alt" content="2711编辑器 — 魔法天文台与星象图书馆" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2711编辑器 · 视觉小说启动器" />
+  <meta name="twitter:description" content="2711编辑器 — 视觉小说启动器。将小说化为可推开的互动世界，携分支抉择与场景画面步入故事旅程。" />
+  <meta name="twitter:image" content="/images/workbench/homepage-bg.jpg?v=11" />
+  <meta name="twitter:image:alt" content="2711编辑器 — 魔法天文台与星象图书馆" />
+
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
-  <link href="css/tokens.css?v=2" rel="stylesheet" />
-  <link href="css/landing.css?v=17" rel="stylesheet" />
-  <link href="css/app.css?v=27" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+  <link href="css/tokens.css?v=13" rel="stylesheet" />
+  <link href="css/app.css?v=41" rel="stylesheet" />
+  <link href="css/workbench.css?v=17" rel="stylesheet" />
+  <link href="css/brand-lockup.css?v=2" rel="stylesheet" />
+  <link href="css/workbench-console-cta.css?v=1" rel="stylesheet" />
+  <link href="css/workbench-layout.css?v=27" rel="stylesheet" />
+  <link href="css/vn-layout.css?v=8" rel="stylesheet" />
 </head>
-<body class="landing-body">
+<body class="workbench-body">
   <a class="skip-link" href="#studio">跳到主内容</a>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="wind-overlay wind-overlay--global" aria-hidden="true"></div>
-  <div class="petal-overlay petal-overlay--global" aria-hidden="true"></div>
 
-  <div id="landing-view" class="landing-pages">
-    <header class="site-nav" id="site-nav">
-      <a class="site-nav__brand" href="#top">
-        <span class="site-nav__wordmark">
-          <span class="site-nav__zh" data-brand="name">2711编辑器</span>
-          <span class="site-nav__en" data-brand="nameEnShort">2711 EDITOR</span>
-        </span>
-      </a>
-      <button type="button" class="site-nav__toggle" id="site-nav-toggle" aria-expanded="false" aria-controls="site-nav-menu" aria-label="打开导航菜单">
-        <span class="site-nav__toggle-bar"></span>
-        <span class="site-nav__toggle-bar"></span>
-        <span class="site-nav__toggle-bar"></span>
-      </button>
-      <div class="site-nav__menu" id="site-nav-menu">
-        <ul class="site-nav__links">
-          <li><a class="site-nav__link" href="#features" data-nav="features">能力</a></li>
-          <li><a class="site-nav__link" href="#how" data-nav="how">流程</a></li>
-          <li><a class="site-nav__link" href="#create" data-nav="create">创作</a></li>
-        </ul>
-        <a class="site-nav__cta" href="#create">开始创作</a>
-      </div>
-    </header>
-
-    <div class="landing-pages__viewport" id="landing-pages-viewport">
-    <main id="top" class="landing-pages__track">
-      <section class="hero landing-page" data-page="top" aria-label="首屏">
-        <div class="hero__media" data-parallax="0.22">
-          <img
-            class="hero__img"
-            src="images/hero-ghibli.svg?v=1"
-            alt="吉卜力风格水彩丘陵与天空，象征故事世界的广阔可能"
-            width="1920"
-            height="1080"
-            decoding="async"
-            fetchpriority="high"
-          />
-        </div>
-        <div class="hero__clouds" aria-hidden="true"></div>
-        <div class="hero__wind" aria-hidden="true"></div>
-        <div class="hero__petals" aria-hidden="true"></div>
-        <div class="hero__mesh" aria-hidden="true"></div>
-        <div class="hero__veil" aria-hidden="true"></div>
-        <div class="hero__frame" aria-hidden="true"></div>
-
-        <div class="hero__content">
-          <p class="hero__eyebrow reveal" data-brand="eyebrow">V 0.2.5 · Interactive Story Studio</p>
-          <h1 class="hero__title reveal reveal--delay-1">
-            <span class="hero__title-en" data-brand="nameEnShort">2711 Editor</span>
-            <span class="hero__title-zh" data-brand="name">2711编辑器</span>
-          </h1>
-          <p class="hero__tagline reveal reveal--delay-2" data-brand="tagline">您的故事，即刻互动</p>
-          <p class="hero__sub reveal reveal--delay-2" data-brand="taglineSub">上传小说或粘贴章节 · 选择视觉风格 · 自动生成分支剧情与场景画面</p>
-          <div class="hero__actions reveal reveal--delay-3">
-            <a class="btn-landing btn-landing--primary btn-landing--lg" href="#create">开始创作</a>
-            <button type="button" class="btn-landing btn-landing--ghost btn-landing--lg" id="hero-demo-btn">浏览演示 Demo</button>
-          </div>
-        </div>
-
-        <button type="button" class="hero__scroll" id="hero-next-btn" aria-label="下一页：能力介绍">
-          <span class="hero__scroll-line"></span>
-          <span class="hero__scroll-text">Next</span>
-        </button>
-      </section>
-
-      <section id="features" class="features landing-page" data-page="features" aria-labelledby="features-title">
-        <div class="section-head reveal">
-          <p class="section-head__kicker">Capabilities</p>
-          <h2 id="features-title" class="section-head__title">从文本到可玩叙事</h2>
-          <p class="section-head__sub">不是简单摘要，而是可点击、可分支、可收束结局的互动体验</p>
-        </div>
-
-        <div class="features__grid">
-          <article class="feature-card feature-card--hero reveal">
-            <div class="feature-card__visual">
-              <img src="images/feature-branches.svg?v=1" alt="分支叙事插画" width="800" height="500" loading="lazy" decoding="async" />
-              <div class="feature-card__visual-veil"></div>
-            </div>
-            <div class="feature-card__body">
-              <p class="feature-card__num">01 · BRANCHING</p>
-              <h3 class="feature-card__title">多分支剧情树</h3>
-              <p class="feature-card__desc">AI 从原文提炼冲突与抉择点，生成多场景节点与多种结局，每一次选择都推动故事走向不同方向。</p>
-            </div>
-          </article>
-
-          <article class="feature-card reveal reveal--delay-1">
-            <div class="feature-card__visual feature-card__visual--compact">
-              <img src="images/feature-transform.svg?v=1" alt="AI 叙事转化插画" width="800" height="500" loading="lazy" decoding="async" />
-              <div class="feature-card__visual-veil feature-card__visual-veil--soft"></div>
-            </div>
-            <div class="feature-card__body">
-              <p class="feature-card__num">02 · TRANSFORM</p>
-              <h3 class="feature-card__title">一键叙事转化</h3>
-              <p class="feature-card__desc">粘贴或上传 TXT、Word、PDF、EPUB，选择古风仙侠、都市言情等风格，自动构建故事圣经与分支图谱。</p>
-            </div>
-          </article>
-
-          <article class="feature-card reveal reveal--delay-2">
-            <div class="feature-card__visual feature-card__visual--compact">
-              <img src="images/feature-play.svg?v=1" alt="沉浸式视觉小说体验插画" width="800" height="500" loading="lazy" decoding="async" />
-              <div class="feature-card__visual-veil feature-card__visual-veil--soft"></div>
-            </div>
-            <div class="feature-card__body">
-              <p class="feature-card__num">03 · IMMERSIVE</p>
-              <h3 class="feature-card__title">视觉小说式游玩</h3>
-              <p class="feature-card__desc">全屏吉卜力风场景背景、旁白与选项面板一体呈现；支持 Demo 秒开试玩与历史记录载入。</p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="how" class="how landing-page" data-page="how" aria-labelledby="how-title">
-        <div class="section-head reveal">
-          <p class="section-head__kicker">Pipeline</p>
-          <h2 id="how-title" class="section-head__title">三步进入故事</h2>
-          <p class="section-head__sub">透明管线进度，让你知道 AI 正在做什么</p>
-        </div>
-        <div class="how__steps">
-          <div class="how-step reveal">
-            <h3 class="how-step__title">注入文本</h3>
-            <p class="how-step__desc">粘贴或上传故事，选择视觉风格 preset，建立故事圣经。</p>
-          </div>
-          <div class="how-step reveal reveal--delay-1">
-            <h3 class="how-step__title">构建分支</h3>
-            <p class="how-step__desc">分析人物与冲突，生成场景节点、选项与结局图谱。</p>
-          </div>
-          <div class="how-step reveal reveal--delay-2">
-            <h3 class="how-step__title">沉浸游玩</h3>
-            <p class="how-step__desc">进入视觉小说界面，点击选项推进剧情，探索属于你的结局。</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="create" class="workshop landing-page" data-page="create" aria-labelledby="workshop-title">
-        <div class="workshop__bg" aria-hidden="true"></div>
-        <div class="workshop__glow" aria-hidden="true"></div>
-
-        <div class="workshop__head section-head reveal">
-          <p class="section-head__kicker">Studio</p>
-          <h2 id="workshop-title" class="section-head__title">创作工坊</h2>
-          <p class="section-head__sub">在此输入你的故事，启动叙事转化管线</p>
-        </div>
-
-        <div id="studio" class="workshop__panel reveal">
-          <div class="workshop__card">
-            <label class="workshop__label" for="story-input">
-              <span class="workshop__label-tag">INPUT</span>
-              输入源 · 小说文本
-            </label>
-            <div class="workshop__toolbar">
-              <label class="workshop-btn workshop-btn--outline workshop-btn--upload" id="upload-dropzone" for="file-input">上传文件</label>
-              <span class="workshop__hint" id="char-count">全文 0 字</span>
-            </div>
-            <p class="workshop__formats" id="upload-formats">支持 TXT · Word · PDF · EPUB · 最大 50MB</p>
-            <p class="workshop__onboard" id="workshop-onboard">粘贴至少 80 字故事，或上传文件开始创作。</p>
-            <textarea
-              id="story-input"
-              class="workshop__textarea"
-              placeholder="粘贴或填入文本"
-              spellcheck="false"
-              aria-describedby="workshop-onboard char-count upload-formats"
-            ></textarea>
-            <input
-              type="file"
-              id="file-input"
-              accept=".txt,.md,.markdown,.doc,.docx,.pdf,.rtf,.epub,text/plain,application/epub+zip"
-              hidden
-            />
-          </div>
-
-          <div class="workshop__card">
-            <p class="workshop__label">
-              <span class="workshop__label-tag">PRESET</span>
-              视觉风格
-            </p>
-            <div class="preset-row" role="group" aria-label="视觉风格">
-              <button type="button" class="preset-btn" data-style="xianxia">
-                <span class="preset-btn__name">古风仙侠</span>
-                <span class="preset-btn__desc">宗门 · 秘境</span>
-              </button>
-              <button type="button" class="preset-btn preset-btn--active" data-style="urban_romance">
-                <span class="preset-btn__name">都市言情</span>
-                <span class="preset-btn__desc">都市 · 多线</span>
-              </button>
-              <button type="button" class="preset-btn" data-style="mystery">
-                <span class="preset-btn__name">悬疑推理</span>
-                <span class="preset-btn__desc">线索 · 反转</span>
-              </button>
-              <button type="button" class="preset-btn" data-style="campus">
-                <span class="preset-btn__name">校园青春</span>
-                <span class="preset-btn__desc">社团 · 成长</span>
-              </button>
-            </div>
-          </div>
-
-          <p class="workshop__upload-status" id="upload-status" hidden role="status"></p>
-          <div class="upload-progress" id="upload-progress" hidden role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="upload-progress__fill" id="upload-progress-fill"></div>
-          </div>
-
-          <div class="workshop__actions">
-            <button type="button" id="demo-btn" class="workshop-btn workshop-btn--outline">试玩 Demo</button>
-            <button type="button" id="load-btn" class="workshop-btn workshop-btn--outline">加载历史</button>
-            <button type="button" id="create-btn" class="workshop-btn workshop-btn--primary workshop-btn--create">
-              <span class="btn__label">一键生成互动游戏</span>
-              <span class="btn__spinner" hidden aria-hidden="true"></span>
-            </button>
-          </div>
-
-          <section class="pipeline" id="pipeline" hidden>
-            <div class="pipeline__head">
-              <span class="pipeline__tag">生成进度</span>
-              <span class="pipeline__pct" id="pipeline-pct">0%</span>
-            </div>
-            <div class="pipeline__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-              <div class="pipeline__fill" id="pipeline-fill"></div>
-            </div>
-            <p class="pipeline__msg" id="pipeline-msg">等待开始…</p>
-            <div class="pipeline__bible" id="bible-preview" hidden></div>
-          </section>
-
-          <p class="workshop__error" id="studio-error" hidden role="alert"></p>
-        </div>
-
-        <footer class="site-footer landing-page__footer">
-          <p class="site-footer__brand" data-brand="footerLine">2711 EDITOR · 2711编辑器</p>
-          <p class="site-footer__copy">v0.2.5 · AI 辅助创作 · 内容仅供体验</p>
-        </footer>
-      </section>
-    </main>
+  <div id="landing-view" class="workbench workbench--luminous">
+    <div class="workbench__atmosphere" aria-hidden="true">
+      <img
+        class="workbench__atmosphere-img"
+        id="workbench-atmosphere-img"
+        src="images/workbench/homepage-bg.jpg?v=11"
+        alt=""
+        width="1920"
+        height="1080"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <div class="workbench__particles" id="workbench-particles"></div>
     </div>
 
-    <nav class="page-nav" id="page-nav" aria-label="全屏分页导航">
-      <button type="button" class="page-nav__btn page-nav__btn--prev" id="page-nav-prev" aria-label="上一页" disabled>
-        <span class="page-nav__chev" aria-hidden="true">‹</span>
-      </button>
-      <div class="page-nav__dots" id="page-nav-dots" role="tablist" aria-label="页面指示"></div>
-      <button type="button" class="page-nav__btn page-nav__btn--next" id="page-nav-next" aria-label="下一页">
-        <span class="page-nav__chev" aria-hidden="true">›</span>
-      </button>
-    </nav>
-  </div>
+    <div id="studio" class="workbench__shell workbench__shell--view-a" data-style="urban_romance">
+      <header class="workbench__topbar">
+        <div class="workbench__topbar-brand">
+          <a class="workbench__brand brand-lockup" href="/" aria-label="2711编辑器 — 返回首页">
+            <span class="workbench__brand-mark brand-lockup__panel">
+              <span class="workbench__brand-zh brand-lockup__main">
+                <span class="workbench__brand-num brand-lockup__num" data-brand="nameNum">2711</span><span class="workbench__brand-label brand-lockup__label" data-brand="nameSuffix">编辑器</span>
+              </span>
+              <span class="brand-lockup__subline" aria-hidden="true">
+                <span class="brand-lockup__rule brand-lockup__rule--l"></span>
+                <span class="workbench__brand-en brand-lockup__en" data-brand="nameEnUpper">2711 EDITOR</span>
+                <span class="brand-lockup__rule brand-lockup__rule--r"></span>
+              </span>
+            </span>
+          </a>
+        </div>
+        <div class="workbench__epigraph" aria-label="Epigraph">
+          <p class="workbench__epigraph-line workbench__epigraph-line--luminous" data-brand="quoteLuminous">Wish you a Luminous Journey</p>
+          <span class="workbench__epigraph-sep" aria-hidden="true"></span>
+          <p class="workbench__epigraph-line workbench__epigraph-line--zest" data-brand="quoteZest">May your Zest Continue to shine</p>
+        </div>
+        <div class="workbench__topbar-end">
+          <button type="button" class="workbench__theme-toggle is-active" id="workbench-theme-toggle" aria-label="切换为柔和光效" aria-pressed="false" title="切换界面光效">
+            <svg class="workbench__theme-toggle-icon workbench__theme-toggle-icon--sun" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="3.25" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <svg class="workbench__theme-toggle-icon workbench__theme-toggle-icon--moon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" hidden>
+              <path d="M11.2 2.4a5.5 5.5 0 1 0 2.4 9.8A4.8 4.8 0 0 1 11.2 2.4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
 
-  <div class="magic-modal" id="history-modal" role="dialog" aria-modal="true" aria-labelledby="history-modal-title" hidden>
-    <div class="magic-modal__dialog">
-      <div class="magic-modal__head">
-        <h3 class="magic-modal__title" id="history-modal-title">加载历史记录</h3>
-        <button type="button" class="magic-modal__close" id="history-modal-close" aria-label="关闭">×</button>
+      <div class="workbench__workspace">
+        <!-- 左栏：手稿输入（羊皮纸风 · mockup） -->
+        <aside class="workbench__panel workbench__input-panel workbench__input-panel--parchment" aria-label="上传小说">
+          <div class="workbench__panel-body workbench__manuscript-panel">
+            <div class="workbench__manuscript-frame">
+              <span class="workbench__manuscript-corner workbench__manuscript-corner--tl" aria-hidden="true"></span>
+              <span class="workbench__manuscript-corner workbench__manuscript-corner--tr" aria-hidden="true"></span>
+              <span class="workbench__manuscript-corner workbench__manuscript-corner--bl" aria-hidden="true"></span>
+              <span class="workbench__manuscript-corner workbench__manuscript-corner--br" aria-hidden="true"></span>
+
+              <div class="workbench__dropzone workshop-btn--upload" id="upload-dropzone">
+                <label for="file-input" class="workbench__dropzone-label" id="upload-dropzone-label">
+                  <span class="workbench__dropzone-icon" aria-hidden="true">
+                    <svg class="workbench__dropzone-cloud-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 32h20a6 6 0 0 0 1.18-11.9A8 8 0 0 0 16.2 14 6.5 6.5 0 0 0 14 32z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+                      <path d="M24 22v10M20 26l4-4 4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <span class="workbench__dropzone-main">拖入文件到此处</span>
+                  <span class="workbench__dropzone-or">或点击上传</span>
+                </label>
+              </div>
+
+              <input
+                type="file"
+                id="file-input"
+                accept=".txt,.md,.markdown,.doc,.docx,.pdf,.rtf,.epub,text/plain,application/epub+zip"
+                hidden
+              />
+
+              <ul class="workbench__file-types" aria-label="支持的文件格式">
+                <li class="workbench__file-type">
+                  <span class="workbench__file-type-icon workbench__file-type-icon--txt" aria-hidden="true">
+                    <svg width="28" height="32" viewBox="0 0 28 32" fill="none"><ellipse cx="6" cy="16" rx="2.5" ry="11" fill="#5a6270"/><ellipse cx="22" cy="16" rx="2.5" ry="11" fill="#5a6270"/><rect class="scroll-body" x="6" y="5" width="16" height="22" rx="1" fill="#7a8490" stroke="#5a6270" stroke-width="0.75"/><path d="M9 11h10M9 15h8M9 19h10" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity="0.85"/></svg>
+                  </span>
+                  <span class="workbench__file-type-label">TXT</span>
+                </li>
+                <li class="workbench__file-type">
+                  <span class="workbench__file-type-icon workbench__file-type-icon--md" aria-hidden="true">
+                    <svg width="28" height="32" viewBox="0 0 28 32" fill="none"><ellipse cx="6" cy="16" rx="2.5" ry="11" fill="#3d7a5c"/><ellipse cx="22" cy="16" rx="2.5" ry="11" fill="#3d7a5c"/><rect class="scroll-body" x="6" y="5" width="16" height="22" rx="1" fill="#5a9878" stroke="#3d7a5c" stroke-width="0.75"/><text x="9" y="17" fill="#fff" font-size="9" font-weight="700" font-family="Outfit,sans-serif">M</text><path d="M18 19l1.5 2.5 1.5-2.5" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <span class="workbench__file-type-label">Markdown</span>
+                </li>
+                <li class="workbench__file-type">
+                  <span class="workbench__file-type-icon workbench__file-type-icon--word" aria-hidden="true">
+                    <svg width="28" height="32" viewBox="0 0 28 32" fill="none"><ellipse cx="6" cy="16" rx="2.5" ry="11" fill="#1e3f6e"/><ellipse cx="22" cy="16" rx="2.5" ry="11" fill="#1e3f6e"/><rect class="scroll-body" x="6" y="5" width="16" height="22" rx="1" fill="#2b579a" stroke="#1e3f6e" stroke-width="0.75"/><text x="8.5" y="18" fill="#fff" font-size="10" font-weight="700" font-family="Outfit,sans-serif">W</text></svg>
+                  </span>
+                  <span class="workbench__file-type-label">Word</span>
+                </li>
+                <li class="workbench__file-type">
+                  <span class="workbench__file-type-icon workbench__file-type-icon--pdf" aria-hidden="true">
+                    <svg width="28" height="32" viewBox="0 0 28 32" fill="none"><ellipse cx="6" cy="16" rx="2.5" ry="11" fill="#b83232"/><ellipse cx="22" cy="16" rx="2.5" ry="11" fill="#b83232"/><rect class="scroll-body" x="6" y="5" width="16" height="22" rx="1" fill="#d94a4a" stroke="#b83232" stroke-width="0.75"/><text x="7" y="17" fill="#fff" font-size="6.5" font-weight="700" font-family="Outfit,sans-serif">PDF</text></svg>
+                  </span>
+                  <span class="workbench__file-type-label">PDF</span>
+                </li>
+                <li class="workbench__file-type">
+                  <span class="workbench__file-type-icon workbench__file-type-icon--rtf" aria-hidden="true">
+                    <svg width="28" height="32" viewBox="0 0 28 32" fill="none"><ellipse cx="6" cy="16" rx="2.5" ry="11" fill="#7a58b8"/><ellipse cx="22" cy="16" rx="2.5" ry="11" fill="#7a58b8"/><rect class="scroll-body" x="6" y="5" width="16" height="22" rx="1" fill="#9b7ad4" stroke="#7a58b8" stroke-width="0.75"/><path d="M9 11h10M9 15h8M9 19h10" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity="0.85"/></svg>
+                  </span>
+                  <span class="workbench__file-type-label">RTF</span>
+                </li>
+                <li class="workbench__file-type">
+                  <span class="workbench__file-type-icon workbench__file-type-icon--epub" aria-hidden="true">
+                    <svg width="28" height="32" viewBox="0 0 28 32" fill="none"><ellipse cx="6" cy="16" rx="2.5" ry="11" fill="#a88440"/><ellipse cx="22" cy="16" rx="2.5" ry="11" fill="#a88440"/><rect class="scroll-body" x="6" y="5" width="16" height="22" rx="1" fill="#c9a054" stroke="#a88440" stroke-width="0.75"/><path d="M14 9v14M9 11c0 0 1.5-1.5 5-1.5s5 1.5 5 1.5M9 21c0 0 1.5 1.5 5 1.5s5-1.5 5-1.5" stroke="#fff" stroke-width="1" stroke-linecap="round"/><path d="M14 15l-1.5 1.5L14 18l1.5-1.5L14 15z" fill="#fff"/></svg>
+                  </span>
+                  <span class="workbench__file-type-label">EPUB</span>
+                </li>
+              </ul>
+
+              <div class="workbench__format-support">
+                <p class="workbench__formats" id="upload-formats">支持 TXT · Markdown · Word · PDF · RTF · EPUB</p>
+                <p class="workbench__formats-limits" id="upload-limits">不限制字数、不限制文件大小与 PDF 页数</p>
+              </div>
+
+              <p class="workbench__paste-label" id="paste-label">或 粘贴文本到下方</p>
+
+              <div class="workbench__textarea-wrap workbench__textarea-wrap--filigree">
+                <span class="workbench__textarea-corner workbench__textarea-corner--tl" aria-hidden="true"></span>
+                <span class="workbench__textarea-corner workbench__textarea-corner--tr" aria-hidden="true"></span>
+                <span class="workbench__textarea-corner workbench__textarea-corner--bl" aria-hidden="true"></span>
+                <span class="workbench__textarea-corner workbench__textarea-corner--br" aria-hidden="true"></span>
+                <textarea
+                  id="story-input"
+                  class="workbench__textarea workshop__textarea"
+                  placeholder="在这里粘贴你的小说内容..."
+                  spellcheck="false"
+                  aria-labelledby="paste-label"
+                  aria-describedby="workshop-onboard char-count upload-formats upload-limits"
+                ></textarea>
+              </div>
+
+              <div class="workbench__manuscript-meta">
+                <p class="workbench__hint workshop__hint" id="char-count">当前字数：0 字</p>
+                <button type="button" class="workbench__clear-btn" id="manuscript-clear-btn">清空</button>
+                <p class="workbench__onboard" id="workshop-onboard" hidden>至少 80 字，或上传文件</p>
+              </div>
+
+              <p class="workshop__upload-status" id="upload-status" hidden role="status"></p>
+              <div class="upload-progress" id="upload-progress" hidden role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="upload-progress__fill" id="upload-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- 中栏：风格舞台 + 开始游玩 -->
+        <main class="workbench__panel workbench__center-hub" aria-label="风格选择与开始">
+          <header class="workbench__panel-head workbench__panel-head--center workbench__panel-head--style">
+            <h2 class="workbench__panel-title workbench__panel-title--decorated">
+              <span class="workbench__title-diamond" aria-hidden="true">◆</span>
+              选择你想要的故事风格
+              <span class="workbench__title-diamond" aria-hidden="true">◆</span>
+            </h2>
+          </header>
+
+          <div class="style-hub">
+            <div class="style-hub__stage-row">
+              <section class="workbench__scene-stage scene-stage--featured" aria-label="场景预览">
+                <div class="scene-stage__frame scene-stage__frame--filigree">
+                  <span class="scene-stage__badge" id="style-preview-badge"><span class="scene-stage__badge-check" aria-hidden="true">✓</span> 已选择</span>
+                  <button type="button" class="scene-stage__nav scene-stage__nav--prev" id="style-preview-prev" aria-label="上一个风格">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                      <path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <button type="button" class="scene-stage__nav scene-stage__nav--next" id="style-preview-next" aria-label="下一个风格">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                      <path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <img
+                    class="scene-stage__img"
+                    id="style-preview-img"
+                    src="images/workbench/world-urban-romance.png?v=12"
+                    alt=""
+                    width="960"
+                    height="540"
+                    decoding="async"
+                  />
+                  <div class="scene-stage__veil" aria-hidden="true"></div>
+                  <div class="scene-stage__meta">
+                    <p class="scene-stage__style" id="style-preview-label">都市言情</p>
+                    <p class="scene-stage__tagline" id="style-preview-tagline">霓虹深夜 · 咖啡香气</p>
+                  </div>
+                  <div class="scene-stage__dots" id="style-preview-dots" aria-hidden="true">
+                    <span class="scene-stage__dot" data-style="xianxia"></span>
+                    <span class="scene-stage__dot" data-style="urban_romance"></span>
+                    <span class="scene-stage__dot" data-style="mystery"></span>
+                    <span class="scene-stage__dot" data-style="campus"></span>
+                  </div>
+                </div>
+              </section>
+
+              <div class="class-rpg-list preset-row" role="radiogroup" aria-label="Style selection">
+                <button type="button" class="class-rpg preset-btn" data-style="xianxia" role="radio" aria-checked="false">
+                  <span class="class-rpg__bg" aria-hidden="true">
+                    <img src="images/workbench/world-xianxia.png?v=12" alt="" loading="lazy" decoding="async" />
+                  </span>
+                  <span class="class-rpg__icon class-rpg__icon--xianxia" aria-hidden="true">仙</span>
+                  <span class="class-rpg__body">
+                    <span class="class-rpg__name preset-btn__name">古风仙侠</span>
+                  </span>
+                </button>
+                <button type="button" class="class-rpg preset-btn preset-btn--active" data-style="urban_romance" role="radio" aria-checked="true">
+                  <span class="class-rpg__bg" aria-hidden="true">
+                    <img src="images/workbench/world-urban-romance.png?v=12" alt="" loading="lazy" decoding="async" />
+                  </span>
+                  <span class="class-rpg__icon class-rpg__icon--urban" aria-hidden="true">都</span>
+                  <span class="class-rpg__body">
+                    <span class="class-rpg__name preset-btn__name">都市言情</span>
+                  </span>
+                </button>
+                <button type="button" class="class-rpg preset-btn" data-style="mystery" role="radio" aria-checked="false">
+                  <span class="class-rpg__bg" aria-hidden="true">
+                    <img src="images/workbench/world-mystery.png?v=12" alt="" loading="lazy" decoding="async" />
+                  </span>
+                  <span class="class-rpg__icon class-rpg__icon--mystery" aria-hidden="true">悬</span>
+                  <span class="class-rpg__body">
+                    <span class="class-rpg__name preset-btn__name">悬疑推理</span>
+                  </span>
+                </button>
+                <button type="button" class="class-rpg preset-btn" data-style="campus" role="radio" aria-checked="false">
+                  <span class="class-rpg__bg" aria-hidden="true">
+                    <img src="images/workbench/world-campus.png?v=12" alt="" loading="lazy" decoding="async" />
+                  </span>
+                  <span class="class-rpg__icon class-rpg__icon--campus" aria-hidden="true">校</span>
+                  <span class="class-rpg__body">
+                    <span class="class-rpg__name preset-btn__name">校园青春</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <p class="scene-stage__hint" id="style-preview-hint">都市恋爱口吻的对白与选项；场景偏霓虹街景、咖啡馆与写字楼。</p>
+
+            <section class="workbench__music music-panel panel-ornate" aria-label="配乐">
+              <header class="music-panel__head">
+                <span class="music-panel__icon" aria-hidden="true">♪</span>
+                <h3 class="music-panel__title">配乐</h3>
+                <label class="music-panel__toggle" id="bgm-auto-toggle-wrap">
+                  <input type="checkbox" class="music-panel__toggle-input" id="bgm-auto-toggle" checked />
+                  <span class="music-panel__toggle-track" aria-hidden="true"></span>
+                  <span class="music-panel__toggle-label">自动匹配</span>
+                </label>
+              </header>
+              <hr class="music-panel__rule" aria-hidden="true" />
+              <div class="music-panel__track-row">
+                <span class="music-panel__track-emoji" aria-hidden="true">🎵</span>
+                <span class="music-panel__track-name" id="bgm-track-label" aria-live="polite">love and deepspace</span>
+                <span class="music-panel__waveform" id="bgm-track-waveform" aria-hidden="true">
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                  <span class="music-panel__waveform-bar"></span>
+                </span>
+                <button type="button" class="music-panel__preview" id="bgm-preview-btn" title="试听当前配乐" aria-label="试听当前配乐" aria-pressed="false">
+                  <svg class="music-panel__preview-icon music-panel__preview-icon--play" width="7" height="8" viewBox="0 0 7 8" fill="none" aria-hidden="true">
+                    <path d="M1 0.75v6.5l5.25-3.25L1 0.75z" fill="currentColor"/>
+                  </svg>
+                  <svg class="music-panel__preview-icon music-panel__preview-icon--pause" width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
+                    <rect x="1.5" y="1.5" width="2" height="5" rx="0.35" fill="currentColor"/>
+                    <rect x="4.5" y="1.5" width="2" height="5" rx="0.35" fill="currentColor"/>
+                  </svg>
+                </button>
+              </div>
+              <p class="music-panel__desc" id="bgm-auto-desc">将根据故事风格自动切换背景音乐…</p>
+              <hr class="music-panel__rule" aria-hidden="true" />
+              <div class="music-panel__actions">
+                <input
+                  type="file"
+                  id="bgm-upload-input"
+                  accept="audio/mpeg,audio/ogg,audio/wav,.mp3,.ogg,.wav"
+                  hidden
+                />
+                <button type="button" class="music-panel__btn music-panel__btn--ghost" id="bgm-shuffle-btn" title="从当前风格曲库换一首">换一首</button>
+                <button type="button" class="music-panel__btn" id="bgm-upload-btn">上传自定义 BGM</button>
+                <button type="button" class="music-panel__btn music-panel__btn--mute" id="bgm-disable-btn">关闭音乐 ×</button>
+                <button type="button" class="music-panel__btn music-panel__btn--ghost" id="bgm-clear-btn" hidden>恢复自动</button>
+              </div>
+            </section>
+
+            <footer class="workbench__cta workbench__cta--console" aria-label="开始游戏">
+              <p class="workbench__cta-note">AI 将为你构筑独一无二的分支剧情世界</p>
+              <button type="button" id="create-btn" class="workbench__new-game workshop-btn workshop-btn--primary workshop-btn--create">
+                <span class="new-game__row">
+                  <span class="new-game__decor" aria-hidden="true">✦</span>
+                  <span class="new-game__zh btn__label">开始游戏</span>
+                  <span class="new-game__decor" aria-hidden="true">✦</span>
+                </span>
+                <span class="new-game__en">NEW GAME</span>
+                <span class="btn__spinner" hidden aria-hidden="true"></span>
+              </button>
+              <p class="workbench__error workshop__error" id="studio-error" hidden role="alert"></p>
+            </footer>
+          </div>
+
+          <section class="pipeline pipeline--overlay" id="pipeline" hidden>
+            <div class="pipeline__immersive">
+              <div class="pipeline__ornate-box">
+                <h3 class="pipeline__title">正在构筑世界...</h3>
+                <ul class="pipeline__steps pipeline__steps--vertical" id="pipeline-steps" aria-label="生成进度">
+                  <li class="pipeline__step" data-step="read"><span class="pipeline__step-mark" aria-hidden="true"></span>阅读原著</li>
+                  <li class="pipeline__step" data-step="weave"><span class="pipeline__step-mark" aria-hidden="true"></span>编织剧情</li>
+                  <li class="pipeline__step" data-step="branch"><span class="pipeline__step-mark" aria-hidden="true"></span>生成命运分支</li>
+                  <li class="pipeline__step" data-step="scene"><span class="pipeline__step-mark" aria-hidden="true"></span>准备场景</li>
+                </ul>
+                <p class="pipeline__pct pipeline__pct--hero" id="pipeline-pct">0%</p>
+                <div class="pipeline__bar pipeline__bar--blue" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <div class="pipeline__fill" id="pipeline-fill"></div>
+                </div>
+                <p class="pipeline__sub" id="pipeline-sub">故事正在成形，请稍候...</p>
+              </div>
+            </div>
+            <p class="pipeline__msg" id="pipeline-msg" hidden>等待开始…</p>
+            <p class="pipeline__elapsed" id="pipeline-elapsed" hidden></p>
+            <div class="pipeline__achievement" id="pipeline-achievement" hidden>
+              <p class="pipeline__achievement-title">你的文字，已化为多重命运</p>
+              <p class="pipeline__achievement-stats" id="pipeline-achievement-stats"></p>
+              <div class="pipeline__cover" id="pipeline-cover" hidden>
+                <img id="pipeline-cover-img" alt="游戏封面" width="320" height="180" decoding="async" />
+                <p class="pipeline__cover-label">封面已生成</p>
+              </div>
+              <button type="button" class="workshop-btn workshop-btn--outline" id="pipeline-share-btn" hidden>分享此世界</button>
+            </div>
+            <div class="pipeline__bible" id="bible-preview" hidden></div>
+          </section>
+        </main>
+
+        <!-- 右栏：LOAD GAME 常驻 -->
+        <aside class="workbench__panel workbench__load-rail workbench__drawer workbench__load-rail--parchment" id="workshop-history" aria-labelledby="load-game-history-title">
+          <header class="workbench__panel-head workbench__drawer-head workbench__drawer-head--load">
+            <div>
+              <p class="workbench__panel-eyebrow workbench__panel-title--load" id="load-game-title">LOAD GAME</p>
+              <h2 class="workbench__panel-title workbench__panel-title--history" id="load-game-history-title">历史记录</h2>
+            </div>
+            <button type="button" class="workbench__drawer-close" id="history-close-btn" aria-label="关闭">×</button>
+          </header>
+          <div class="workbench__panel-body workbench__load-body">
+            <p class="history-loading" id="history-loading" hidden role="status">Loading…</p>
+            <ul class="history-list" id="history-list" aria-label="存档列表"></ul>
+            <div class="history-empty" id="history-empty">
+              <span class="history-empty__icon" aria-hidden="true">📖</span>
+              <p class="history-empty__title">还没有作品哦</p>
+              <p class="history-empty__hint">上传小说，开启你的第一个故事吧！</p>
+            </div>
+          </div>
+        </aside>
       </div>
-      <div class="magic-modal__body workshop__history">
-        <p class="workshop__formats">上传与生成自动保存，可载入文本或直接游玩。</p>
-        <ul class="history-list" id="history-list" aria-label="历史记录列表"></ul>
-        <p class="history-empty" id="history-empty">暂无记录。上传文件或完成一次转化后，作品将自动保存在此处。</p>
-        <p class="history-loading" id="history-loading" hidden role="status">正在加载历史记录…</p>
-      </div>
+
+      <div class="workbench__drawer-backdrop" id="history-backdrop" hidden aria-hidden="true"></div>
     </div>
   </div>
 
   <div id="game" class="game" hidden>
+    <a class="game__share-brand" id="share-brand-bar" href="/" hidden>
+      <span>用 2711 制作你的游戏</span>
+    </a>
+
     <div class="vn-stage" id="vn-stage">
       <div class="game__scene-bg" id="scene-bg">
         <div class="game__scene-bg__layer is-active" id="scene-bg-a" aria-hidden="true"></div>
@@ -287,54 +441,127 @@
       </div>
       <div class="game__scene-veil"></div>
 
-      <header class="game__hud">
+      <header class="game__hud game__hud--vn">
         <button type="button" class="game__back" id="back-studio" title="返回工作室" aria-label="返回工作室">← 返回</button>
         <div class="game__meta">
           <span class="game__style" id="game-style"></span>
           <h2 class="game__title" id="game-title"></h2>
         </div>
-        <span class="game__scene-tag" id="scene-tag"></span>
-        <button type="button" class="game__replay" id="game-replay" title="从头再玩" aria-label="从头再玩" hidden>↺</button>
+        <div class="game__hud-tools">
+          <span class="game__scene-tag" id="scene-tag" hidden aria-hidden="true"></span>
+          <span class="game__chapter-hud" id="game-chapter-hud" hidden>
+            <span class="game__chapter-hud__badge" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 2.5h7l3 3V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M10 2.5V5.5H13" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M5 8h6M5 10.5h4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="game__chapter-hud__text" id="chapter-hud-text"></span>
+          </span>
+          <button type="button" class="game__replay" id="game-replay" title="从头再玩" aria-label="从头再玩" hidden>↺</button>
+        </div>
       </header>
 
-      <div class="vn-portrait vn-portrait--left" id="portrait-left" aria-hidden="true" hidden></div>
-      <div class="vn-portrait vn-portrait--right" id="portrait-right" aria-hidden="true" hidden></div>
+      <div class="vn-character-zone" id="vn-character-zone" aria-hidden="true" hidden>
+        <img class="vn-character-zone__img" id="vn-character-img" alt="" decoding="async" />
+      </div>
 
-      <div class="vn-dialogue" id="vn-dialogue" role="log" aria-live="assertive" aria-atomic="true" aria-relevant="additions text">
+      <div class="vn-dialogue-wrap" id="vn-dialogue-wrap">
         <div class="vn-name" id="speaker">旁白</div>
-        <div class="vn-text" id="narrative"></div>
-        <div class="vn-continue" id="continue-hint">点击继续 ▸</div>
+        <div class="vn-dialogue" id="vn-dialogue" role="log" aria-live="assertive" aria-atomic="true" aria-relevant="additions text">
+          <div class="vn-text" id="narrative"></div>
+          <div class="vn-continue" id="continue-hint">点击继续 ▸</div>
+        </div>
       </div>
 
       <div class="vn-choices-panel" id="choices-panel" hidden>
-        <p class="vn-choices-label">◆ 请做出选择</p>
+        <p class="vn-choices-label">✧ 请做出选择 ✧</p>
         <nav class="vn-choices" id="choices" aria-label="剧情选项"></nav>
       </div>
 
       <footer class="vn-ending" id="ending-banner" hidden>
-        <p class="vn-ending__label" id="ending-label"></p>
-        <button type="button" class="workshop-btn workshop-btn--outline" id="restart-btn">再玩一次</button>
+        <div class="vn-ending__card">
+          <p class="vn-ending__type" id="ending-type"></p>
+          <p class="vn-ending__subtitle" id="ending-subtitle"></p>
+          <p class="vn-ending__synopsis" id="ending-synopsis"></p>
+          <div class="vn-ending__actions">
+            <button type="button" class="workshop-btn workshop-btn--primary workshop-btn--ornate" id="restart-btn">再玩一次</button>
+            <button type="button" class="workshop-btn workshop-btn--outline" id="ending-codex-from-end">查看结局图鉴</button>
+            <button type="button" class="workshop-btn workshop-btn--outline" id="share-world-btn" hidden>分享此世界</button>
+          </div>
+        </div>
       </footer>
+
+      <aside class="ending-codex" id="ending-codex" hidden aria-label="结局图鉴">
+        <header class="ending-codex__head">
+          <h3>结局图鉴</h3>
+          <p class="ending-codex__progress" id="ending-codex-progress"></p>
+          <button type="button" class="ending-codex__close" id="ending-codex-close" aria-label="关闭">×</button>
+        </header>
+        <ul class="ending-codex__list" id="ending-codex-list"></ul>
+      </aside>
+
+      <footer class="game__dock" id="game-dock" aria-label="游玩工具栏">
+        <div class="game__dock-audio-wrap" id="bgm-volume-wrap">
+          <button type="button" class="game__dock-audio" id="bgm-toggle" title="背景音乐" aria-label="背景音乐开关" aria-pressed="false">
+            <svg class="game__audio-svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M3 7.5v5h3l4 3V4.5L6 7.5H3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              <path class="game__audio-wave" d="M13.5 7.5c1 .9 1 4.1 0 5M15.8 5.2c1.8 1.7 1.8 7.9 0 9.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="game__volume-pop" id="bgm-volume-pop" hidden>
+            <label class="game__volume-label" for="bgm-volume">音量</label>
+            <input type="range" class="game__volume-range" id="bgm-volume" min="0" max="100" value="65" aria-label="背景音乐音量" />
+          </div>
+        </div>
+        <span class="game__dock-hint">建议佩戴耳机 · 沉浸体验</span>
+        <button type="button" class="game__dock-codex" id="dock-codex-btn" title="结局图鉴" aria-label="结局图鉴" hidden>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="14" cy="6" r="2.5" fill="currentColor" stroke="none" opacity="0.85"/>
+          </svg>
+          <span class="game__dock-codex__label" id="dock-codex-label">结局图鉴</span>
+        </button>
+      </footer>
+
+      <div class="chapter-modal chapter-modal--cinematic" id="chapter-modal" hidden role="dialog" aria-modal="true" aria-labelledby="chapter-modal-title">
+        <div class="chapter-modal__veil" aria-hidden="true"></div>
+        <div class="chapter-modal__panel chapter-modal__panel--cinematic">
+          <p class="chapter-modal__eyebrow" id="chapter-modal-num">Chapter 1</p>
+          <div class="chapter-modal__divider" aria-hidden="true"></div>
+          <h3 class="chapter-modal__title" id="chapter-modal-title"></h3>
+          <p class="chapter-modal__blurb" id="chapter-modal-blurb"></p>
+          <button type="button" class="chapter-modal__btn chapter-modal__btn--ghost" id="chapter-modal-start">点击继续</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script src="js/brand.js?v=9"></script>
-  <script src="js/demo.js?v=10"></script>
+  <script src="js/env-config.js?v=2"></script>
+  <script src="js/lib/api-errors.js?v=3"></script>
+  <script src="js/lib/api-config.js?v=3"></script>
+  <script src="js/brand.js?v=15"></script>
+  <script src="js/demo.js?v=12"></script>
   <script src="js/scene-images.js?v=8"></script>
-  <script src="js/mood.js?v=15"></script>
-  <script src="js/game.js?v=14"></script>
-  <script src="js/landing-pages.js?v=1"></script>
-  <script src="js/landing-motion.js?v=3"></script>
-  <script src="js/reveal.js?v=9"></script>
-  <script src="js/lib/api-errors.js?v=1"></script>
-  <script src="js/lib/sse.js?v=1"></script>
-  <script src="js/workshop/EditorInput.js?v=2"></script>
-  <script src="js/workshop/StylePresets.js?v=1"></script>
-  <script src="js/workshop/PipelineView.js?v=1"></script>
-  <script src="js/workshop/CreateFlow.js?v=2"></script>
-  <script src="js/history.js?v=6"></script>
-  <script src="js/workshop/StudioController.js?v=2"></script>
-  <script src="js/magic-editor.js?v=4"></script>
-  <script src="js/app.js?v=27"></script>
+  <script src="js/mood.js?v=16"></script>
+  <script src="js/music-picker.js?v=8"></script>
+  <script src="js/audio.js?v=7"></script>
+  <script src="js/progress-store.js?v=2"></script>
+  <script src="js/share.js?v=1"></script>
+  <script src="js/protagonist-gate.js?v=4"></script>
+  <script src="js/game.js?v=26"></script>
+  <script src="js/lib/sse.js?v=4"></script>
+  <script src="js/workshop/EditorInput.js?v=8"></script>
+  <script src="js/workshop/StylePresets.js?v=16"></script>
+  <script src="js/workshop/PipelineView.js?v=6"></script>
+  <script src="js/workshop/CreateFlow.js?v=15"></script>
+  <script src="js/history.js?v=22"></script>
+  <script src="js/workshop/StudioController.js?v=10"></script>
+  <script src="js/magic-editor.js?v=7"></script>
+  <script src="js/workbench.js?v=9"></script>
+  <script src="js/app.js?v=29"></script>
+  <script src="js/impeccable-live-loader.js?v=1" data-impeccable-port="8400"></script>
 </body>
 </html>
