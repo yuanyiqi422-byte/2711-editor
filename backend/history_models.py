@@ -24,9 +24,17 @@ class HistoryItem(BaseModel):
     has_game: bool = False
     node_count: int = 0
     ending_count: int = 0
+    branch_count: int = 0
+    unlocked_endings: int = 0
+    share_token: str | None = None
+
+
+class HistoryProgress(BaseModel):
+    unlocked: list[dict] = Field(default_factory=list)
 
 
 class HistoryDetail(BaseModel):
     item: HistoryItem
     text: str
     game: GamePack | None = None
+    progress: HistoryProgress | None = None

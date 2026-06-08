@@ -7,7 +7,7 @@ from pathlib import Path
 from fastapi import HTTPException
 from pydantic import ValidationError
 
-from history_models import HistoryDetail, HistoryItem, HistorySaveRequest
+from history_models import HistoryDetail, HistoryItem, HistoryProgress, HistorySaveRequest
 from models import GamePack
 
 HISTORY_ROOT = Path(__file__).resolve().parent / "data" / "history"
@@ -39,6 +39,10 @@ def _text_path(entry_id: str) -> Path:
 
 def _game_path(entry_id: str) -> Path:
     return _entry_dir(entry_id) / "game.json"
+
+
+def _progress_path(entry_id: str) -> Path:
+    return _entry_dir(entry_id) / "progress.json"
 
 
 def _ensure_root() -> None:
@@ -91,7 +95,44 @@ def _prune_old_entries() -> None:
 
 
 def _meta_to_item(meta: dict) -> HistoryItem:
-    return HistoryItem.model_validate(meta)
+    item = HistoryItem.model_validate(meta)
+    if item.unlocked_endings == 0:
+        progress = _load_progress_raw(meta.get("id", ""))
+        if progress:
+            item = item.model_copy(update={"unlocked_endings": len(progress.get("unlocked") or [])})
+    return item
+
+
+def _load_progress_raw(entry_id: str) -> dict | None:
+    path = _progress_path(entry_id)
+    if not path.is_file():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def load_progress(entry_id: str) -> HistoryProgress:
+    raw = _load_progress_raw(entry_id)
+    if not raw:
+        return HistoryProgress(unlocked=[])
+    return HistoryProgress.model_validate(raw)
+
+
+def save_progress(entry_id: str, progress: HistoryProgress) -> HistoryItem:
+    _load_meta(entry_id)
+    _entry_dir(entry_id).mkdir(parents=True, exist_ok=True)
+    unlocked = progress.unlocked or []
+    _progress_path(entry_id).write_text(
+        json.dumps({"unlocked": unlocked}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    meta = _load_meta(entry_id)
+    meta["unlocked_endings"] = len(unlocked)
+    meta["updated_at"] = _now_iso()
+    _write_meta(entry_id, meta)
+    return _meta_to_item(meta)
 
 
 def refresh_history_count() -> int:
@@ -135,7 +176,7 @@ def get_entry(entry_id: str) -> HistoryDetail:
             game = GamePack.model_validate(json.loads(game_file.read_text(encoding="utf-8")))
         except (json.JSONDecodeError, ValidationError):
             game = None
-    return HistoryDetail(item=_meta_to_item(meta), text=text, game=game)
+    return HistoryDetail(item=_meta_to_item(meta), text=text, game=game, progress=load_progress(entry_id))
 
 
 def _default_title(req: HistorySaveRequest) -> str:
@@ -168,11 +209,25 @@ def save_entry(req: HistorySaveRequest) -> HistoryItem:
     game_data = req.game
     node_count = 0
     ending_count = 0
+    branch_count = 0
     title = _default_title(req)
+    share_token = None
+    unlocked_endings = 0
+    if meta_file.is_file():
+        try:
+            old_meta = json.loads(meta_file.read_text(encoding="utf-8"))
+            share_token = old_meta.get("share_token")
+            unlocked_endings = int(old_meta.get("unlocked_endings") or 0)
+        except (json.JSONDecodeError, OSError):
+            pass
+        progress_raw = _load_progress_raw(entry_id)
+        if progress_raw:
+            unlocked_endings = len(progress_raw.get("unlocked") or [])
     if game_data:
         title = game_data.title or title
         node_count = len(game_data.nodes)
         ending_count = sum(1 for n in game_data.nodes.values() if n.is_ending)
+        branch_count = sum(len(n.choices) for n in game_data.nodes.values())
 
     meta = {
         "id": entry_id,
@@ -185,6 +240,9 @@ def save_entry(req: HistorySaveRequest) -> HistoryItem:
         "has_game": game_data is not None,
         "node_count": node_count,
         "ending_count": ending_count,
+        "branch_count": branch_count,
+        "unlocked_endings": unlocked_endings,
+        "share_token": share_token,
     }
 
     _entry_dir(entry_id).mkdir(parents=True, exist_ok=True)
@@ -199,6 +257,46 @@ def save_entry(req: HistorySaveRequest) -> HistoryItem:
 
     _write_meta(entry_id, meta)
     _prune_old_entries()
+    return _meta_to_item(meta)
+
+
+def ensure_share_token(entry_id: str) -> str:
+    meta = _load_meta(entry_id)
+    if not meta.get("has_game"):
+        raise HTTPException(status_code=400, detail="该记录尚未生成可分享的游戏")
+    token = meta.get("share_token")
+    if not token:
+        token = uuid.uuid4().hex[:10]
+        meta["share_token"] = token
+        meta["updated_at"] = _now_iso()
+        _write_meta(entry_id, meta)
+    return token
+
+
+def get_entry_by_share_token(token: str) -> HistoryDetail:
+    if not token or not re.fullmatch(r"[a-f0-9]{8,12}", token):
+        raise HTTPException(status_code=400, detail="无效的分享链接")
+    if not HISTORY_ROOT.is_dir():
+        raise HTTPException(status_code=404, detail="分享内容不存在")
+    for child in HISTORY_ROOT.iterdir():
+        if not child.is_dir():
+            continue
+        meta_file = child / "meta.json"
+        if not meta_file.is_file():
+            continue
+        try:
+            meta = json.loads(meta_file.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        if meta.get("share_token") == token and meta.get("has_game"):
+            return get_entry(meta["id"])
+    raise HTTPException(status_code=404, detail="分享内容不存在或已删除")
+
+
+def touch_entry(entry_id: str) -> HistoryItem:
+    meta = _load_meta(entry_id)
+    meta["updated_at"] = _now_iso()
+    _write_meta(entry_id, meta)
     return _meta_to_item(meta)
 
 
