@@ -16,6 +16,7 @@ const FRONTEND = join(ROOT, "frontend");
 const REDIRECTS = join(FRONTEND, "_redirects");
 const NETLIFY_TOML = join(ROOT, "netlify.toml");
 const INJECT_MARKER = "# [injected-api-proxy]";
+const DEFAULT_PRODUCTION_API = "https://two711-editor-api.onrender.com";
 
 function stripSlash(url) {
   return (url || "").trim().replace(/\/+$/, "");
@@ -26,7 +27,10 @@ function escapeRegExp(text) {
 }
 
 const backendProxy = stripSlash(
-  process.env.API_BACKEND_URL || process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || ""
+  process.env.API_BACKEND_URL ||
+    process.env.BACKEND_URL ||
+    process.env.RENDER_EXTERNAL_URL ||
+    (process.env.NETLIFY ? DEFAULT_PRODUCTION_API : "")
 );
 // Netlify /api rewrite proxy truncates long SSE streams — prefer direct backend URL.
 const apiBase = stripSlash(process.env.API_BASE_URL || process.env.VITE_API_BASE || "") || backendProxy;
