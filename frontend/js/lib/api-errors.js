@@ -14,7 +14,31 @@
     );
   }
 
+  function isNetworkFetchError(err) {
+    const m =
+      err && err.message
+        ? String(err.message)
+        : typeof err === "string"
+          ? err
+          : "";
+    const lower = m.toLowerCase();
+    return (
+      lower === "failed to fetch" ||
+      lower.indexOf("networkerror") !== -1 ||
+      lower.indexOf("network request failed") !== -1 ||
+      lower.indexOf("load failed") !== -1 ||
+      (err && err.name === "TypeError" && lower.indexOf("fetch") !== -1)
+    );
+  }
+
+  function friendlyNetworkMessage() {
+    return global.ApiConfig && global.ApiConfig.backendUnavailableMessage
+      ? global.ApiConfig.backendUnavailableMessage
+      : "无法连接故事解析服务（网络或跨域被拦截）。请刷新后重试；若持续失败，请确认后端已部署最新版本。";
+  }
+
   function friendlyBackendMessage(err) {
+    if (isNetworkFetchError(err)) return friendlyNetworkMessage();
     if (!isHtmlJsonParseError(err)) return "";
     return global.ApiConfig && global.ApiConfig.backendUnavailableMessage
       ? global.ApiConfig.backendUnavailableMessage
@@ -142,6 +166,7 @@
     classifyLlmError: classifyLlmError,
     friendlyValidationMessage: friendlyValidationMessage,
     isHtmlJsonParseError: isHtmlJsonParseError,
+    isNetworkFetchError: isNetworkFetchError,
     friendlyBackendMessage: friendlyBackendMessage,
   };
 })(typeof window !== "undefined" ? window : globalThis);

@@ -83,7 +83,7 @@ async def _cached_analyze_story(text: str, style, source_char_count: int):
     return bible
 
 ENV_PATH = Path(__file__).resolve().parent / ".env"
-APP_VERSION = "0.2.6"
+APP_VERSION = "0.2.7"
 _startup_issues: list[str] = []
 _history_count_cache: int = 0
 
@@ -166,6 +166,7 @@ def _cors_origins() -> list[str]:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins(),
+    allow_origin_regex=r"https://([a-zA-Z0-9-]+--)?2711editor\.netlify\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

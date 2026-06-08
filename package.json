@@ -1,8 +1,8 @@
 {
   "name": "2711-editor",
   "private": true,
-  "version": "0.2.5",
-  "description": "2711 Editor v0.2.5 — interactive story creation platform",
+  "version": "0.2.7",
+  "description": "2711 Editor v0.2.7 — interactive story creation platform",
   "type": "module",
   "scripts": {
     "build": "node scripts/frontend-build.mjs",
