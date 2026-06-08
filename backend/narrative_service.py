@@ -1,8 +1,11 @@
 import asyncio
 import logging
 import re
+from collections.abc import Awaitable, Callable
 
 logger = logging.getLogger(__name__)
+
+ProgressCallback = Callable[[int, str], Awaitable[None]] | None
 
 from llm import LLMError, chat_json
 from models import (
@@ -224,9 +227,16 @@ async def generate_game_nodes(
     bible: StoryBible,
     style: StylePreset,
     source_char_count: int = 0,
+    on_progress: ProgressCallback = None,
 ) -> GamePack:
+    async def report(pct: int, msg: str) -> None:
+        if on_progress:
+            await on_progress(pct, msg)
+
     chars = source_char_count or max(len(bible.synopsis) * 20, 5000)
     bible_dict = bible.model_dump()
+
+    await report(52, "正在规划场景骨架…")
 
     try:
         outline_raw = await chat_json(
@@ -244,6 +254,8 @@ async def generate_game_nodes(
         skeleton = outline_raw["nodes"]
         node_ids = list(skeleton.keys())
         batch_size = 3
+        total = len(node_ids)
+        completed = 0
         for i in range(0, len(node_ids), batch_size):
             batch_ids = node_ids[i : i + batch_size]
             batch_raw = await chat_json(
@@ -271,6 +283,11 @@ async def generate_game_nodes(
                         DialogueLine.model_validate(ln) for ln in lines if isinstance(ln, dict)
                     ]
                 merged_nodes[base["id"]] = _normalize_node(StoryNode.model_validate(base))
+            completed += len(batch_ids)
+            await report(
+                55 + int(17 * completed / max(total, 1)),
+                f"正在生成场景 {completed}/{total}…",
+            )
             if i + batch_size < len(node_ids):
                 await asyncio.sleep(1.2)
 
@@ -282,6 +299,7 @@ async def generate_game_nodes(
         }
         pack = _parse_nodes(raw, style)
     else:
+        await report(58, "正在一次性生成场景节点…")
         raw = await chat_json(
             build_nodes_system(),
             build_nodes_user(bible_dict, style, source_char_count=chars),
