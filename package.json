@@ -1,8 +1,8 @@
 {
   "name": "2711-editor",
   "private": true,
-  "version": "0.2.7",
-  "description": "2711 Editor v0.2.7 — interactive story creation platform",
+  "version": "0.2.8",
+  "description": "2711 Editor v0.2.8 — interactive story creation platform",
   "type": "module",
   "scripts": {
     "build": "node scripts/frontend-build.mjs",
@@ -14,6 +14,8 @@
     "smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-test.ps1",
     "predeploy:netlify": "node scripts/inject-env-config.mjs",
     "deploy:netlify": "npm run predeploy:netlify && npx netlify deploy --prod --dir=frontend",
+    "predeploy:cloudflare": "node scripts/inject-env-config.mjs",
+    "deploy:cloudflare": "npm run predeploy:cloudflare && npx wrangler pages deploy frontend --project-name=2711editor --commit-dirty=true",
     "test:backend": ".venv\\Scripts\\python -m pytest backend/tests -q",
     "test": "npm run validate && npm run test:backend"
   },

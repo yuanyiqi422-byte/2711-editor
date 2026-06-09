@@ -49,6 +49,14 @@ Docker：`docker compose -f docker/docker-compose.yml up --build`
 
 详细架构决策见 `infrastructure-blueprint.md`。
 
+## 线上部署
+
+前端托管在 **Cloudflare Pages**（静态站点），API 在 **Render**。详见 [`DEPLOY.md`](DEPLOY.md)。
+
+- 生产前端：https://2711editor.pages.dev
+- 生产 API：https://two711-editor-api.onrender.com
+
+
 Agent / 脚本重启（无需用户操作）：
 
 ```powershell
@@ -66,19 +74,20 @@ powershell -File scripts/dev-watch.ps1
 
 - 粘贴或上传故事：**TXT / Markdown / Word (.docx) / PDF / RTF / EPUB**，单文件最大 **50MB**
 - 扫描版 PDF 自动 **OCR**
-- **上传后全文写入文本框**（默认不截字）；「开始转化」时若超过模型安全字数，服务端**智能采样**（按章或头中尾），不拒绝全文提交
+- **上传后全文写入文本框**（默认不截字、不采样）；如需控制生成长度，可在 `backend/.env` 配置采样字数
 - **本地历史记录**：上传与生成自动保存，支持「载入文本」「直接游玩」，免重复上传 PDF
 - 长篇可生成 **15～25 个场景节点**、2～3 种结局；短篇 **8～12** 节点
+- **背景音乐**：启程台可选内置氛围曲或上传本地 mp3/ogg/wav（会话内有效）。QQ Music 等外链库需平台 API 与版权授权，当前不支持
 
 ### 大文件 / PDF 环境变量（`backend/.env`）
 
 | 变量 | 默认 | 说明 |
 |------|------|------|
 | `MAX_UPLOAD_MB` | 50 | 单文件上传上限 |
-| `MAX_EXTRACT_CHARS` | 10000000 | 提取阶段正文硬上限 |
-| `MAX_CREATE_CHARS` | 同 `MAX_EXTRACT_CHARS` | 「开始转化」提交正文硬上限 |
-| `LLM_INPUT_CHARS` | **0** | **0** 时用 `LLM_MODEL_SAFE_CHARS` 自动采样；>0 为显式采样上限 |
-| `LLM_MODEL_SAFE_CHARS` | 120000 | `LLM_INPUT_CHARS=0` 时生成游戏的智能采样字数 |
+| `MAX_EXTRACT_CHARS` | **0**（不限） | 提取阶段正文上限；0 = 不截断 |
+| `MAX_CREATE_CHARS` | **0**（不限） | 「开始转化」提交上限；0 = 不限制 |
+| `LLM_INPUT_CHARS` | **0** | 0 时用 `LLM_MODEL_SAFE_CHARS`；>0 为显式采样上限 |
+| `LLM_MODEL_SAFE_CHARS` | **0**（不采样） | 0 = 全文送入 AI；>0 且超长时智能采样 |
 | `MAX_PDF_PAGES` | **0** | **0 = 处理全部页**（受 `PDF_PAGE_HARD_CAP` 保护） |
 | `PDF_PAGE_HARD_CAP` | 2000 | `MAX_PDF_PAGES=0` 时的页数硬上限 |
 
