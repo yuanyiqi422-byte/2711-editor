@@ -1,0 +1,426 @@
+/**
+ * Taste Skill × Impeccable · 2711 落地页 v24
+ * Design Read: premium playful VN editor, split hero + floating device stack, VARIANCE 9 / MOTION 7 / DENSITY 3
+ */
+
+/* ─── 画布：冷色天空，留白呼吸 ─── */
+body.landing-body {
+  background: #eef6ff;
+  color: var(--ink);
+}
+
+.landing-scroll .grain,
+.landing-scroll .wind-overlay,
+.landing-scroll .petal-overlay {
+  opacity: 0.06;
+}
+
+/* ─── 导航：透明 → 浮动胶囊 ─── */
+.site-nav {
+  top: 12px;
+  left: max(16px, env(safe-area-inset-left));
+  right: max(16px, env(safe-area-inset-right));
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(126, 184, 255, 0.22);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.site-nav.is-scrolled {
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 48px rgba(90, 143, 200, 0.12);
+}
+
+.site-nav__cta {
+  border-radius: 10px;
+}
+
+/* ─── Hero：视频式双栏 + 设备叠层 ─── */
+.hero--video {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--nav-h) + 28px) 0 72px;
+  overflow: clip;
+}
+
+.hero--video .hero__media,
+.hero--video .hero__clouds,
+.hero--video .hero__wind,
+.hero--video .hero__petals,
+.hero--video .hero__mesh,
+.hero--video .hero__veil,
+.hero--video .hero__format-strip,
+.hero--video .hero__scroll {
+  display: none;
+}
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__aurora {
+  position: absolute;
+  inset: -20% -10%;
+  background:
+    radial-gradient(ellipse 55% 45% at 15% 20%, rgba(168, 212, 255, 0.55), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 15%, rgba(248, 168, 200, 0.35), transparent 58%),
+    radial-gradient(ellipse 60% 50% at 50% 95%, rgba(184, 212, 200, 0.4), transparent 62%),
+    linear-gradient(180deg, #f8fbff 0%, #eef6ff 55%, #e8f4ef 100%);
+}
+
+.hero__frame {
+  position: relative;
+  z-index: 1;
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(36px, 6vw, 64px);
+  align-items: center;
+}
+
+@media (min-width: 980px) {
+  .hero__frame {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: clamp(32px, 4vw, 48px);
+  }
+}
+
+.hero__copy {
+  text-align: left;
+}
+
+@media (max-width: 979.98px) {
+  .hero__copy {
+    text-align: center;
+  }
+}
+
+.hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--sky-deep);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(126, 184, 255, 0.3);
+}
+
+.hero--video .hero__eyebrow {
+  display: none;
+}
+
+.hero--video .hero__title {
+  gap: 10px;
+}
+
+.hero--video .hero__title-en {
+  font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
+}
+
+.hero--video .hero__title-zh {
+  font-size: clamp(2.4rem, 6.5vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+  color: #2a3548;
+  text-shadow: none;
+}
+
+.hero--video .hero__tagline {
+  margin: 20px 0 0;
+  max-width: 22ch;
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.hero--video .hero__lede {
+  display: none;
+}
+
+@media (max-width: 979.98px) {
+  .hero--video .hero__tagline {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.hero--video .hero__actions {
+  justify-content: flex-start;
+  margin-top: 28px;
+}
+
+@media (max-width: 979.98px) {
+  .hero--video .hero__actions {
+    justify-content: center;
+  }
+}
+
+.hero--video .btn-landing--primary {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(107, 142, 107, 0.22);
+}
+
+.hero--video .btn-landing--ghost {
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* 设备叠层预览 */
+.hero__device-stack {
+  position: relative;
+  width: min(100%, 620px);
+  min-height: 380px;
+  margin: 0 auto;
+  perspective: 1400px;
+}
+
+@media (min-width: 980px) {
+  .hero__device-stack {
+    margin: 0 0 0 auto;
+    min-height: 440px;
+  }
+}
+
+.device {
+  border-radius: 14px;
+  border: 1px solid rgba(126, 184, 255, 0.32);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 28px 72px rgba(74, 103, 120, 0.14);
+  overflow: hidden;
+}
+
+.device__chrome {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(126, 184, 255, 0.16);
+  background: rgba(248, 251, 255, 0.95);
+}
+
+.device__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(126, 184, 255, 0.45);
+}
+
+.device__dot:nth-child(1) { background: #ffc8dd; }
+.device__dot:nth-child(2) { background: #a8d4ff; }
+.device__dot:nth-child(3) { background: #b8d4c8; }
+
+.device__url {
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.device--main {
+  position: relative;
+  z-index: 2;
+  transform: rotateY(-8deg) rotateX(5deg);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.device--main .device__scene {
+  position: relative;
+  aspect-ratio: 16 / 10;
+}
+
+.device--main .device__scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.device--satellite {
+  position: absolute;
+  z-index: 3;
+  width: min(46%, 220px);
+  animation: deviceFloat 7s ease-in-out infinite;
+}
+
+.device--style {
+  top: -6%;
+  right: -4%;
+  animation-delay: -2s;
+}
+
+.device--branch {
+  bottom: 8%;
+  left: -6%;
+  width: min(52%, 240px);
+  animation-delay: -4s;
+}
+
+.device--satellite .device__body {
+  padding: 12px 14px;
+}
+
+.device__label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--sky-deep);
+}
+
+.device__branch-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+.device__branch-line::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sakura);
+  flex-shrink: 0;
+}
+
+@keyframes deviceFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* 格式条：Hero 下方独立区 */
+.hero__ribbon {
+  position: relative;
+  z-index: 1;
+  padding: 8px 0 40px;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.hero__ribbon-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  animation: formatMarquee 32s linear infinite;
+}
+
+.hero__ribbon-pill {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(126, 184, 255, 0.24);
+}
+
+/* ─── 能力：非对称 Bento ─── */
+.landing-scroll .features {
+  padding-top: clamp(48px, 8vw, 88px);
+}
+
+.landing-scroll .section-head__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  text-wrap: balance;
+}
+
+.landing-scroll .features .features__grid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .landing-scroll .features .features__grid {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .landing-scroll .feature-card:nth-child(1) {
+    grid-column: span 7;
+    grid-row: span 2;
+  }
+
+  .landing-scroll .feature-card:nth-child(2) {
+    grid-column: span 5;
+  }
+
+  .landing-scroll .feature-card:nth-child(3) {
+    grid-column: span 5;
+  }
+}
+
+.landing-scroll .feature-card__num {
+  display: none;
+}
+
+.landing-scroll .feature-card {
+  border: 1px solid rgba(126, 184, 255, 0.22);
+  border-radius: 14px;
+}
+
+.landing-scroll .feature-card:nth-child(1) {
+  background: linear-gradient(160deg, rgba(168, 212, 255, 0.28), rgba(255, 255, 255, 0.96));
+}
+
+.landing-scroll .feature-card:nth-child(2) {
+  background: linear-gradient(160deg, rgba(248, 168, 200, 0.2), rgba(255, 255, 255, 0.96));
+}
+
+.landing-scroll .feature-card:nth-child(3) {
+  background: linear-gradient(160deg, rgba(184, 212, 200, 0.32), rgba(255, 255, 255, 0.96));
+}
+
+/* ─── 工坊：工作室 Dock ─── */
+.landing-scroll .workshop {
+  background: linear-gradient(180deg, transparent, rgba(168, 212, 255, 0.08) 40%, transparent);
+  border-top: none;
+}
+
+.landing-scroll .workshop__panel {
+  border-radius: 20px;
+  padding: clamp(16px, 3vw, 24px);
+  border: 1px solid rgba(126, 184, 255, 0.34);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 32px 80px rgba(90, 143, 200, 0.1);
+}
+
+.landing-scroll .workshop__card {
+  border-radius: 14px;
+  background: rgba(248, 251, 255, 0.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__ribbon-track,
+  .device--satellite {
+    animation: none;
+  }
+
+  .device--main {
+    transform: none;
+  }
+}

@@ -124,8 +124,11 @@ def save_progress(entry_id: str, progress: HistoryProgress) -> HistoryItem:
     _load_meta(entry_id)
     _entry_dir(entry_id).mkdir(parents=True, exist_ok=True)
     unlocked = progress.unlocked or []
+    payload = {"unlocked": unlocked}
+    if progress.checkpoint is not None:
+        payload["checkpoint"] = progress.checkpoint
     _progress_path(entry_id).write_text(
-        json.dumps({"unlocked": unlocked}, ensure_ascii=False, indent=2),
+        json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
     meta = _load_meta(entry_id)

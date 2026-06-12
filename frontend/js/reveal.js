@@ -1,10 +1,11 @@
-/** 滚动显现 + 导航 + 分页联动 */
+/** 滚动显现 + 导航 + 分页/锚点联动 */
 (function () {
   const nav = document.getElementById("site-nav");
   const menu = document.getElementById("site-nav-menu");
   const toggle = document.getElementById("site-nav-toggle");
   const navLinks = document.querySelectorAll(".site-nav__link[data-nav]");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const scrollLanding = Boolean(document.getElementById("landing-view"));
 
   function closeMenu() {
     if (!nav || !toggle) return;
@@ -45,30 +46,53 @@
     });
   }
 
+  function updateNavScrolled(scrolled) {
+    if (nav) nav.classList.toggle("is-scrolled", scrolled);
+  }
+
   function handlePageChange(detail) {
-    if (nav) {
-      nav.classList.toggle("is-scrolled", detail.index > 0);
+    if (!scrollLanding) {
+      updateNavScrolled(detail.index > 0);
     }
     if (detail.slug && detail.slug !== "top") {
       setActiveNav(detail.slug);
     } else {
       navLinks.forEach(function (link) { link.classList.remove("is-active"); });
     }
-    revealInPage(detail.page);
-  }
-
-  if (typeof LandingPages !== "undefined") {
-    LandingPages.onChange(handlePageChange);
-    handlePageChange({
-      index: LandingPages.getCurrent(),
-      slug: LandingPages.getSlug(),
-      page: document.querySelector(".landing-page.is-active"),
-    });
+    if (!scrollLanding) revealInPage(detail.page);
   }
 
   const reveals = document.querySelectorAll(".reveal");
-  if (reveals.length && reduced) {
+
+  if (reduced) {
     reveals.forEach(function (el) { el.classList.add("is-visible"); });
+  } else if (scrollLanding) {
+    document.querySelectorAll(".hero--vn .reveal, .hero .reveal").forEach(function (el) {
+      el.classList.add("is-visible");
+    });
+
+    const io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    reveals.forEach(function (el) {
+      if (el.classList.contains("is-visible")) return;
+      io.observe(el);
+    });
+
+    function onScroll() {
+      updateNavScrolled(window.scrollY > 32);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   } else if (reveals.length && typeof LandingPages === "undefined") {
     const io = new IntersectionObserver(
       function (entries) {
@@ -85,7 +109,18 @@
       if (el.classList.contains("feature-card")) return;
       io.observe(el);
     });
-  } else if (reveals.length) {
+  }
+
+  if (typeof LandingPages !== "undefined") {
+    LandingPages.onChange(handlePageChange);
+    handlePageChange({
+      index: LandingPages.getCurrent(),
+      slug: LandingPages.getSlug(),
+      page: scrollLanding
+        ? document.getElementById("top")
+        : document.querySelector(".landing-page.is-active"),
+    });
+  } else if (!scrollLanding) {
     const hero = document.querySelector(".landing-page.hero");
     if (hero) revealInPage(hero);
   }

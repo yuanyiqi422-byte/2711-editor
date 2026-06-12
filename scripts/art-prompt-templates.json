@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "locale": "zh-CN",
+  "notes_zh": "2711 编辑器统一生图 Prompt 模板。Agent 用 build-prompt 子命令或本文件直接拼装，禁止每次手写风格词。",
+  "sources": {
+    "art_style": "scripts/art-style.json",
+    "scene_rules": "scripts/SCENE-GEN-RULES.md",
+    "crowd_rules": "scripts/scene-crowd-rules.json",
+    "art_style_mdc": ".cursor/rules/art-style.mdc"
+  },
+  "base_negative": "NOT photorealistic, NOT photography, NOT live action, NOT 3D render, NOT CGI, NOT Unreal Engine, NOT hyperrealistic, NOT stock photo, watermark, text overlay, blurry, low detail",
+  "categories": {
+    "scene": {
+      "zh": "游戏场景纯背景（无 UI）",
+      "path": "images/scenes/{id}.png",
+      "size": [1920, 1080],
+      "format": "png",
+      "remove_bg": false,
+      "prompt_pattern": "{subject}, {style_prefix}, wide visual novel background, Chinese everyday or historical context as appropriate, {crowd_suffix}",
+      "negative_append": "{scene_negative}",
+      "post_scene": ["python scripts/sync-scene-images-js.py", "bump scene-images.js VERSION"]
+    },
+    "landing": {
+      "zh": "落地页 Hero / Feature 大图",
+      "path": "images/{id}.png",
+      "size": [1920, 1080],
+      "format": "png",
+      "remove_bg": false,
+      "prompt_pattern": "{subject}, {landing_prefix}, fantasy game UI design, parchment scroll, floating island castle, magical gears crystals feathers, soft diffused light, hand-drawn illustration",
+      "negative_append": "{negative}"
+    },
+    "ui": {
+      "zh": "界面装饰插画（可含 UI 语境）",
+      "path": "images/ui/{id}.png",
+      "size": [800, 500],
+      "format": "png",
+      "remove_bg": false,
+      "prompt_pattern": "{subject}, {ui_prefix}, 2D anime art style, Studio Ghibli style, watercolor background, pastel blue pink mint green, ethereal lighting, healing cozy atmosphere, hand-drawn illustration",
+      "negative_append": "{negative}"
+    },
+    "icon": {
+      "zh": "小图标 / 贴纸（需透明底）",
+      "path": "images/icons/{id}.png",
+      "size": [512, 512],
+      "format": "png",
+      "remove_bg": true,
+      "bg_prompt_suffix": ", isolated object centered on pure flat white background, generous white margins, sticker cutout style, no shadow, single subject only",
+      "prompt_pattern": "{subject}, 2D anime art style, Japanese animation, Studio Ghibli style, watercolor painted texture, pastel soft blue pale pink mint green, ethereal lighting, healing cozy atmosphere, fantasy game UI accent, hand-drawn illustration, NOT 3D{bg_suffix}",
+      "negative_append": "{negative}, busy background, scenery, landscape, multiple objects"
+    },
+    "workbench": {
+      "zh": "工坊 / 控制台面板图",
+      "path": "images/workbench/{id}.png",
+      "size": [1200, 800],
+      "format": "png",
+      "remove_bg": false,
+      "prompt_pattern": "{subject}, {ui_prefix}, visual novel editor workbench panel, parchment paper texture, ornate metallic borders, 2D anime illustration, pastel healing palette",
+      "negative_append": "{negative}"
+    }
+  },
+  "placement_hints": {
+    "hero": { "category": "landing", "wire": "frontend/index.html .hero__visual img 或 landing.css background-image" },
+    "feature_card": { "category": "ui", "wire": "frontend/index.html .feature-card__visual img" },
+    "workshop_empty": { "category": "icon", "wire": "frontend/index.html .history-empty__icon 或空状态区块" },
+    "workbench_bg": { "category": "workbench", "wire": "frontend/index.html workbench 背景或 .workbench__panel" },
+    "game_scene": { "category": "scene", "wire": "frontend/js/scene-images.js SCENES 映射 + manifest scenes" }
+  },
+  "examples": {
+    "workshop_empty": {
+      "category": "icon",
+      "id": "empty-story-scroll",
+      "subject_en": "magical open story scroll with tiny floating feathers and soft glowing crystals, upload motif",
+      "placement": "history-empty icon replacing emoji"
+    },
+    "hero": {
+      "category": "landing",
+      "id": "hero-scroll-island",
+      "subject_en": "visual novel editor landing hero, open scroll with branching story paths, floating UI panels over castle island",
+      "placement": "landing hero visual"
+    }
+  }
+}

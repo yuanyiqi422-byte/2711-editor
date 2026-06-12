@@ -50,8 +50,8 @@ _STOP = frozenset(
 
 # 常见中文姓（用于加分，非必须）
 _SURNAMES = frozenset(
-    "李王张刘陈杨赵黄周吴徐孙胡朱高林何郭马罗梁宋郑谢韩唐冯于董萧程曹袁邓许傅沈曾彭吕苏卢蒋蔡贾丁魏薛叶阎余潘杜戴夏钟汪田任姜范方石姚谭廖邹熊金陆郝孔白崔康毛邱秦江史顾侯邵孟龙万段雷钱汤尹黎易常武乔贺赖龚文".split()
-)
+    "李王张刘陈杨赵黄周吴徐孙胡朱高林何郭马罗梁宋郑谢韩唐冯于董萧程曹袁邓许傅沈曾彭吕苏卢蒋蔡贾丁魏薛叶阎余潘杜戴夏钟汪田任姜范方石姚谭廖邹熊金陆郝孔白崔康毛邱秦江史顾侯邵孟龙万段雷钱汤尹黎易常武乔贺赖龚文"
+)  # char-level singles
 
 _COMPOUND_SURNAMES = frozenset({"欧阳", "司马", "上官", "诸葛", "东方", "皇甫", "令狐", "慕容", "宇文", "长孙"})
 
@@ -72,6 +72,10 @@ _SPEAKER_VERB = re.compile(
 _NARRATIVE_NAME = re.compile(
     r"([\u4e00-\u9fff]{2,3})(?:的|地|与|和|同|向|往|是|有|无|被|让|给|从|到|于|为|在|见|遇|带|领|随|伴|等|找|寻|请|访|称|号|名|站|走|跑|坐|躺|看|望|听|想|回|转|来|去|出|入|开|关|笑|哭|叹|道)"
 )
+# 译名 / 经典文学人名（无常见姓亦可）
+_STATION_NAME = re.compile(r"([\u4e00-\u9fff]{3,4})(?:在(?:车|火)站|在站台)")
+_MEET_NAME = re.compile(r"(?:遇见|碰见|见到|遇到)(?:了)?([\u4e00-\u9fff]{2,4})")
+_DOTTED_NAME = re.compile(r"([\u4e00-\u9fff]{2,4})·[\u4e00-\u9fff]")
 _QUOTE = re.compile(
     r"[\u300c\u300e\u201c\u2018「『][^\u300d\u300f\u201d\u2019」』]*[\u300d\u300f\u201d\u2019」』]"
 )
@@ -84,8 +88,8 @@ _VERB_PHRASE = re.compile(
     r".*(?:一下|一点|一声|一句|一眼|一番|一阵|一些|许多|怎么|为何|什么|哪里|哪儿|清楚|明白)$"
 )
 
-_BAD_INNER = frozenset("的了在是有和与或把被让给从到不在没别非莫勿未岂怎何吗呢吧啊呀哦嗯")
-_BAD_PREFIX_CHARS = frozenset("对向往从跟和与给把将被让在到为以于按望着吹衣猎兄师这那")
+_BAD_INNER = frozenset("的了在是有和与或把被让给从到不在没别非莫勿未岂怎何吗呢吧啊呀哦嗯个下以")
+_BAD_PREFIX_CHARS = frozenset("对向往从跟和与给把将被让在到为以于按望着吹衣猎兄师这那他她它你我")
 _BAD_NAME_SUFFIX = frozenset("站走跑看听说想觉感应心脸面手头眼边处回前后上下来去道声风大响")
 
 MIN_CONFIDENCE_SCORE = 18
@@ -135,7 +139,92 @@ def _has_surname(name: str) -> bool:
     return len(name) >= 2 and name[:2] in _COMPOUND_SURNAMES
 
 
-def _is_likely_fragment(name: str) -> bool:
+_MAX_FRAGMENT_PAD = 3
+
+
+_KNOWN_BAD_NAME_SLICES = frozenset({"尔斯泰", "伦斯基", "他下个礼"})
+
+
+def _is_suffix_of_longer_cjk_token(name: str, text: str) -> bool:
+    """Reject name if any CJK token in text strictly contains it (e.g. 托尔斯泰→尔斯泰)."""
+    if not name or not text or _has_surname(name):
+        return False
+    for m in re.finditer(r"[\u4e00-\u9fff]{2,}", text):
+        word = m.group(0)
+        if len(word) <= len(name):
+            continue
+        if word.endswith(name):
+            return True
+        if word.startswith(name) and name[0] in "他她它你我这那":
+            return True
+    return False
+
+
+def _is_bad_token_slice(name: str, text: str) -> bool:
+    """检测错误分词切片：如「他下个礼」←「他下个礼拜」、「尔斯泰」←「托尔斯泰」。"""
+    if not name or not text:
+        return False
+    for m in re.finditer(re.escape(name), text):
+        start, end = m.start(), m.end()
+
+        left = start
+        for _ in range(_MAX_FRAGMENT_PAD):
+            if left > 0 and "\u4e00" <= text[left - 1] <= "\u9fff":
+                left -= 1
+            else:
+                break
+        prefix = text[left:start]
+        if (
+            prefix
+            and len(prefix) <= _MAX_FRAGMENT_PAD
+            and text[left:end].endswith(name)
+            and not _has_surname(name)
+        ):
+            return True
+
+        right = end
+        for _ in range(_MAX_FRAGMENT_PAD):
+            if right < len(text) and "\u4e00" <= text[right] <= "\u9fff":
+                right += 1
+            else:
+                break
+        suffix = text[end:right]
+        if suffix and len(suffix) <= _MAX_FRAGMENT_PAD:
+            if text[start:right].startswith(name) and name[0] in "他她它你我这那":
+                return True
+            if (
+                prefix
+                and not _has_surname(name)
+                and not text[left:end].endswith(name)
+                and not text[start:right].startswith(name)
+            ):
+                return True
+    return False
+
+
+def _is_embedded_in_longer_name(name: str, text: str) -> bool:
+    """无姓氏名是否为更长 CJK 词内的尾/前缀碎片（LLM 误拆专用）。"""
+    if not name or not text:
+        return False
+    if name in _KNOWN_BAD_NAME_SLICES:
+        return True
+    if _has_surname(name):
+        return False
+    if _is_bad_token_slice(name, text):
+        return True
+    return _is_suffix_of_longer_cjk_token(name, text)
+
+
+def _has_particle_or_punct(name: str) -> bool:
+    if re.search(r"[^\u4e00-\u9fff]", name):
+        return True
+    for ch in name:
+        if ch in _BAD_INNER:
+            return True
+    return False
+
+
+def _is_likely_fragment(name: str, *, text: str = "") -> bool:
     """排除对话/描写中的短语碎片。"""
     if name in _STOP or name in _DEMONSTRATIVES:
         return True
@@ -151,10 +240,12 @@ def _is_likely_fragment(name: str) -> bool:
             return True
         if name.startswith(("不", "没", "别", "莫", "勿", "未", "非")):
             return True
+    if text and _is_embedded_in_longer_name(name, text):
+        return True
     return False
 
 
-def _is_plausible_name(name: str, *, strict: bool = False) -> bool:
+def _is_plausible_name(name: str, *, strict: bool = False, text: str = "") -> bool:
     if not name or len(name) < 2 or len(name) > 4:
         return False
     if name in _STOP or name in _DEMONSTRATIVES or name in _PRONOUNS:
@@ -163,7 +254,9 @@ def _is_plausible_name(name: str, *, strict: bool = False) -> bool:
         return False
     if _VERB_PHRASE.search(name):
         return False
-    if _is_likely_fragment(name):
+    if _has_particle_or_punct(name):
+        return False
+    if _is_likely_fragment(name, text=text):
         return False
     if any(ch in name for ch in _BAD_INNER):
         return False
@@ -213,7 +306,7 @@ def _score_candidates(sample: str) -> Counter[str]:
 
     def add(name: str, pts: int, *, only_narrative: bool = False, strict: bool = False) -> None:
         n = name.strip()
-        if not _is_plausible_name(n, strict=strict):
+        if not _is_plausible_name(n, strict=strict, text=sample):
             return
         if only_narrative and n not in narrative:
             return
@@ -226,18 +319,25 @@ def _score_candidates(sample: str) -> Counter[str]:
     for m in _ROLE_HINT.finditer(sample):
         add(m.group(1), 55)
 
+    for m in _STATION_NAME.finditer(sample):
+        add(m.group(1), 42, strict=False)
+    for m in _MEET_NAME.finditer(sample):
+        add(m.group(1), 38, strict=False)
+    for m in _DOTTED_NAME.finditer(sample):
+        add(m.group(1), 36, strict=False)
+
     for m in _SPEAKER_LABEL.finditer(sample):
         n = m.group(1).strip()
         if _has_surname(n):
             add(n, 28)
-        elif _is_plausible_name(n):
+        elif _is_plausible_name(n, text=sample):
             add(n, 12, strict=True)
 
     for m in _SPEAKER_VERB.finditer(sample):
         n = m.group(1).strip()
         if _has_surname(n):
             add(n, 20)
-        elif _is_plausible_name(n, strict=True):
+        elif _is_plausible_name(n, strict=True, text=sample):
             add(n, 10)
 
     for m in _NARRATIVE_NAME.finditer(narrative):
@@ -246,7 +346,7 @@ def _score_candidates(sample: str) -> Counter[str]:
     tokens = [
         m.group(0)
         for m in re.finditer(r"[\u4e00-\u9fff]{2,3}", narrative)
-        if _is_plausible_name(m.group(0), strict=True)
+        if _is_plausible_name(m.group(0), strict=True, text=sample)
     ]
     for name, count in Counter(tokens).items():
         if count >= 2:
@@ -254,13 +354,13 @@ def _score_candidates(sample: str) -> Counter[str]:
 
     for m in _NARRATIVE_NAME.finditer(_narrative_text(early)):
         n = m.group(1).strip()
-        if _is_plausible_name(n, strict=True):
+        if _is_plausible_name(n, strict=True, text=sample):
             scores[n] += 10
 
     freq = Counter(
         m.group(1)
         for m in _NARRATIVE_NAME.finditer(narrative)
-        if _is_plausible_name(m.group(1), strict=True)
+        if _is_plausible_name(m.group(1), strict=True, text=sample)
     )
     for name, count in freq.items():
         if count >= 2:
@@ -310,8 +410,8 @@ async def extract_protagonist_candidates_llm(text: str, limit: int = 3) -> list[
     system = (
         "你是中文小说角色分析助手。从片段中识别真实人名（2-4个汉字）。"
         "排除：指示词（这儿/这里/那里）、代词、头衔（师兄/师父/长老）、"
-        "动词短语（不逼你/风很/轻轻/低声）、环境描写词。"
-        "优先：我叫/名为/乃是 后的名字，早期叙述中反复出现的带姓氏专名。"
+        "动词短语（不逼你/风很/轻轻/低声）、环境描写词、从更长词切出的碎片（如他下个礼/尔斯泰）。"
+        "只返回完整专名（2-4个汉字），优先中文姓名；音译人名须完整（如托尔斯泰、渥伦斯基）。"
         "只返回 JSON，无把握则 characters 为空。"
     )
     user = (
@@ -341,10 +441,16 @@ async def extract_protagonist_candidates_llm(text: str, limit: int = 3) -> list[
         if not isinstance(item, dict):
             continue
         name = str(item.get("name", "")).strip()
-        if not _is_plausible_name(name) or name in seen:
+        if (
+            not _is_plausible_name(name, text=sample)
+            or name in seen
+            or _is_embedded_in_longer_name(name, sample)
+        ):
             continue
         seen.add(name)
         llm_score = int(item.get("score") or 50)
+        if not _has_surname(name) and (llm_score < 80 or len(name) < 3):
+            continue
         role = str(item.get("role") or ("主角" if not out else "主要角色"))
         out.append({
             "name": name,
@@ -390,15 +496,24 @@ async def extract_protagonist_candidates_enhanced(text: str, limit: int = 3) -> 
 
     llm_task = asyncio.create_task(extract_protagonist_candidates_llm(text, limit=limit))
 
-    # 启发式置信度高时不必等 LLM
-    if heur_top >= 75:
+    # 启发式置信度足够时不必等 LLM（避免 preview 端点被慢模型拖住）
+    if heur_top >= 70 and heuristic:
         llm_task.cancel()
-        return {"characters": heuristic, "low_confidence": False}
+        return {"characters": heuristic, "low_confidence": heur_top < 55}
 
-    llm_chars = await llm_task
+    try:
+        llm_chars = await asyncio.wait_for(llm_task, timeout=14.0)
+    except (asyncio.TimeoutError, asyncio.CancelledError):
+        llm_chars = []
     if llm_chars:
-        validated = [c for c in llm_chars if _is_plausible_name(c["name"])]
-        if validated:
+        sample_full = text.strip()[:12000]
+        validated = [
+            c
+            for c in llm_chars
+            if _is_plausible_name(c["name"], text=sample_full)
+            and not _is_embedded_in_longer_name(c["name"], sample_full)
+        ]
+        if validated and validated[0]["confidence"] >= 55:
             merged = _merge_candidates(validated, heuristic, limit)
             top_conf = merged[0]["confidence"] if merged else 0
             return {

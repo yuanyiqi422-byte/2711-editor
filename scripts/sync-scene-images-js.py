@@ -15,7 +15,7 @@ KEYWORDS_JSON = SCRIPTS / "scene-keywords.json"
 prompts = json.loads(PROMPTS.read_text(encoding="utf-8"))
 ids = sorted(prompts.keys())
 png_ids = {p.stem for p in SCENES_DIR.glob("*.png")}
-version = 8
+version = 15
 
 BASE_KEYWORDS: dict[str, dict[str, int]] = {
     "meadow": {"calm_meadow": 4, "campus_field": 2, "flower_field": 3, "meadow_windmill": 3},
@@ -48,7 +48,7 @@ BASE_KEYWORDS: dict[str, dict[str, int]] = {
     "moon": {"night_stars": 4, "moon_bridge": 5},
     "city": {"city_lights": 4, "rainy_street": 2, "clock_tower": 3, "subway_night": 3},
     "urban": {"city_lights": 3, "market_alley": 3},
-    "neon": {"city_lights": 3, "subway_night": 2, "cyberpunk_alley_gun": 4},
+    "neon": {"city_lights": 3, "subway_night": 2, "cyberpunk_alley_gun": 4, "cyber_city_rain": 4},
     "lights": {"city_lights": 3, "lantern_festival": 3},
     "fog": {"mystery_fog": 5, "ghost_mansion": 4, "pagoda_mist": 3},
     "mist": {"mystery_fog": 4, "pagoda_mist": 4, "hot_spring": 2, "hot_spring_mist": 5},
@@ -115,12 +115,18 @@ BASE_KEYWORDS: dict[str, dict[str, int]] = {
     "fair": {"campus_field": 3, "night_bazaar": 2, "rabbit_lantern_fair": 4},
     "office": {"office_midnight": 5, "tense_meeting": 4},
     "elevator": {"ceo_elevator": 5, "hospital_blood_elevator": 4},
-    "wedding": {"wedding_room_alone": 5, "ghost_wedding_hall": 4},
+    "wedding": {"wedding_room_alone": 5, "wedding_banquet_hall": 6, "ghost_wedding_hall": 4},
+    "funeral": {"funeral_hall_empty": 6},
+    "hometown": {"old_hometown_street": 6, "grandparents_yard": 5},
+    "farewell": {"train_farewell_platform": 6, "airport_sunset": 3},
+    "grandparent": {"grandparents_yard": 6},
+    "candle": {"candlelit_room": 6, "candle_room": 4},
+    "confession": {"balcony_confession_night": 6, "rooftop_secret": 4},
     "prison": {"prison_cell_taunt": 5},
     "dragon": {"dragon_nest_egg": 5},
     "mech": {"mech_hangar_weld": 5, "colosseum_cyber_arm": 4},
     "zombie": {"supermarket_siege": 5},
-    "mars": {"mars_greenhouse_patch": 5},
+    "mars": {"mars_greenhouse_patch": 5, "mars_base_dome": 5},
     "throne": {"throne_hall_debate": 5},
     "execution": {"execution_scaffold": 5},
 }

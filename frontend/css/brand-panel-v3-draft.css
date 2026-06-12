@@ -1,0 +1,293 @@
+/**
+ * 2711编辑器 · Brand panel v3 (DRAFT — not linked in index.html)
+ * Transparent cutout frame + strong CSS typography · quiet healing integration
+ * Spec: frontend/images/ui/brand-panel-v3-SPEC.md
+ */
+
+:root {
+  --brand-panel-v3-frame: url("../images/ui/brand-panel-v3-frame.png");
+  --brand-panel-v3-aspect: 600 / 200;
+  --brand-v3-num-shine: linear-gradient(
+    118deg,
+    #b8955a 0%,
+    #D6B06A 28%,
+    #e8d4b0 42%,
+    #8fa4c8 68%,
+    #6b84a8 100%
+  );
+  --brand-v3-label-shine: linear-gradient(
+    112deg,
+    #8a6840 0%,
+    #c9a050 38%,
+    #D6B06A 58%,
+    #8fa4c8 100%
+  );
+  --brand-v3-text-shadow: 0 1px 2px rgba(45, 50, 64, 0.12);
+  --brand-v3-en-color: var(--brand-subline-color);
+}
+
+/* ── Link wrapper ── */
+.brand-lockup--v3.workbench__brand {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0;
+  text-decoration: none;
+  color: inherit;
+  border-radius: calc(var(--radius-sm) + 2px);
+  transition:
+    transform var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.brand-lockup--v3.workbench__brand:hover {
+  opacity: 1;
+  transform: translateY(-0.5px);
+}
+
+.brand-lockup--v3.workbench__brand:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 3px;
+}
+
+/* ── Transparent cutout frame (no opaque fill) ── */
+.brand-lockup--v3 .brand-lockup__panel,
+.brand-lockup--v3 .workbench__brand-mark {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  min-width: clamp(168px, 28vw, 240px);
+  padding:
+    clamp(10px, 1.4vh, 14px)
+    clamp(18px, 2.4vw, 28px)
+    clamp(8px, 1.1vh, 11px);
+
+  background: transparent;
+  background-image: var(--brand-panel-v3-frame);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  border: none;
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  aspect-ratio: var(--brand-panel-v3-aspect);
+}
+
+.brand-lockup--v3:hover .brand-lockup__panel,
+.brand-lockup--v3:hover .workbench__brand-mark {
+  filter: brightness(1.03);
+  box-shadow: 0 2px 12px var(--brand-panel-glow);
+}
+
+/* ── Main wordmark row ── */
+.brand-lockup--v3 .brand-lockup__main,
+.brand-lockup--v3 .workbench__brand-zh {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.06em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ── 2711 numerals · strong gold-sky gradient ── */
+.brand-lockup--v3 .brand-lockup__num,
+.brand-lockup--v3 .workbench__brand-num {
+  font-family: var(--font-brand-num);
+  font-size: clamp(1.6rem, 3.4vh, 2.05rem);
+  font-weight: 700;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  letter-spacing: 0.06em;
+  background: var(--brand-v3-num-shine);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(var(--brand-v3-text-shadow));
+}
+
+/* ── 编辑器 · refined serif ── */
+.brand-lockup--v3 .brand-lockup__label,
+.brand-lockup--v3 .workbench__brand-label {
+  font-family: var(--font-brand-cn);
+  font-size: clamp(1.32rem, 2.7vh, 1.7rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  background: var(--brand-v3-label-shine);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transform: translateY(0.05em);
+  filter: drop-shadow(var(--brand-v3-text-shadow));
+}
+
+/* Optional split numeral treatment (requires HTML split) */
+.brand-lockup--v3 .brand-lockup__num-part--warm {
+  background: linear-gradient(160deg, #c9a050 0%, #e8d4b0 55%, #D6B06A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-lockup--v3 .brand-lockup__num-part--cool {
+  background: linear-gradient(160deg, #f4efe6 0%, #c8dce8 45%, #8fa4c8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── EN subline + decorative rules ── */
+.brand-lockup--v3 .brand-lockup__subline {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 0.9vw, 10px);
+  width: 100%;
+  min-width: 0;
+}
+
+.brand-lockup--v3 .brand-lockup__rule {
+  flex: 1 1 0;
+  min-width: 8px;
+  height: 1px;
+  opacity: 0.75;
+}
+
+.brand-lockup--v3 .brand-lockup__rule--l {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(143, 164, 200, 0.12) 22%,
+    var(--brand-rule-color) 88%
+  );
+}
+
+.brand-lockup--v3 .brand-lockup__rule--r {
+  background: linear-gradient(
+    90deg,
+    var(--brand-rule-color) 12%,
+    rgba(216, 154, 165, 0.28) 78%,
+    transparent 100%
+  );
+}
+
+.brand-lockup--v3 .brand-lockup__en,
+.brand-lockup--v3 .workbench__brand-en {
+  flex: 0 0 auto;
+  font-family: var(--font-brand-en);
+  font-size: clamp(0.52rem, 1vh, 0.65rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brand-v3-en-color);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  white-space: nowrap;
+}
+
+/* ── Dark workbench topbar override (stronger shine on dark bg) ── */
+.workbench__topbar .brand-lockup--v3 .brand-lockup__num,
+.workbench__topbar .brand-lockup--v3 .workbench__brand-num {
+  background: var(--brand-title-shine);
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.28));
+}
+
+.workbench__topbar .brand-lockup--v3 .brand-lockup__label,
+.workbench__topbar .brand-lockup--v3 .workbench__brand-label {
+  background: var(--brand-title-shine);
+  filter: drop-shadow(0 0 6px rgba(143, 196, 220, 0.14));
+}
+
+.workbench__topbar .brand-lockup--v3 .brand-lockup__en,
+.workbench__topbar .brand-lockup--v3 .workbench__brand-en {
+  background: linear-gradient(
+    90deg,
+    rgba(232, 200, 120, 0.82) 0%,
+    rgba(244, 239, 230, 0.9) 45%,
+    rgba(200, 220, 232, 0.88) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.workbench__topbar .brand-lockup--v3.workbench__brand {
+  align-items: flex-start;
+}
+
+.workbench__topbar .brand-lockup--v3 .brand-lockup__main,
+.workbench__topbar .brand-lockup--v3 .workbench__brand-zh {
+  justify-content: flex-start;
+}
+
+/* ── Motion (subtle breathe, optional) ── */
+@media (prefers-reduced-motion: no-preference) {
+  .brand-lockup--v3 .brand-lockup__num,
+  .brand-lockup--v3 .workbench__brand-num {
+    animation: brand-v3-num-breathe 6s ease-in-out infinite;
+  }
+
+  @keyframes brand-v3-num-breathe {
+    0%,
+    100% {
+      filter: drop-shadow(var(--brand-v3-text-shadow));
+    }
+    50% {
+      filter: drop-shadow(0 0 8px rgba(143, 164, 200, 0.22));
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-lockup--v3.workbench__brand,
+  .brand-lockup--v3.workbench__brand:hover {
+    transform: none;
+  }
+
+  .brand-lockup--v3 .brand-lockup__num,
+  .brand-lockup--v3 .workbench__brand-num {
+    animation: none;
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .workbench__topbar .brand-lockup--v3.workbench__brand {
+    align-items: center;
+  }
+
+  .brand-lockup--v3 .brand-lockup__panel,
+  .brand-lockup--v3 .workbench__brand-mark {
+    padding-inline: clamp(14px, 4vw, 20px);
+    min-width: clamp(148px, 36vw, 200px);
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-lockup--v3 .brand-lockup__subline {
+    display: none;
+  }
+
+  .brand-lockup--v3 .brand-lockup__label,
+  .brand-lockup--v3 .workbench__brand-label {
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (max-width: 360px) {
+  .brand-lockup--v3 .brand-lockup__num,
+  .brand-lockup--v3 .workbench__brand-num {
+    letter-spacing: 0.04em;
+  }
+}

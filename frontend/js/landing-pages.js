@@ -1,178 +1,80 @@
-/** 2711 Editor · 全屏分页导航（点击切换，非长页滚动） */
+/** 2711 Editor · 滚动落地页导航（锚点 + 活跃态） */
 (function () {
-  const SLUGS = ["top", "features", "how", "create"];
-  const SLUG_ALIASES = { studio: "create" };
-  const LABELS = ["首屏", "能力", "流程", "创作"];
+  const SECTIONS = [
+    { id: "top", slug: "top", el: document.getElementById("top") },
+    { id: "journey", slug: "journey", el: document.getElementById("journey") },
+    { id: "features", slug: "features", el: document.getElementById("features") },
+    { id: "create", slug: "create", el: document.getElementById("create") },
+  ].filter(function (s) { return s.el; });
 
-  const landing = document.getElementById("landing-view");
-  const track = document.querySelector(".landing-pages__track");
-  const pages = track ? Array.from(track.querySelectorAll(".landing-page")) : [];
-
-  if (!landing || !track || !pages.length) return;
-
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const nav = document.getElementById("site-nav");
-  const prevBtn = document.getElementById("page-nav-prev");
-  const nextBtn = document.getElementById("page-nav-next");
-  const dotsHost = document.getElementById("page-nav-dots");
-  const heroNextBtn = document.getElementById("hero-next-btn");
-
-  let current = 0;
-  let animating = false;
   const listeners = [];
 
-  function slugIndex(slug) {
-    const resolved = SLUG_ALIASES[slug] || slug;
-    const i = SLUGS.indexOf(resolved);
-    return i >= 0 ? i : 0;
+  function getCurrentSlug() {
+    const y = window.scrollY + (window.innerHeight * 0.35);
+    let current = SECTIONS[0];
+    SECTIONS.forEach(function (section) {
+      if (section.el && section.el.offsetTop <= y) current = section;
+    });
+    return current ? current.slug : "top";
   }
 
-  function clampIndex(index) {
-    return Math.max(0, Math.min(pages.length - 1, index));
-  }
-
-  function emitChange() {
+  function emitChange(slug) {
+    const section = SECTIONS.find(function (s) { return s.slug === slug; });
     const detail = {
-      index: current,
-      slug: SLUGS[current] || "top",
-      page: pages[current],
+      index: SECTIONS.indexOf(section),
+      slug: slug,
+      page: section ? section.el : null,
     };
     listeners.forEach(function (fn) { fn(detail); });
     document.dispatchEvent(new CustomEvent("landing:pagechange", { detail: detail }));
   }
 
-  function applyTrack() {
-    track.style.transform = "translate3d(0, " + (-current * 100) + "%, 0)";
-    track.setAttribute("data-current", String(current));
-    landing.setAttribute("data-page-index", String(current));
-    landing.setAttribute("data-page-slug", SLUGS[current] || "top");
-
-    if (nav) {
-      nav.classList.toggle("is-scrolled", current > 0);
-    }
-
-    pages.forEach(function (page, i) {
-      const active = i === current;
-      page.classList.toggle("is-active", active);
-      page.setAttribute("aria-hidden", active ? "false" : "true");
-      if (active) page.scrollTop = 0;
-    });
-
-    if (dotsHost) {
-      dotsHost.querySelectorAll(".page-nav__dot").forEach(function (dot, i) {
-        const on = i === current;
-        dot.classList.toggle("is-active", on);
-        dot.setAttribute("aria-selected", on ? "true" : "false");
-        dot.setAttribute("tabindex", on ? "0" : "-1");
-      });
-    }
-
-    if (prevBtn) prevBtn.disabled = current <= 0;
-    if (nextBtn) nextBtn.disabled = current >= pages.length - 1;
-
-    const hash = SLUGS[current] === "top" ? "" : "#" + SLUGS[current];
-    if (window.location.hash !== hash) {
-      history.replaceState(null, "", hash || window.location.pathname + window.location.search);
-    }
-
-    emitChange();
-  }
-
-  function goTo(target, opts) {
-    const index = typeof target === "number" ? clampIndex(target) : slugIndex(String(target));
-    if (index === current || animating) return index;
-    animating = true;
-    current = index;
-    applyTrack();
-    window.setTimeout(function () { animating = false; }, reduced ? 0 : 620);
-    return index;
-  }
-
-  function goNext() {
-    goTo(current + 1);
-  }
-
-  function goPrev() {
-    goTo(current - 1);
-  }
-
-  function buildDots() {
-    if (!dotsHost) return;
-    dotsHost.innerHTML = "";
-    pages.forEach(function (_page, i) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "page-nav__dot";
-      btn.setAttribute("role", "tab");
-      btn.setAttribute("aria-label", "第 " + (i + 1) + " 页 · " + (LABELS[i] || SLUGS[i]));
-      btn.setAttribute("aria-controls", pages[i].id || SLUGS[i]);
-      btn.addEventListener("click", function () { goTo(i); });
-      dotsHost.appendChild(btn);
-    });
-  }
-
-  function interceptHashLinks() {
-    landing.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener("click", function (e) {
-        const raw = a.getAttribute("href");
-        if (!raw || raw === "#") {
-          e.preventDefault();
-          goTo(0);
-          return;
-        }
-        const slug = raw.slice(1);
-        const idx = slugIndex(slug);
-        if (idx > 0 || slug === "top") {
-          e.preventDefault();
-          goTo(idx);
-        }
-      });
-    });
-  }
-
-  function bindControls() {
-    if (prevBtn) prevBtn.addEventListener("click", goPrev);
-    if (nextBtn) nextBtn.addEventListener("click", goNext);
-    if (heroNextBtn) heroNextBtn.addEventListener("click", function () { goTo("features"); });
-
-    document.addEventListener("keydown", function (e) {
-      if (landing.hidden || !landing.isConnected) return;
-      if (e.target && (e.target.closest(".workshop__textarea") || e.target.closest(".magic-modal"))) return;
-      if (e.key === "ArrowDown" || e.key === "PageDown") {
-        e.preventDefault();
-        goNext();
-      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-        e.preventDefault();
-        goPrev();
-      } else if (e.key === "Home") {
-        e.preventDefault();
-        goTo(0);
-      } else if (e.key === "End") {
-        e.preventDefault();
-        goTo(pages.length - 1);
-      }
-    });
-  }
-
-  function initFromHash() {
-    const hash = window.location.hash.slice(1);
-    if (hash) goTo(slugIndex(hash));
-    else applyTrack();
-  }
-
-  buildDots();
-  interceptHashLinks();
-  bindControls();
-  initFromHash();
-
   window.LandingPages = {
-    goTo: goTo,
-    goNext: goNext,
-    goPrev: goPrev,
-    getCurrent: function () { return current; },
-    getSlug: function () { return SLUGS[current] || "top"; },
+    goTo: function (slug) {
+      const section = SECTIONS.find(function (s) { return s.slug === slug || s.id === slug; });
+      if (!section || !section.el) return;
+      section.el.scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+    goNext: function () {
+      const slug = getCurrentSlug();
+      const i = SECTIONS.findIndex(function (s) { return s.slug === slug; });
+      if (i >= 0 && i < SECTIONS.length - 1) this.goTo(SECTIONS[i + 1].slug);
+    },
+    goPrev: function () {
+      const slug = getCurrentSlug();
+      const i = SECTIONS.findIndex(function (s) { return s.slug === slug; });
+      if (i > 0) this.goTo(SECTIONS[i - 1].slug);
+    },
+    getCurrent: function () {
+      const slug = getCurrentSlug();
+      return SECTIONS.findIndex(function (s) { return s.slug === slug; });
+    },
+    getSlug: function () { return getCurrentSlug(); },
     onChange: function (fn) {
       if (typeof fn === "function") listeners.push(fn);
     },
   };
-})();
+
+  let scrollTimer = null;
+  window.addEventListener("scroll", function () {
+    if (scrollTimer) clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(function () {
+      emitChange(getCurrentSlug());
+    }, 80);
+  }, { passive: true });
+
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      const hash = link.getAttribute("href");
+      if (!hash || hash === "#") return;
+      const id = hash.slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", hash);
+    });
+  });
+
+  emitChange(getCurrentSlug());
+})(typeof window !== "undefined" ? window : globalThis);

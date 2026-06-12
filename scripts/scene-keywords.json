@@ -1,4 +1,202 @@
 {
+  "abandoned_temple_courtyard": [
+    "破庙",
+    "荒废",
+    "庭院",
+    "古刹",
+    "废墟"
+  ],
+  "acrobat_street_show": [
+    "杂耍",
+    "街头",
+    "江湖",
+    "表演",
+    "卖艺"
+  ],
+  "ai_data_core": [
+    "AI",
+    "数据中心",
+    "全息",
+    "女童"
+  ],
+  "alchemy_explosion": [
+    "炼金",
+    "爆炸",
+    "实验室",
+    "黑脸"
+  ],
+  "alchemy_last_seal": [
+    "炼丹",
+    "成丹",
+    "丹炉",
+    "控火"
+  ],
+  "ancestral_grave_rain": [
+    "祖坟",
+    "清明",
+    "雨",
+    "祭品",
+    "扫墓"
+  ],
+  "ancient_barracks_yard": [
+    "兵营",
+    "校场",
+    "军营",
+    "操练",
+    "营房"
+  ],
+  "ancient_tree_lightning": [
+    "古树",
+    "雷击木",
+    "天罚",
+    "神木",
+    "雷劫"
+  ],
+  "apartment_elevator": [
+    "电梯",
+    "公寓",
+    "楼层",
+    "按键"
+  ],
+  "art_room": [
+    "美术室",
+    "画室",
+    "绘画",
+    "艺术课"
+  ],
+  "auction_booth": [
+    "拍卖行",
+    "包厢",
+    "竞价"
+  ],
+  "balcony_confession_night": [
+    "阳台",
+    "告白",
+    "深夜",
+    "城市夜景"
+  ],
+  "bandit_mountain_pass": [
+    "山道",
+    "匪窝",
+    "埋伏",
+    "关隘",
+    "劫道"
+  ],
+  "bank_vip_room": [
+    "银行",
+    "VIP",
+    "贵宾",
+    "理财"
+  ],
+  "bar_booth_drink": [
+    "酒吧",
+    "卡座",
+    "借酒",
+    "消愁"
+  ],
+  "bio_lab_embryo": [
+    "生化",
+    "胚胎",
+    "实验舱",
+    "变异"
+  ],
+  "black_market_stall": [
+    "黑市",
+    "捡漏",
+    "地摊",
+    "外挂"
+  ],
+  "blackout_study_hall": [
+    "晚自习",
+    "停电",
+    "黑暗",
+    "欢呼",
+    "教室"
+  ],
+  "blacksmith_forge_sparks": [
+    "铁匠铺",
+    "锻造",
+    "火花",
+    "兵器",
+    "打铁"
+  ],
+  "blind_date_restaurant": [
+    "相亲",
+    "西餐厅",
+    "牛排",
+    "年薪"
+  ],
+  "border_rally_war": [
+    "点将台",
+    "边关",
+    "将士",
+    "怒吼"
+  ],
+  "bronze_coffin_stars": [
+    "青铜古棺",
+    "星空",
+    "漂流"
+  ],
+  "bunker_red_alarm": [
+    "避难所",
+    "警报",
+    "防空洞",
+    "爪子"
+  ],
+  "bus_stop_rain": [
+    "公交站",
+    "候车",
+    "雨棚",
+    "伞"
+  ],
+  "cafeteria_serving": [
+    "食堂",
+    "打饭",
+    "阿姨",
+    "肉",
+    "排队"
+  ],
+  "candlelit_room": [
+    "烛光",
+    "房间",
+    "私密",
+    "情感",
+    "modest_apartment",
+    "mirror_room",
+    "19th_century",
+    "寒舍",
+    "陋室"
+  ],
+  "clock_tower": [
+    "clock_tower",
+    "paris_street",
+    "19th_century",
+    "巴黎"
+  ],
+  "ceo_elevator": [
+    "总裁",
+    "电梯",
+    "暧昧",
+    "呼吸"
+  ],
+  "charity_gala": [
+    "慈善晚宴",
+    "宴会",
+    "礼服",
+    "角落",
+    "ballroom",
+    "banquet_hall",
+    "19th_century",
+    "舞会",
+    "gala",
+    "晚宴"
+  ],
+  "chemistry_lab": [
+    "化学实验室",
+    "化学课",
+    "实验课",
+    "实验室"
+  ],
   "classroom_drowse": [
     "催眠",
     "午后",
@@ -7,12 +205,218 @@
     "偷偷",
     "手机"
   ],
-  "snack_shop_rush": [
-    "小卖部",
-    "下课",
-    "烤肠",
-    "饮料",
-    "冲刺"
+  "cliff_leap": [
+    "悬崖",
+    "纵身",
+    "深渊",
+    "绝境"
+  ],
+  "cloud_sea_stairway": [
+    "云海",
+    "天梯",
+    "登仙",
+    "石阶",
+    "云梯"
+  ],
+  "cold_palace_body": [
+    "冷宫",
+    "草席",
+    "裹尸",
+    "夹道"
+  ],
+  "colosseum_cyber_arm": [
+    "角斗场",
+    "机械臂",
+    "改装",
+    "电池"
+  ],
+  "convenience_store_night": [
+    "便利店",
+    "深夜",
+    "夜宵",
+    "关东煮"
+  ],
+  "corridor_punishment": [
+    "罚站",
+    "走廊",
+    "迟到",
+    "窗口"
+  ],
+  "crime_tape_alley": [
+    "封锁线",
+    "警戒线",
+    "凶案现场",
+    "弄堂",
+    "案发现场"
+  ],
+  "crowded_subway": [
+    "地铁",
+    "早高峰",
+    "拥挤",
+    "沙丁鱼"
+  ],
+  "curse_bamboo_night": [
+    "竹林",
+    "午夜",
+    "诅咒",
+    "茅山",
+    "怪谈"
+  ],
+  "cursed_bus_ride": [
+    "公交车",
+    "怪谈",
+    "寿衣",
+    "末班"
+  ],
+  "cyber_city_rain": [
+    "赛博",
+    "雨夜",
+    "霓虹雨",
+    "黑客城"
+  ],
+  "cyberpunk_alley_gun": [
+    "赛博朋克",
+    "霓虹",
+    "枪战",
+    "义肢"
+  ],
+  "dormitory_hallway_night": [
+    "宿舍走廊",
+    "寝室",
+    "夜",
+    "宿舍楼"
+  ],
+  "dragon_nest_egg": [
+    "龙巢",
+    "偷蛋",
+    "金币",
+    "鼾声"
+  ],
+  "empress_unveil_night": [
+    "坤宁宫",
+    "凤冠",
+    "卸妆",
+    "深夜"
+  ],
+  "er_waiting_room": [
+    "急诊",
+    "凌晨",
+    "缴费",
+    "医院"
+  ],
+  "escort_cart_road": [
+    "镖局",
+    "押镖",
+    "马车",
+    "山路",
+    "行旅"
+  ],
+  "exam_hall_silent": [
+    "考场",
+    "考试",
+    "静默",
+    "期末考"
+  ],
+  "exam_rank_board": [
+    "红榜",
+    "排名",
+    "期末",
+    "成绩",
+    "布告栏"
+  ],
+  "execution_scaffold": [
+    "断头台",
+    "法场",
+    "鬼头刀",
+    "斩"
+  ],
+  "family_dining": [
+    "饭桌",
+    "晚餐",
+    "家里",
+    "团圆",
+    "吃饭"
+  ],
+  "farm_pardon_edict": [
+    "贬谪",
+    "农田",
+    "平反",
+    "圣旨"
+  ],
+  "ferry_crossing_mist": [
+    "渡船",
+    "迷雾",
+    "江河",
+    "摆渡",
+    "渡口"
+  ],
+  "fortune_teller_booth": [
+    "算命",
+    "卦摊",
+    "占卜",
+    "道士",
+    "测字"
+  ],
+  "funeral_hall_empty": [
+    "灵堂",
+    "葬礼",
+    "白菊",
+    "追悼"
+  ],
+  "gas_station_night": [
+    "加油站",
+    "加油",
+    "深夜",
+    "便利店"
+  ],
+  "gate_white_stairs": [
+    "山门",
+    "天梯",
+    "石阶",
+    "考核"
+  ],
+  "ghost_story_well": [
+    "古井",
+    "怪谈",
+    "投井",
+    "冤魂",
+    "乡村"
+  ],
+  "ghost_village_fog": [
+    "鬼村",
+    "荒村",
+    "迷雾",
+    "空村",
+    "诡异"
+  ],
+  "ghost_wedding_hall": [
+    "鬼新娘",
+    "喜堂",
+    "红盖头",
+    "纸脸"
+  ],
+  "grad_backstage": [
+    "毕业晚会",
+    "后台",
+    "告别",
+    "幕布"
+  ],
+  "grandparents_yard": [
+    "爷爷奶奶",
+    "院子",
+    "老家",
+    "童年"
+  ],
+  "guild_quest_board": [
+    "公会",
+    "悬赏",
+    "屠龙",
+    "看板"
+  ],
+  "hall_disciple_fight": [
+    "宗门大殿",
+    "长老",
+    "收徒"
   ],
   "hallway_rainstorm": [
     "穿堂",
@@ -20,6 +424,455 @@
     "避雨",
     "共撑伞",
     "教学楼"
+  ],
+  "haunted_mansion_stair": [
+    "鬼宅",
+    "楼梯",
+    "老宅",
+    "符咒",
+    "怪谈"
+  ],
+  "haunted_toilet_crack": [
+    "女厕所",
+    "门缝",
+    "怪谈",
+    "反向"
+  ],
+  "hidden_valley_spring": [
+    "秘境",
+    "隐谷",
+    "洞天",
+    "灵泉",
+    "桃源"
+  ],
+  "highway_ammo": [
+    "公路",
+    "弹药",
+    "废土",
+    "怪鸟"
+  ],
+  "hospital_blood_elevator": [
+    "电梯",
+    "血滴",
+    "医院",
+    "惊悚"
+  ],
+  "hospital_er_waiting": [
+    "急诊",
+    "候诊",
+    "医院",
+    "等待"
+  ],
+  "hot_spring_mist": [
+    "寒潭",
+    "温泉",
+    "沐浴",
+    "圣女"
+  ],
+  "hotel_hangover": [
+    "总统套房",
+    "宿醉",
+    "酒店",
+    "清晨"
+  ],
+  "infinite_white_orb": [
+    "无限流",
+    "光球",
+    "结算",
+    "主神"
+  ],
+  "infirmary_curtain": [
+    "医务室",
+    "床帘",
+    "来苏水",
+    "八卦"
+  ],
+  "insomnia_rental": [
+    "失眠",
+    "出租屋",
+    "深夜",
+    "手机",
+    "modest_apartment",
+    "寒舍",
+    "陋室"
+  ],
+  "jade_pool_meditation": [
+    "玉池",
+    "灵泉",
+    "打坐",
+    "悟道",
+    "闭关"
+  ],
+  "jianghu_inn": [
+    "客栈",
+    "江湖",
+    "密谋",
+    "烟雨"
+  ],
+  "landlord_doorway": [
+    "房东",
+    "门口",
+    "催租",
+    "敲门",
+    "出租屋"
+  ],
+  "landlord_rent": [
+    "房东",
+    "催租",
+    "砸门",
+    "出租屋"
+  ],
+  "late_bbq_street": [
+    "烧烤",
+    "深夜",
+    "撸串",
+    "社畜"
+  ],
+  "laundry_room": [
+    "洗衣房",
+    "洗衣机",
+    "晾衣",
+    "洗衣"
+  ],
+  "law_firm_office": [
+    "律所",
+    "律师事务所",
+    "律师",
+    "法务",
+    "开庭"
+  ],
+  "library_roof_study": [
+    "图书馆",
+    "自习",
+    "屋顶",
+    "阅览室"
+  ],
+  "library_sweeping_monk": [
+    "藏经阁",
+    "扫地",
+    "老僧",
+    "点化"
+  ],
+  "library_window_nap": [
+    "图书馆",
+    "靠窗",
+    "打盹",
+    "窗帘",
+    "午后"
+  ],
+  "luxury_counter": [
+    "奢侈品",
+    "柜台",
+    "导购",
+    "黑卡",
+    "jewelry",
+    "项链",
+    "钻石",
+    "珠宝",
+    "首饰"
+  ],
+  "magic_academy": [
+    "魔法学院",
+    "冥想",
+    "元素"
+  ],
+  "manor_kneeling_punish": [
+    "侯府",
+    "偏厅",
+    "跪训",
+    "庶女"
+  ],
+  "mars_base_dome": [
+    "火星",
+    "穹顶",
+    "殖民",
+    "基地"
+  ],
+  "mars_greenhouse_patch": [
+    "火星",
+    "温室",
+    "胶带",
+    "失压"
+  ],
+  "mech_hangar_weld": [
+    "机甲",
+    "整备库",
+    "焊接",
+    "机库"
+  ],
+  "mist_beast_forest": [
+    "迷雾",
+    "巨兽",
+    "森林",
+    "秘境"
+  ],
+  "moving_day_street": [
+    "搬家",
+    "纸箱",
+    "货车",
+    "搬离",
+    "行李"
+  ],
+  "netcafe_allnight": [
+    "网吧",
+    "通宵",
+    "开黑",
+    "泡面",
+    "室友"
+  ],
+  "nether_bridge": [
+    "奈何桥",
+    "冥界",
+    "还魂",
+    "阴魂"
+  ],
+  "newyear_crowd": [
+    "跨年",
+    "广场",
+    "倒计时",
+    "失散"
+  ],
+  "night_bbq_street": [
+    "夜市",
+    "烧烤摊",
+    "深夜烧烤",
+    "炭火"
+  ],
+  "noon_gate_kneeling": [
+    "午门",
+    "长跪",
+    "叩首",
+    "暴雨"
+  ],
+  "nunnery_well": [
+    "尼姑庵",
+    "井边",
+    "打水",
+    "叩门"
+  ],
+  "office_midnight": [
+    "格子间",
+    "凌晨",
+    "加班",
+    "方案",
+    "外卖"
+  ],
+  "old_hometown_street": [
+    "老家",
+    "故乡",
+    "老街",
+    "回乡"
+  ],
+  "pantry_gossip": [
+    "茶水间",
+    "八卦",
+    "咖啡",
+    "人事"
+  ],
+  "paper_doll_village": [
+    "荒村",
+    "纸扎",
+    "灯笼",
+    "诡异"
+  ],
+  "paper_effigy_workshop": [
+    "纸扎",
+    "扎纸铺",
+    "纸人",
+    "诡异",
+    "冥品"
+  ],
+  "parent_meeting_hall": [
+    "家长会",
+    "礼堂",
+    "家长",
+    "开会"
+  ],
+  "parking_ambush": [
+    "停车场",
+    "伏击",
+    "地下",
+    "黑衣人"
+  ],
+  "pawnshop_alley_night": [
+    "当铺",
+    "典当",
+    "夜市",
+    "小巷",
+    "长巷"
+  ],
+  "pharmacy_search_antidote": [
+    "太医院",
+    "解药",
+    "煎药",
+    "药炉"
+  ],
+  "plane_door_fall": [
+    "运输机",
+    "坠落",
+    "推下",
+    "高空"
+  ],
+  "plum_garden_snow": [
+    "御花园",
+    "梅林",
+    "折梅",
+    "微服"
+  ],
+  "poem_on_painted_boat": [
+    "画舫",
+    "秦淮",
+    "绝句",
+    "花魁"
+  ],
+  "police_mediation": [
+    "派出所",
+    "调解",
+    "对骂",
+    "民警"
+  ],
+  "prison_cell_taunt": [
+    "天牢",
+    "铁窗",
+    "脚镣",
+    "嘲讽"
+  ],
+  "rabbit_lantern_fair": [
+    "元宵",
+    "灯市",
+    "兔子灯",
+    "灯谜"
+  ],
+  "rebellion_sandbox": [
+    "谋反",
+    "沙盘",
+    "密室",
+    "兵变"
+  ],
+  "roast_chicken_spirit": [
+    "烤鸡",
+    "神兽",
+    "幼崽",
+    "诱拐"
+  ],
+  "rooftop_secret": [
+    "天台",
+    "告白",
+    "不良",
+    "抽烟",
+    "秘密"
+  ],
+  "royal_hunt_arrow": [
+    "围猎",
+    "百步穿杨",
+    "弓弦"
+  ],
+  "sand_battlefield": [
+    "黄沙",
+    "战场",
+    "两军",
+    "修士"
+  ],
+  "school_gate_rain": [
+    "校门",
+    "下雨",
+    "雨天",
+    "入学"
+  ],
+  "school_infirmary": [
+    "医务室",
+    "校医",
+    "保健室",
+    "生病"
+  ],
+  "school_prank_fly": [
+    "私塾",
+    "捉弄",
+    "苍蝇",
+    "墨汁"
+  ],
+  "school_rooftop_rain": [
+    "天台",
+    "屋顶",
+    "下雨",
+    "雨天"
+  ],
+  "sect_arena": [
+    "家族大比",
+    "擂台",
+    "宗门",
+    "天才"
+  ],
+  "sect_mission_hall": [
+    "任务殿",
+    "宗门任务",
+    "悬赏",
+    "历练",
+    "功德"
+  ],
+  "shopping_mall_atrium": [
+    "商场",
+    "中庭",
+    "购物",
+    "扶梯",
+    "逛街"
+  ],
+  "silk_shop_ledger": [
+    "丝绸",
+    "账房",
+    "亏空",
+    "算盘"
+  ],
+  "snack_shop_rush": [
+    "小卖部",
+    "下课",
+    "烤肠",
+    "饮料",
+    "冲刺"
+  ],
+  "space_station_window": [
+    "太空",
+    "空间站",
+    "星窗",
+    "宇宙"
+  ],
+  "spirit_beast_forest": [
+    "灵兽",
+    "灵兽林",
+    "妖兽",
+    "兽潮",
+    "灵兽园"
+  ],
+  "sports_parade": [
+    "运动会",
+    "方阵",
+    "举牌",
+    "检阅"
+  ],
+  "startup_garage": [
+    "创业",
+    "车库",
+    "初创",
+    "融资",
+    "加班"
+  ],
+  "storm_no_ride": [
+    "暴雨",
+    "打车",
+    "排队",
+    "湿透"
+  ],
+  "submarine_interior": [
+    "潜艇",
+    "舱室",
+    "潜航",
+    "深海走廊"
+  ],
+  "submarine_sonar": [
+    "潜艇",
+    "声呐",
+    "深海",
+    "红点"
   ],
   "sunny_basketball": [
     "篮球",
@@ -35,273 +888,11 @@
     "扫帚",
     "教室"
   ],
-  "rooftop_secret": [
-    "天台",
-    "告白",
-    "不良",
-    "抽烟",
-    "秘密"
-  ],
-  "blackout_study_hall": [
-    "晚自习",
-    "停电",
-    "黑暗",
-    "欢呼",
-    "教室"
-  ],
-  "corridor_punishment": [
-    "罚站",
-    "走廊",
-    "迟到",
-    "窗口"
-  ],
-  "exam_rank_board": [
-    "红榜",
-    "排名",
-    "期末",
-    "成绩",
-    "布告栏"
-  ],
-  "infirmary_curtain": [
-    "医务室",
-    "床帘",
-    "来苏水",
-    "八卦"
-  ],
-  "sports_parade": [
-    "运动会",
-    "方阵",
-    "举牌",
-    "检阅"
-  ],
-  "library_window_nap": [
-    "图书馆",
-    "靠窗",
-    "打盹",
-    "窗帘",
-    "午后"
-  ],
-  "grad_backstage": [
-    "毕业晚会",
-    "后台",
-    "告别",
-    "幕布"
-  ],
-  "cafeteria_serving": [
-    "食堂",
-    "打饭",
-    "阿姨",
-    "肉",
-    "排队"
-  ],
-  "netcafe_allnight": [
-    "网吧",
-    "通宵",
-    "开黑",
-    "泡面",
-    "室友"
-  ],
-  "crowded_subway": [
-    "地铁",
-    "早高峰",
-    "拥挤",
-    "沙丁鱼"
-  ],
-  "office_midnight": [
-    "格子间",
-    "凌晨",
-    "加班",
-    "方案",
-    "外卖"
-  ],
-  "tense_meeting": [
-    "会议室",
-    "老板",
-    "训斥",
-    "高层"
-  ],
-  "pantry_gossip": [
-    "茶水间",
-    "八卦",
-    "咖啡",
-    "人事"
-  ],
-  "storm_no_ride": [
-    "暴雨",
-    "打车",
-    "排队",
-    "湿透"
-  ],
-  "blind_date_restaurant": [
-    "相亲",
-    "西餐厅",
-    "牛排",
-    "年薪"
-  ],
-  "late_bbq_street": [
-    "烧烤",
-    "深夜",
-    "撸串",
-    "社畜"
-  ],
-  "bar_booth_drink": [
-    "酒吧",
-    "卡座",
-    "借酒",
-    "消愁"
-  ],
-  "er_waiting_room": [
-    "急诊",
-    "凌晨",
-    "缴费",
-    "医院"
-  ],
-  "insomnia_rental": [
-    "失眠",
-    "出租屋",
-    "深夜",
-    "手机"
-  ],
-  "luxury_counter": [
-    "奢侈品",
-    "柜台",
-    "导购",
-    "黑卡"
-  ],
-  "police_mediation": [
-    "派出所",
-    "调解",
-    "对骂",
-    "民警"
-  ],
-  "hotel_hangover": [
-    "总统套房",
-    "宿醉",
-    "酒店",
-    "清晨"
-  ],
-  "parking_ambush": [
-    "停车场",
-    "伏击",
-    "地下",
-    "黑衣人"
-  ],
-  "charity_gala": [
-    "慈善晚宴",
-    "宴会",
-    "礼服",
-    "角落"
-  ],
-  "landlord_rent": [
-    "房东",
-    "催租",
-    "砸门",
-    "出租屋"
-  ],
-  "newyear_crowd": [
-    "跨年",
-    "广场",
-    "倒计时",
-    "失散"
-  ],
-  "ceo_elevator": [
-    "总裁",
-    "电梯",
-    "暧昧",
-    "呼吸"
-  ],
-  "wet_market_haggle": [
-    "菜市场",
-    "砍价",
-    "香菜",
-    "市井"
-  ],
-  "bank_vip_room": [
-    "银行",
-    "VIP",
-    "贵宾",
-    "理财"
-  ],
-  "sect_arena": [
-    "家族大比",
-    "擂台",
-    "宗门",
-    "天才"
-  ],
-  "hall_disciple_fight": [
-    "宗门大殿",
-    "长老",
-    "收徒"
-  ],
-  "mist_beast_forest": [
-    "迷雾",
-    "巨兽",
-    "森林",
-    "秘境"
-  ],
-  "tomb_wall_script": [
-    "古墓",
-    "功法",
-    "石壁",
-    "火把"
-  ],
-  "tribulation_peak": [
-    "渡劫",
-    "雷云",
-    "孤峰",
-    "紫霄"
-  ],
-  "auction_booth": [
-    "拍卖行",
-    "包厢",
-    "竞价"
-  ],
-  "black_market_stall": [
-    "黑市",
-    "捡漏",
-    "地摊",
-    "外挂"
-  ],
-  "hot_spring_mist": [
-    "寒潭",
-    "温泉",
-    "沐浴",
-    "圣女"
-  ],
-  "library_sweeping_monk": [
-    "藏经阁",
-    "扫地",
-    "老僧",
-    "点化"
-  ],
-  "trial_tower_99": [
-    "试炼塔",
-    "重力",
-    "突破"
-  ],
-  "sand_battlefield": [
-    "黄沙",
-    "战场",
-    "两军",
-    "修士"
-  ],
-  "jianghu_inn": [
-    "客栈",
-    "江湖",
-    "密谋",
-    "烟雨"
-  ],
-  "cliff_leap": [
-    "悬崖",
-    "纵身",
-    "深渊",
-    "绝境"
-  ],
-  "alchemy_last_seal": [
-    "炼丹",
-    "成丹",
-    "丹炉",
-    "控火"
+  "supermarket_siege": [
+    "超市",
+    "丧尸",
+    "卷帘门",
+    "防御"
   ],
   "sword_grave": [
     "剑冢",
@@ -309,213 +900,19 @@
     "认主",
     "剑鸣"
   ],
-  "underground_arena": [
-    "角斗场",
-    "搏杀",
-    "兽人",
-    "铁笼"
+  "sword_lake_mirror": [
+    "剑池",
+    "万剑",
+    "沉剑",
+    "镜面",
+    "洗剑"
   ],
-  "gate_white_stairs": [
-    "山门",
-    "天梯",
-    "石阶",
-    "考核"
-  ],
-  "nether_bridge": [
-    "奈何桥",
-    "冥界",
-    "还魂",
-    "阴魂"
-  ],
-  "roast_chicken_spirit": [
-    "烤鸡",
-    "神兽",
-    "幼崽",
-    "诱拐"
-  ],
-  "magic_academy": [
-    "魔法学院",
-    "冥想",
-    "元素"
-  ],
-  "dragon_nest_egg": [
-    "龙巢",
-    "偷蛋",
-    "金币",
-    "鼾声"
-  ],
-  "guild_quest_board": [
-    "公会",
-    "悬赏",
-    "屠龙",
-    "看板"
-  ],
-  "temple_ruins_array": [
-    "古庙",
-    "法阵",
-    "紫光",
-    "废墟"
-  ],
-  "alchemy_explosion": [
-    "炼金",
-    "爆炸",
-    "实验室",
-    "黑脸"
-  ],
-  "bronze_coffin_stars": [
-    "青铜古棺",
-    "星空",
-    "漂流"
-  ],
-  "supermarket_siege": [
-    "超市",
-    "丧尸",
-    "卷帘门",
-    "防御"
-  ],
-  "highway_ammo": [
-    "公路",
-    "弹药",
-    "废土",
-    "怪鸟"
-  ],
-  "bunker_red_alarm": [
-    "避难所",
-    "警报",
-    "防空洞",
-    "爪子"
-  ],
-  "cyberpunk_alley_gun": [
-    "赛博朋克",
-    "霓虹",
-    "枪战",
-    "义肢"
-  ],
-  "warship_planet_burst": [
-    "战舰",
-    "星球",
-    "爆炸",
-    "指挥舱"
-  ],
-  "infinite_white_orb": [
-    "无限流",
-    "光球",
-    "结算",
-    "主神"
-  ],
-  "paper_doll_village": [
-    "荒村",
-    "纸扎",
-    "灯笼",
-    "诡异"
-  ],
-  "wasteland_can_market": [
-    "废土",
-    "黑市",
-    "罐头",
-    "辐射"
-  ],
-  "bio_lab_embryo": [
-    "生化",
-    "胚胎",
-    "实验舱",
-    "变异"
-  ],
-  "plane_door_fall": [
-    "运输机",
-    "坠落",
-    "推下",
-    "高空"
-  ],
-  "hospital_blood_elevator": [
-    "电梯",
-    "血滴",
-    "医院",
-    "惊悚"
-  ],
-  "haunted_toilet_crack": [
-    "女厕所",
-    "门缝",
-    "怪谈",
-    "反向"
-  ],
-  "mech_hangar_weld": [
-    "机甲",
-    "整备库",
-    "焊接",
-    "机库"
-  ],
-  "wasteland_radar": [
-    "雷达",
-    "荒原",
-    "广播",
-    "废土"
-  ],
-  "cursed_bus_ride": [
-    "公交车",
-    "怪谈",
-    "寿衣",
-    "末班"
-  ],
-  "ai_data_core": [
-    "AI",
-    "数据中心",
-    "全息",
-    "女童"
-  ],
-  "submarine_sonar": [
-    "潜艇",
-    "声呐",
-    "深海",
-    "红点"
-  ],
-  "ghost_wedding_hall": [
-    "鬼新娘",
-    "喜堂",
-    "红盖头",
-    "纸脸"
-  ],
-  "mars_greenhouse_patch": [
-    "火星",
-    "温室",
-    "胶带",
-    "失压"
-  ],
-  "colosseum_cyber_arm": [
-    "角斗场",
-    "机械臂",
-    "改装",
-    "电池"
-  ],
-  "throne_hall_debate": [
-    "金銮殿",
-    "朝堂",
-    "舌战",
-    "折子"
-  ],
-  "plum_garden_snow": [
-    "御花园",
-    "梅林",
-    "折梅",
-    "微服"
-  ],
-  "manor_kneeling_punish": [
-    "侯府",
-    "偏厅",
-    "跪训",
-    "庶女"
-  ],
-  "wedding_room_alone": [
-    "婚房",
-    "龙凤烛",
-    "独守",
-    "王府"
-  ],
-  "prison_cell_taunt": [
-    "天牢",
-    "铁窗",
-    "脚镣",
-    "嘲讽"
+  "taxi_interior_night": [
+    "出租车",
+    "的士",
+    "车内",
+    "后座",
+    "计价器"
   ],
   "teahouse_spy_story": [
     "茶馆",
@@ -523,87 +920,159 @@
     "密探",
     "惊堂木"
   ],
-  "poem_on_painted_boat": [
-    "画舫",
-    "秦淮",
-    "绝句",
-    "花魁"
+  "temple_ruins_array": [
+    "古庙",
+    "法阵",
+    "紫光",
+    "废墟"
   ],
-  "border_rally_war": [
-    "点将台",
-    "边关",
-    "将士",
-    "怒吼"
+  "tense_meeting": [
+    "会议室",
+    "老板",
+    "训斥",
+    "高层"
   ],
-  "royal_hunt_arrow": [
-    "围猎",
-    "百步穿杨",
-    "弓弦"
+  "throne_hall_debate": [
+    "金銮殿",
+    "朝堂",
+    "舌战",
+    "折子"
   ],
-  "empress_unveil_night": [
-    "坤宁宫",
-    "凤冠",
-    "卸妆",
-    "深夜"
+  "thunder_platform_empty": [
+    "雷台",
+    "渡劫台",
+    "天雷",
+    "雷击",
+    "引雷"
   ],
-  "rabbit_lantern_fair": [
-    "元宵",
-    "灯市",
-    "兔子灯",
-    "灯谜"
+  "thunderstorm_temple_ruins": [
+    "雷暴",
+    "古庙",
+    "废墟",
+    "霹雳",
+    "破庙"
   ],
-  "pharmacy_search_antidote": [
-    "太医院",
-    "解药",
-    "煎药",
-    "药炉"
+  "tomb_wall_script": [
+    "古墓",
+    "功法",
+    "石壁",
+    "火把"
   ],
-  "cold_palace_body": [
-    "冷宫",
-    "草席",
-    "裹尸",
-    "夹道"
+  "train_farewell_platform": [
+    "火车站",
+    "送别",
+    "月台",
+    "离别"
   ],
-  "farm_pardon_edict": [
-    "贬谪",
-    "农田",
-    "平反",
-    "圣旨"
+  "trial_tower_99": [
+    "试炼塔",
+    "重力",
+    "突破"
   ],
-  "school_prank_fly": [
-    "私塾",
-    "捉弄",
-    "苍蝇",
-    "墨汁"
+  "tribulation_peak": [
+    "渡劫",
+    "雷云",
+    "孤峰",
+    "紫霄"
   ],
-  "execution_scaffold": [
-    "断头台",
-    "法场",
-    "鬼头刀",
-    "斩"
+  "tv_studio_live": [
+    "电视台",
+    "直播",
+    "演播室",
+    "主持",
+    "录播"
   ],
-  "rebellion_sandbox": [
-    "谋反",
-    "沙盘",
-    "密室",
-    "兵变"
+  "underground_arena": [
+    "角斗场",
+    "搏杀",
+    "兽人",
+    "铁笼"
   ],
-  "nunnery_well": [
-    "尼姑庵",
-    "井边",
-    "打水",
-    "叩门"
+  "warship_planet_burst": [
+    "战舰",
+    "星球",
+    "爆炸",
+    "指挥舱"
   ],
-  "silk_shop_ledger": [
-    "丝绸",
-    "账房",
-    "亏空",
-    "算盘"
+  "wasteland_can_market": [
+    "废土",
+    "黑市",
+    "罐头",
+    "辐射"
   ],
-  "noon_gate_kneeling": [
-    "午门",
-    "长跪",
-    "叩首",
-    "暴雨"
+  "wasteland_radar": [
+    "雷达",
+    "荒原",
+    "广播",
+    "废土"
+  ],
+  "wasteland_ruins": [
+    "废墟",
+    "末日",
+    "遗迹",
+    "废城"
+  ],
+  "wedding_banquet_hall": [
+    "婚宴",
+    "酒席",
+    "喜宴",
+    "婚礼大厅",
+    "ballroom",
+    "banquet_hall",
+    "舞会",
+    "宴会"
+  ],
+  "wedding_room_alone": [
+    "婚房",
+    "龙凤烛",
+    "独守",
+    "王府"
+  ],
+  "wet_market_haggle": [
+    "菜市场",
+    "砍价",
+    "香菜",
+    "市井"
+  ],
+  "white_void_room": [
+    "无限流",
+    "虚空",
+    "白房间",
+    "主神"
+  ],
+  "apartment_living": [
+    "modest_apartment",
+    "公寓",
+    "客厅",
+    "寒舍",
+    "family_dining"
+  ],
+  "old_apartment_stairwell": [
+    "modest_apartment",
+    "公寓",
+    "楼梯",
+    "出租",
+    "寒舍"
+  ],
+  "empress_bedchamber_empty": [
+    "mirror_room",
+    "镜子",
+    "梳妆",
+    "bedroom",
+    "modest_apartment"
+  ],
+  "old_town_bridge_rain": [
+    "paris_street",
+    "巴黎",
+    "19th_century",
+    "街道",
+    "bridge"
+  ],
+  "canal_ancient_night": [
+    "paris_street",
+    "巴黎",
+    "19th_century",
+    "运河",
+    "canal"
   ]
 }

@@ -57,6 +57,20 @@ function Stop-ServerOnPort {
             }
         }
 
+        # Fallback: netstat PIDs (some environments miss Get-NetTCPConnection rows)
+        try {
+            $netstat = netstat -ano | Select-String ":$Port\s+.*LISTENING"
+            foreach ($line in $netstat) {
+                $processId = [int](($line -split '\s+')[-1])
+                if ($processId -gt 0 -and $processId -notin $killed) {
+                    Stop-Process -Id $processId -Force -ErrorAction SilentlyContinue
+                    $killed += $processId
+                }
+            }
+        } catch {
+            # ignore netstat parse errors
+        }
+
         $killedTotal += $killed.Count
         if ($killed.Count -gt 0) {
             Start-Sleep -Milliseconds 800
@@ -77,7 +91,8 @@ function Get-UvicornArgs {
         "--port", "$(Get-ServerPort)",
         "--reload",
         "--reload-dir", ".",
-        "--reload-include", ".env"
+        "--reload-include", ".env",
+        "--reload-include", "static_cache.py"
     )
 }
 
@@ -129,7 +144,13 @@ function Test-ServerHealth {
 function Get-PythonExe {
     $root = Get-ProjectRoot
     $venvPy = Join-Path $root ".venv\Scripts\python.exe"
-    if (Test-Path $venvPy) { return $venvPy }
+    if (Test-Path $venvPy) {
+        $prev = $ErrorActionPreference
+        $ErrorActionPreference = "SilentlyContinue"
+        & $venvPy -c "import sys" 2>$null | Out-Null
+        $ErrorActionPreference = $prev
+        if ($LASTEXITCODE -eq 0) { return $venvPy }
+    }
     return "python"
 }
 

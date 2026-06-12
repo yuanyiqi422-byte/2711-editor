@@ -1,13 +1,24 @@
 {
-  "version": 1,
-  "notes_zh": "2711 编辑器统一视觉规范 — 2D 吉卜力水彩动漫，非 3D 渲染",
-  "style_prefix": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, NOT 3D render, NOT photorealistic. Pastel color palette, soft blue, pale pink, mint green, ethereal lighting, Makoto Shinkai style clouds and light rays, healing and cozy atmosphere, dreamy.",
-  "ui_prefix": "Fantasy game UI design, web design, RPG interface, parchment paper texture, ornate metallic borders, glowing buttons, magical floating island, giant open scroll, floating gears, glowing crystals, magical feathers.",
-  "landing_prefix": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, pastel blue pink mint green, ethereal lighting, dreamy, fantasy game UI design, parchment scroll, floating island castle, magical gears and crystals.",
-  "negative": "3D render, CGI, photorealistic, low detail, flat vector, minimalist icon, clip art, blurry, watermark, text overlay",
+  "version": 6,
+  "locale": "zh-CN",
+  "notes_zh": "2711 编辑器统一视觉规范 — Makoto Shinkai 2D 水彩动漫背景 + 中国场景语境（校园食堂/菜市场/庙会/地铁高铁/灯笼节等），严禁摄影/写实/3D。人群密度按场景类型：社交/公共=多人，自然/静谧=可空。",
+  "locale_note": "Prompts default to Chinese everyday settings (school cafeteria, wet market, temple fair, HSR platform, campus corridor) — NOT Western stock-photo or live-action references.",
+  "crowd_policy": "Match crowd density to scene type. Social/public locations (cafeteria, classroom, market, train platform, festival, corridor, cafe, street) MUST include many people or a bustling crowd — NOT empty or a single lonely figure. Quiet nature scenes (meadow, peaks, night stars, shrine at dawn, fog forest, beach cliff) may stay empty or sparse.",
+  "style_prefix": "Makoto Shinkai anime film background art, 2D Japanese animation illustration, watercolor gouache painted texture with visible brushwork and soft edges, dappled sunlight chiaroscuro god rays rim light, pastel soft blue pale pink mint green warm cream, healing cozy dreamy atmosphere, wide visual novel background, illustrated anime art ONLY",
+  "style_suffix": "Makoto Shinkai anime film background art, 2D Japanese animation illustration, watercolor gouache painted texture, dappled sunlight chiaroscuro god rays, pastel soft blue pink mint green, healing cozy dreamy atmosphere, wide visual novel background, illustrated anime art ONLY",
+  "crowd_social_suffix": "Many anime-styled background characters, bustling lively crowd, simple illustrated silhouettes and faces, NOT empty, NOT a single lonely figure, NOT real people",
+  "crowd_sparse_suffix": "One or two distant anime figures optional, quiet intimate mood",
+  "crowd_empty_suffix": "Empty scenic background, no people, no silhouettes, serene quiet atmosphere",
+  "ui_prefix": "Fantasy game UI design, web design, RPG interface, parchment paper texture, ornate metallic borders, glowing buttons, magical floating island, giant open scroll, floating gears, glowing crystals, magical feathers",
+  "landing_prefix": "Studio Ghibli style, 2D anime art style, Japanese animation, watercolor background, masterpiece, highly detailed, pastel blue pink mint green, ethereal lighting, dreamy, fantasy game UI design, parchment scroll, floating island castle, magical gears and crystals",
+  "negative": "NOT photorealistic, NOT photography, NOT live action, NOT 3D render, NOT CGI, NOT Unreal Engine, NOT hyperrealistic, NOT stock photo, illustrated anime background art only, low detail, flat vector, minimalist icon, clip art, blurry, watermark, text overlay, empty social venue, deserted cafeteria, deserted classroom, deserted market, NO game UI, NO dialogue box, NO HUD, NO minimap, NO menu buttons, NO choice buttons, NO status bars, NO quest tracker, NO speech bubble, NO interface elements, NO VN screenshot composition, pure background illustration only",
   "palette": {
     "soft_blue": "#a8d8ff",
     "pale_pink": "#f8c8dc",
     "mint_green": "#9fd4a8"
-  }
+  },
+  "ui_forbidden_zh": "场景图严禁游戏 UI：无对话框、无 HUD、无小地图、无菜单按钮、无任务追踪、无界面 mockup；仅纯背景环境插画。ui_prefix 仅用于 landing/营销页，禁止用于 scene PNG。",
+  "ui_forbidden": "Scene PNGs must be PURE BACKGROUND ART ONLY. NO dialogue boxes, HUD, minimap, menu buttons, quest tracker, or game interface mockup. ui_prefix is for landing pages only, NOT scene backgrounds.",
+  "scene_negative": "NO game UI, NO dialogue box, NO HUD, NO minimap, NO menu buttons, NO choice buttons, NO status bars, NO quest tracker, NO text overlay, NO speech bubble, NO interface elements, NO VN screenshot, NO parchment dialogue panel, pure background illustration only, NOT photorealistic, NOT 3D render, NOT CGI",
+  "ui_forbidden_terms": "dialogue box, text box, speech bubble, minimap, HUD, menu buttons, UI panels, quest tracker, status bars, resource counters, choice buttons, game interface mockup, visual novel UI overlay, glowing menu buttons, on-screen UI labels, auto button, save button, system menu"
 }

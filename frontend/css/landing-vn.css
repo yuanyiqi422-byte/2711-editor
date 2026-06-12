@@ -1,0 +1,421 @@
+/**
+ * 2711编辑器 · 视觉小说落地页（吉卜力治愈 + 奇幻 UI）
+ * 替代 taste-landing 冷淡 SaaS 风
+ */
+
+body.landing-body {
+  background: var(--cream-warm);
+}
+
+.landing-scroll .grain { opacity: 0.05; }
+.landing-scroll .wind-overlay--global { opacity: 0.16; }
+.landing-scroll .petal-overlay--global { opacity: 0.2; }
+
+/* ─── Hero：水彩场景 + 羊皮纸文案 + 金属框预览 ─── */
+.hero--vn {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--gradient-hero);
+}
+
+.hero--vn .hero__split-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: center;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: calc(var(--nav-h) + 24px) clamp(18px, 4vw, 32px) 88px;
+}
+
+@media (min-width: 960px) {
+  .hero--vn .hero__split-inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(20px, 3.5vw, 44px);
+  }
+}
+
+.hero--vn .hero__content--split {
+  position: relative;
+  padding: clamp(20px, 3vw, 32px);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 16px 48px rgba(45, 50, 64, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.hero--vn .hero__content--split::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--gold-soft), var(--gold));
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero--vn .hero__content--split::before {
+  display: none;
+}
+
+.hero--vn .hero__title-zh {
+  font-size: clamp(2.35rem, 6vw, 3.75rem);
+  text-wrap: balance;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hero--vn .hero__tagline {
+  margin-top: 18px;
+  max-width: 28ch;
+  font-size: var(--text-lg);
+  color: var(--ink);
+}
+
+.hero--vn .hero__sub {
+  margin: 12px 0 0;
+  max-width: 32ch;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  letter-spacing: var(--tracking-wide);
+  line-height: var(--leading-normal);
+}
+
+.hero--vn .hero__menu {
+  margin: 26px 0 0;
+  width: min(100%, 320px);
+}
+
+.hero--vn .hero__content--split .hero__actions {
+  justify-content: flex-start;
+  margin-top: 26px;
+}
+
+@media (max-width: 959.98px) {
+  .hero--vn .hero__content--split {
+    text-align: center;
+  }
+
+  .hero--vn .hero__menu {
+    margin: 24px auto 0;
+  }
+
+  .hero--vn .hero__tagline,
+  .hero--vn .hero__sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero--vn .hero__tagline {
+    margin-right: auto;
+  }
+}
+
+/* 舞台预览：奇幻 RPG 边框 */
+.hero__stage {
+  position: relative;
+  width: min(100%, 560px);
+  margin: 0 auto;
+}
+
+@media (min-width: 960px) {
+  .hero__stage {
+    margin: 0 0 0 auto;
+  }
+}
+
+.hero__stage-frame {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--radius-md);
+  padding: 3px;
+  background: linear-gradient(135deg, var(--gold-soft), var(--gold), var(--world-fantasy-soft));
+  box-shadow:
+    0 24px 64px rgba(45, 50, 64, 0.1),
+    0 0 0 1px rgba(214, 181, 122, 0.25);
+}
+
+.hero__stage-inner {
+  border-radius: 13px;
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid rgba(214, 181, 122, 0.28);
+}
+
+.hero__stage-chrome {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  background: rgba(245, 240, 228, 0.95);
+  border-bottom: 1px solid rgba(107, 142, 107, 0.18);
+}
+
+.hero__stage-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.hero__stage-dot:nth-child(1) { background: var(--sakura-soft); }
+.hero__stage-dot:nth-child(2) { background: var(--sky-soft); }
+.hero__stage-dot:nth-child(3) { background: var(--meadow-light); }
+
+.hero__stage-url {
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.hero__stage-scene {
+  position: relative;
+  aspect-ratio: 16 / 10;
+}
+
+.hero__stage-scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__stage-badge {
+  position: absolute;
+  z-index: 2;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  animation: stageBadgeFloat 6s ease-in-out infinite;
+}
+
+.hero__stage-badge--style {
+  top: -10px;
+  right: -8px;
+}
+
+.hero__stage-badge--choice {
+  bottom: 12px;
+  left: -10px;
+  animation-delay: -3s;
+}
+
+.hero__stage-badge__tag {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--sky-deep);
+}
+
+.hero__stage-badge__text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.hero__stage-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.hero__stage-choice {
+  padding: 5px 8px;
+  border-radius: var(--radius-xs);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink);
+  background: rgba(141, 177, 143, 0.22);
+  border: 1px solid rgba(141, 177, 143, 0.35);
+}
+
+.hero__stage-choice--alt {
+  background: rgba(155, 122, 212, 0.18);
+  border-color: rgba(155, 122, 212, 0.32);
+  color: var(--ink-soft);
+}
+
+@keyframes stageBadgeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* 能力区：插画风卡片 */
+.landing-scroll .features .feature-card {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  box-shadow: var(--shadow-card);
+}
+
+.landing-scroll .features .feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.landing-scroll .feature-card__num {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--sky-deep);
+  opacity: 0.88;
+}
+
+.landing-scroll .workshop__panel {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: var(--paper);
+  box-shadow: var(--shadow-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__stage-badge {
+    animation: none;
+  }
+
+  .game-menu__item--primary {
+    animation: none;
+  }
+}
+
+/* ─── 旅行便签 · 签名语 ─── */
+.travel-note {
+  margin: 0;
+  font-family: var(--font-display-en);
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  opacity: 0.78;
+}
+
+.travel-note::before {
+  content: "— ";
+  opacity: 0.45;
+}
+
+.travel-note--hero {
+  margin-top: 18px;
+  text-align: left;
+}
+
+.travel-note--section {
+  max-width: 900px;
+  margin: clamp(28px, 4vw, 44px) auto 0;
+  text-align: center;
+}
+
+.travel-note--footer {
+  margin-top: 10px;
+  font-size: 10px;
+  opacity: 0.62;
+}
+
+@media (max-width: 959.98px) {
+  .travel-note--hero {
+    text-align: center;
+  }
+}
+
+/* ─── 旅程 · RPG 任务日志风 ─── */
+.journey {
+  position: relative;
+  padding: var(--section-pad) 24px clamp(56px, 8vw, 80px);
+  border-top: 1px solid var(--border-soft);
+  background: var(--gradient-sunset);
+  overflow: hidden;
+}
+
+.journey::before {
+  content: "";
+  position: absolute;
+  top: 8%;
+  left: 6%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(214, 181, 122, 0.14) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.journey::after {
+  content: "✦";
+  position: absolute;
+  top: 14%;
+  right: 10%;
+  font-size: 14px;
+  color: var(--gold);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.journey .section-head {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.journey .section-head__kicker {
+  color: var(--sky-deep);
+}
+
+.journey__track {
+  list-style: none;
+  padding: 0;
+  margin: clamp(28px, 4vw, 40px) auto 0;
+  max-width: 1080px;
+}
+
+@media (min-width: 768px) {
+  .journey .how__steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
+.journey-step {
+  list-style: none;
+}
+
+.journey-step::before {
+  font-size: var(--text-lg);
+  color: var(--sky-deep);
+  opacity: 0.85;
+}
+
+.journey-step .how-step__tag {
+  display: block;
+  margin: 0 0 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--meadow);
+}
+
+/* 工坊区：启程台语气 */
+.landing-scroll .workshop__head .section-head__sub {
+  display: block;
+  margin-top: 8px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}

@@ -1,0 +1,398 @@
+{
+  "version": 4,
+  "notes_zh": "场景生图人群密度规则 — 供 art-style / scene-expansion / GenerateImage 引用。所有人物必须是 2D 动漫风格，禁止真人/写实。中国语境公共场景默认有人群。",
+  "style_negative": "NOT photorealistic, NOT photography, NOT live action, NOT 3D render, NOT CGI, NOT Unreal Engine, NOT hyperrealistic, NOT stock photo, illustrated anime background art only",
+  "locale": "zh-CN",
+  "zh_keyword_map": {
+    "食堂": {
+      "category": "social",
+      "scenes": [
+        "cafeteria_serving"
+      ]
+    },
+    "饭堂": {
+      "category": "social",
+      "scenes": [
+        "cafeteria_serving"
+      ]
+    },
+    "菜市": {
+      "category": "social",
+      "scenes": [
+        "market_alley",
+        "wet_market_haggle"
+      ]
+    },
+    "菜市场": {
+      "category": "social",
+      "scenes": [
+        "wet_market_haggle",
+        "market_alley"
+      ]
+    },
+    "地铁": {
+      "category": "social",
+      "scenes": [
+        "crowded_subway",
+        "subway_night"
+      ]
+    },
+    "高铁": {
+      "category": "social",
+      "scenes": [
+        "shinkai_train_platform"
+      ]
+    },
+    "火车": {
+      "category": "social",
+      "scenes": [
+        "shinkai_train_platform",
+        "train_countryside"
+      ]
+    },
+    "校园": {
+      "category": "social",
+      "scenes": [
+        "campus_field",
+        "school_corridor",
+        "classroom_drowse"
+      ]
+    },
+    "灯笼": {
+      "category": "social",
+      "scenes": [
+        "lantern_festival",
+        "rabbit_lantern_fair",
+        "night_bazaar"
+      ]
+    },
+    "庙会": {
+      "category": "social",
+      "scenes": [
+        "lantern_festival",
+        "night_bazaar",
+        "rabbit_lantern_fair"
+      ]
+    },
+    "灯市": {
+      "category": "social",
+      "scenes": [
+        "rabbit_lantern_fair",
+        "lantern_festival"
+      ]
+    },
+    "夜市": {
+      "category": "sparse",
+      "scenes": [
+        "night_bbq_street"
+      ]
+    },
+    "宿舍": {
+      "category": "interior_quiet",
+      "scenes": [
+        "dormitory_bunk"
+      ]
+    },
+    "便利店": {
+      "category": "social",
+      "scenes": [
+        "convenience_store_night"
+      ]
+    },
+    "校门": {
+      "category": "social",
+      "scenes": [
+        "school_gate"
+      ]
+    },
+    "考场": {
+      "category": "social",
+      "scenes": [
+        "exam_hall"
+      ]
+    },
+    "卧室": {
+      "category": "interior_quiet",
+      "scenes": [
+        "apartment_bedroom"
+      ]
+    },
+    "商场": {
+      "category": "social",
+      "scenes": [
+        "luxury_mall"
+      ]
+    },
+    "厨房": {
+      "category": "interior_quiet",
+      "scenes": [
+        "home_kitchen"
+      ]
+    },
+    "公园": {
+      "category": "nature",
+      "scenes": [
+        "city_park"
+      ]
+    },
+    "公交站": {
+      "category": "social",
+      "scenes": [
+        "bus_stop_rain"
+      ]
+    },
+    "出租车": {
+      "category": "sparse",
+      "scenes": [
+        "taxi_night"
+      ]
+    },
+    "警局": {
+      "category": "institutional_sparse",
+      "scenes": [
+        "police_station"
+      ]
+    },
+    "副本": {
+      "category": "nature",
+      "scenes": [
+        "dungeon_gate"
+      ]
+    },
+    "体育馆": {
+      "category": "social",
+      "scenes": [
+        "gym_sports_hall"
+      ]
+    },
+    "律所": {
+      "category": "interior_quiet",
+      "scenes": [
+        "law_firm_office"
+      ]
+    },
+    "电视台": {
+      "category": "social",
+      "scenes": [
+        "tv_studio_live"
+      ]
+    },
+    "创业": {
+      "category": "social",
+      "scenes": [
+        "startup_garage"
+      ]
+    },
+    "中庭": {
+      "category": "social",
+      "scenes": [
+        "shopping_mall_atrium"
+      ]
+    },
+    "加油站": {
+      "category": "sparse",
+      "scenes": [
+        "gas_station_night"
+      ]
+    },
+    "搬家": {
+      "category": "social",
+      "scenes": [
+        "moving_day_street"
+      ]
+    },
+    "太平间": {
+      "category": "institutional_sparse",
+      "scenes": [
+        "morgue_corridor_blue",
+        "hospital_basement_night"
+      ]
+    },
+    "急诊": {
+      "category": "social",
+      "scenes": [
+        "er_waiting_chaos_crowd",
+        "ambulance_bay_night",
+        "hospital_er",
+        "hospital_er_waiting"
+      ]
+    },
+    "灵堂": {
+      "category": "institutional_sparse",
+      "scenes": [
+        "funeral_hall_empty"
+      ]
+    },
+    "婚宴": {
+      "category": "social",
+      "scenes": [
+        "wedding_banquet_hall"
+      ]
+    },
+    "老家": {
+      "category": "nature",
+      "scenes": [
+        "old_hometown_street",
+        "grandparents_yard"
+      ]
+    },
+    "送别": {
+      "category": "social",
+      "scenes": [
+        "train_farewell_platform"
+      ]
+    },
+    "告白": {
+      "category": "interior_quiet",
+      "scenes": [
+        "balcony_confession_night"
+      ]
+    },
+    "饭桌": {
+      "category": "interior_quiet",
+      "scenes": [
+        "family_dining"
+      ]
+    },
+    "晚餐": {
+      "category": "interior_quiet",
+      "scenes": [
+        "family_dining"
+      ]
+    },
+    "洗衣房": {
+      "category": "interior_quiet",
+      "scenes": [
+        "laundry_room"
+      ]
+    },
+    "洗衣": {
+      "category": "interior_quiet",
+      "scenes": [
+        "laundry_room"
+      ]
+    },
+    "烧烤摊": {
+      "category": "sparse",
+      "scenes": [
+        "night_bbq_street"
+      ]
+    },
+    "灵兽": {
+      "category": "nature",
+      "scenes": [
+        "spirit_beast_forest"
+      ]
+    },
+    "剑池": {
+      "category": "nature",
+      "scenes": [
+        "sword_lake_mirror"
+      ]
+    },
+    "雷台": {
+      "category": "nature",
+      "scenes": [
+        "thunder_platform_empty"
+      ]
+    }
+  },
+  "categories": {
+    "social": {
+      "density": "many",
+      "rule": "Bustling crowd required; many anime background figures in Chinese public venues; never empty cafeteria/market/subway/festival; never real people",
+      "examples": [
+        "cafeteria_serving",
+        "classroom_drowse",
+        "school_corridor",
+        "campus_field",
+        "market_alley",
+        "wet_market_haggle",
+        "night_bazaar",
+        "lantern_festival",
+        "rabbit_lantern_fair",
+        "romance_cafe",
+        "rainy_street",
+        "shinkai_train_platform",
+        "crowded_subway",
+        "newyear_crowd",
+        "snack_shop_rush",
+        "sunny_basketball",
+        "airport_sunset",
+        "subway_night",
+        "er_waiting_chaos_crowd"
+      ]
+    },
+    "interior_quiet": {
+      "density": "sparse",
+      "rule": "0–2 anime figures OK; intimate or after-hours mood",
+      "examples": [
+        "indoor_warm",
+        "candle_room",
+        "wedding_room_alone",
+        "candlelit_room",
+        "balcony_confession_night",
+        "insomnia_rental",
+        "library_window_nap",
+        "sect_mission_hall"
+      ]
+    },
+    "nature": {
+      "density": "empty",
+      "rule": "Empty or sparse; no crowds unless festival in nature",
+      "examples": [
+        "calm_meadow",
+        "xianxia_peaks",
+        "night_stars",
+        "beach_wind",
+        "mystery_fog",
+        "forest_path",
+        "sunset_hill",
+        "shrine_path",
+        "snow_shrine",
+        "bamboo_grove",
+        "cherry_tunnel",
+        "sakura_river",
+        "waterfall_rainbow",
+        "floating_isles",
+        "winter_snow",
+        "rooftop_sky",
+        "city_lights",
+        "shinkai_bamboo_dappled",
+        "shinkai_coast_road",
+        "shinkai_observatory_hill",
+        "spirit_beast_forest",
+        "sword_lake_mirror",
+        "cloud_sea_stairway",
+        "jade_pool_meditation",
+        "thunder_platform_empty",
+        "ancient_tree_lightning",
+        "hidden_valley_spring"
+      ]
+    },
+    "institutional_sparse": {
+      "density": "sparse",
+      "rule": "Long corridors/halls may be empty or 1–3 anime staff; eerie hospital OK empty",
+      "examples": [
+        "hospital_hall",
+        "shinkai_hospital_morgue_hall",
+        "library_aisle",
+        "morgue_corridor_blue",
+        "hospital_basement_night",
+        "sterile_exam_room_empty",
+        "clinic_reception_empty",
+        "pharmacy_night_closed",
+        "infirmary_dark",
+        "ambulance_bay_night"
+      ]
+    }
+  },
+  "prompt_tokens": {
+    "many": "many anime-styled people, bustling Chinese crowd, lively atmosphere, simple illustrated silhouettes and faces, NOT real people, NOT photorealistic",
+    "sparse": "one or two distant anime figures, quiet intimate mood, NOT photorealistic",
+    "empty": "empty scenic background, no people, no silhouettes, NOT photorealistic"
+  },
+  "pure_background_rule_zh": "场景 PNG 必须是纯背景插画：禁止对话框、HUD、小地图、菜单按钮、任务追踪、界面 mockup；无主角特写，远处匿名人群可。",
+  "pure_background_rule": "Scene images must be pure painted environment backgrounds only. NO game UI overlays.",
+  "ui_negative": "NO game UI, NO dialogue box, NO HUD, NO minimap, NO menu buttons, NO text overlay, NO speech bubble, NO interface elements, pure background illustration only"
+}

@@ -1,0 +1,179 @@
+/**
+ * Epigraph v3 · Draft typography package
+ * ───────────────────────────────────────
+ * NOT linked in index.html — review mockup + SPEC first.
+ * To apply: add after workbench-layout.css
+ *   <link rel="stylesheet" href="css/epigraph-v3-draft.css?v=1" />
+ * Requires tokens.css (--sky, --sakura, --ink, --vn-*).
+ * HTML/JS unchanged: brand.js wraps W L J / M Z C in .workbench__epigraph-cap
+ *
+ * v3 goals: readable serif, warm cream base, adequate size, no gradient-clip caps.
+ */
+
+/* ── Container · more vertical breathing room ── */
+.workbench__epigraph {
+  --epigraph-max-w: 360px;
+  --epigraph-gap: 8px;
+  --epigraph-pad-y: 6px;
+  --epigraph-glow-duration: 5.5s;
+
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--epigraph-gap);
+  text-align: center;
+  max-width: var(--epigraph-max-w);
+  padding: var(--epigraph-pad-y) 4px;
+}
+
+/* ── Base line typography · readable, warm, not squashed ── */
+.workbench__epigraph-line {
+  margin: 0;
+  font-family: "Cormorant Garamond", "Source Serif 4", Georgia, var(--font-display-en), serif;
+  font-size: clamp(15px, 1.65vh, 17px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  color: color-mix(in srgb, var(--vn-ivory) 88%, var(--vn-gold) 12%);
+  text-shadow:
+    0 0 14px color-mix(in srgb, var(--vn-glow-warm) 90%, transparent),
+    0 1px 2px rgba(10, 14, 20, 0.35);
+}
+
+/* Line 1 · luminous journey — warm cream body */
+.workbench__epigraph-line--luminous {
+  color: color-mix(in srgb, var(--vn-ivory) 90%, var(--sakura) 10%);
+}
+
+/* Line 2 · zest continue — warm cream body, slightly rosier */
+.workbench__epigraph-line--zest {
+  color: color-mix(in srgb, var(--vn-ivory) 86%, var(--sky) 14%);
+}
+
+/* ── Highlighted letters W L J / M Z C · solid color, readable ── */
+.workbench__epigraph-cap {
+  display: inline-block;
+  position: relative;
+  font-size: 1.06em;
+  font-weight: 600;
+  font-style: normal;
+  font-variant: normal;
+  letter-spacing: inherit;
+  vertical-align: baseline;
+  color: inherit;
+  text-shadow: none;
+}
+
+/* WLJ · soft sakura pink */
+.workbench__epigraph-line--luminous .workbench__epigraph-cap {
+  color: color-mix(in srgb, var(--sakura) 78%, var(--vn-ivory) 22%);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--sakura-soft) 55%, transparent);
+}
+
+/* MZC · soft sky blue */
+.workbench__epigraph-line--zest .workbench__epigraph-cap {
+  color: color-mix(in srgb, var(--sky) 82%, var(--vn-ivory) 18%);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--sky-soft) 55%, transparent);
+}
+
+/* Subtle underline — no gradient clip */
+.workbench__epigraph-cap::after {
+  content: "";
+  position: absolute;
+  left: 0.1em;
+  right: 0.1em;
+  bottom: 0.08em;
+  height: 1px;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.workbench__epigraph-line--luminous .workbench__epigraph-cap::after {
+  opacity: 0.48;
+}
+
+.workbench__epigraph-line--zest .workbench__epigraph-cap::after {
+  opacity: 0.45;
+}
+
+/* ── Divider · warm gold bridge, gentle not flashy ── */
+.workbench__epigraph-sep {
+  display: block;
+  width: min(140px, 48vw);
+  height: 1px;
+  margin: 2px 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--vn-gold) 28%, transparent) 16%,
+    color-mix(in srgb, var(--vn-gold) 62%, var(--vn-ivory) 38%) 50%,
+    color-mix(in srgb, var(--vn-gold) 28%, transparent) 84%,
+    transparent 100%
+  );
+  opacity: 0.58;
+  position: relative;
+}
+
+.workbench__epigraph-sep::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--vn-gold) 70%, var(--vn-ivory) 30%);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--vn-glow-gold) 65%, transparent);
+  animation: epigraph-v3-sep-glow var(--epigraph-glow-duration) ease-in-out infinite;
+}
+
+/* ── Motion (prefers-reduced-motion safe) ── */
+@keyframes epigraph-v3-sep-glow {
+  0%,
+  100% {
+    opacity: 0.82;
+    box-shadow: 0 0 6px color-mix(in srgb, var(--vn-glow-gold) 50%, transparent);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 10px color-mix(in srgb, var(--vn-glow-gold) 75%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workbench__epigraph-sep::before {
+    animation: none;
+    opacity: 0.9;
+  }
+}
+
+/* ── Responsive · keep readable floor on narrow screens ── */
+@media (max-width: 720px) {
+  .workbench__epigraph {
+    --epigraph-max-w: 300px;
+    --epigraph-gap: 6px;
+    --epigraph-pad-y: 4px;
+  }
+
+  .workbench__epigraph-line {
+    font-size: clamp(14px, 3.4vw, 16px);
+    line-height: 1.5;
+    letter-spacing: 0.015em;
+  }
+
+  .workbench__epigraph-cap {
+    font-size: 1.04em;
+  }
+
+  .workbench__epigraph-sep {
+    width: min(116px, 54vw);
+  }
+}

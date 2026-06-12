@@ -1,0 +1,276 @@
+/**
+ * Epigraph v2 · Draft typography package
+ * ───────────────────────────────────────
+ * NOT linked in index.html — review mockups first.
+ * To apply: add after workbench-layout.css
+ *   <link rel="stylesheet" href="css/epigraph-v2-draft.css?v=1" />
+ * Requires tokens.css (--sky, --sakura, --ink, --vn-*).
+ * HTML/JS unchanged: brand.js still wraps W L J / M Z C in .workbench__epigraph-cap
+ */
+
+/* ── Container ── */
+.workbench__epigraph {
+  --epigraph-max-w: 340px;
+  --epigraph-gap: 6px;
+  --epigraph-glow-duration: 4.8s;
+
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--epigraph-gap);
+  text-align: center;
+  max-width: var(--epigraph-max-w);
+  padding: 2px 0;
+}
+
+/* ── Base line typography ── */
+.workbench__epigraph-line {
+  margin: 0;
+  font-family: "Cormorant Garamond", var(--font-display-en);
+  font-size: clamp(11.5px, 1.42vh, 14px);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Line 1 · luminous journey — sky body, sakura caps */
+.workbench__epigraph-line--luminous {
+  color: color-mix(in srgb, var(--sky) 88%, var(--ink) 12%);
+  text-shadow:
+    0 0 20px color-mix(in srgb, var(--sky-soft) 70%, transparent),
+    0 1px 0 color-mix(in srgb, var(--sky-deep) 25%, transparent);
+}
+
+/* Line 2 · zest continue — sakura body, sky caps */
+.workbench__epigraph-line--zest {
+  color: color-mix(in srgb, var(--sakura) 86%, var(--ink) 14%);
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--sakura-soft) 65%, transparent),
+    0 1px 0 color-mix(in srgb, var(--sakura) 20%, transparent);
+}
+
+/* ── Highlighted letters W L J / M Z C ── */
+.workbench__epigraph-cap {
+  --epigraph-cap-gradient: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--sakura) 92%, white 8%) 0%,
+    color-mix(in srgb, var(--sakura) 68%, var(--sky) 32%) 48%,
+    color-mix(in srgb, var(--sakura) 88%, #fce8ec 12%) 100%
+  );
+  --epigraph-cap-glow: color-mix(in srgb, var(--sakura-soft) 80%, transparent);
+  --epigraph-cap-underline: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--sakura) 55%, transparent) 22%,
+    color-mix(in srgb, var(--sakura) 90%, white 10%) 50%,
+    color-mix(in srgb, var(--sakura) 55%, transparent) 78%,
+    transparent 100%
+  );
+
+  display: inline-block;
+  position: relative;
+  font-size: 1.18em;
+  font-weight: 600;
+  font-style: italic;
+  font-variant: normal;
+  letter-spacing: 0.04em;
+  vertical-align: baseline;
+  background: var(--epigraph-cap-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 10px var(--epigraph-cap-glow));
+  animation: epigraph-cap-breathe var(--epigraph-glow-duration) ease-in-out infinite;
+}
+
+.workbench__epigraph-line--luminous .workbench__epigraph-cap {
+  --epigraph-cap-gradient: linear-gradient(
+    128deg,
+    color-mix(in srgb, var(--sakura) 95%, #fff5f7 5%) 0%,
+    color-mix(in srgb, var(--sakura) 72%, var(--lavender) 28%) 42%,
+    color-mix(in srgb, var(--sakura) 88%, white 12%) 100%
+  );
+  --epigraph-cap-glow: color-mix(in srgb, var(--sakura-soft) 85%, transparent);
+  --epigraph-cap-underline: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--sakura) 70%, transparent) 30%,
+    color-mix(in srgb, var(--sakura) 95%, white 5%) 50%,
+    color-mix(in srgb, var(--sakura) 70%, transparent) 70%,
+    transparent
+  );
+}
+
+.workbench__epigraph-line--zest .workbench__epigraph-cap {
+  --epigraph-cap-gradient: linear-gradient(
+    128deg,
+    color-mix(in srgb, var(--sky) 92%, #e8f0fa 8%) 0%,
+    color-mix(in srgb, var(--sky) 68%, var(--lavender) 32%) 42%,
+    color-mix(in srgb, var(--sky-deep) 55%, var(--sky) 45%) 100%
+  );
+  --epigraph-cap-glow: color-mix(in srgb, var(--sky-soft) 90%, transparent);
+  --epigraph-cap-underline: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--sky) 65%, transparent) 30%,
+    color-mix(in srgb, var(--sky) 95%, #dce8f8 5%) 50%,
+    color-mix(in srgb, var(--sky) 65%, transparent) 70%,
+    transparent
+  );
+}
+
+/* Decorative underline + center dot flourish */
+.workbench__epigraph-cap::after {
+  content: "";
+  position: absolute;
+  left: 0.06em;
+  right: 0.06em;
+  bottom: 0.02em;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--epigraph-cap-underline);
+  opacity: 0.55;
+  pointer-events: none;
+  transform: scaleX(0.92);
+  transform-origin: center;
+}
+
+.workbench__epigraph-cap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -0.12em;
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Only middle cap of each triplet gets center dot (L, Z) — via nth-of-type if order preserved */
+.workbench__epigraph-line--luminous .workbench__epigraph-cap:nth-of-type(2)::before,
+.workbench__epigraph-line--zest .workbench__epigraph-cap:nth-of-type(2)::before {
+  opacity: 0.35;
+  background: var(--epigraph-cap-gradient);
+  box-shadow: 0 0 6px var(--epigraph-cap-glow);
+}
+
+/* ── Divider · sky ↔ sakura ethereal bridge ── */
+.workbench__epigraph-sep {
+  display: block;
+  width: min(132px, 46vw);
+  height: 1px;
+  margin: 1px 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--sky) 35%, transparent) 14%,
+    color-mix(in srgb, var(--vn-gold) 55%, var(--sky) 45%) 38%,
+    color-mix(in srgb, var(--sakura) 50%, var(--vn-gold) 50%) 62%,
+    color-mix(in srgb, var(--sakura) 35%, transparent) 86%,
+    transparent 100%
+  );
+  opacity: 0.62;
+  position: relative;
+}
+
+.workbench__epigraph-sep::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--vn-ivory) 80%, var(--sky) 20%) 0%,
+    color-mix(in srgb, var(--sakura) 45%, var(--sky) 55%) 55%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--sky-soft) 70%, var(--sakura-soft) 30%),
+    0 0 4px color-mix(in srgb, var(--vn-gold) 40%, transparent);
+  animation: epigraph-sep-pulse var(--epigraph-glow-duration) ease-in-out infinite;
+}
+
+.workbench__epigraph-sep::after {
+  content: "";
+  position: absolute;
+  inset: -3px 20%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--sky-soft) 25%, transparent) 45%,
+    color-mix(in srgb, var(--sakura-soft) 25%, transparent) 55%,
+    transparent
+  );
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+/* ── Motion (prefers-reduced-motion safe) ── */
+@keyframes epigraph-cap-breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 8px var(--epigraph-cap-glow));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px var(--epigraph-cap-glow))
+      drop-shadow(0 0 4px color-mix(in srgb, var(--epigraph-cap-glow) 60%, white 40%));
+  }
+}
+
+@keyframes epigraph-sep-pulse {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workbench__epigraph-cap,
+  .workbench__epigraph-sep::before {
+    animation: none;
+  }
+
+  .workbench__epigraph-cap {
+    filter: drop-shadow(0 0 10px var(--epigraph-cap-glow));
+  }
+}
+
+/* ── Responsive tighten ── */
+@media (max-width: 720px) {
+  .workbench__epigraph {
+    --epigraph-max-w: 280px;
+    --epigraph-gap: 4px;
+  }
+
+  .workbench__epigraph-line {
+    font-size: clamp(10.5px, 2.8vw, 12.5px);
+    letter-spacing: 0.06em;
+  }
+
+  .workbench__epigraph-cap {
+    font-size: 1.14em;
+  }
+
+  .workbench__epigraph-sep {
+    width: min(108px, 52vw);
+  }
+}

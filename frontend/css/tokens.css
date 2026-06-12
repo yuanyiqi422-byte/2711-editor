@@ -1,55 +1,135 @@
 /**
  * 2711 Editor · 全站设计令牌（单一来源）
- * 由 index.html 最先以 <link> 引入，landing.css / app.css 共用
+ * Dark VN menu theme · workbench primary
+ * Light parchment tokens scoped to #game
  */
 :root {
-  /* Color — 蓝粉绿治愈系 */
-  --sky: #7eb8ff;
-  --sky-soft: #a8d4ff;
-  --sky-deep: #5a8fc8;
-  --sakura: #f8a8c8;
-  --sakura-soft: #ffc8dd;
-  --lavender: #c8b8e8;
-  --meadow: #6b8e6b;
-  --meadow-soft: #8ab898;
-  --meadow-light: #b8d4c8;
-  --forest: #4a6850;
-  --wheat: #e8dcc8;
-  --cream: #faf6ed;
-  --cream-warm: #f5f0e4;
-  --on-accent: #fff;
-  --paper: rgba(250, 246, 237, 0.92);
-  --ink: #3a3548;
-  --ink-soft: #5a5068;
-  --ink-muted: rgba(90, 80, 104, 0.72);
-  --surface: rgba(250, 246, 237, 0.88);
-  --surface-card: #faf6ed;
-  --surface-2: #f5f0e4;
-  --border-soft: rgba(107, 142, 107, 0.28);
-  --border: rgba(107, 142, 107, 0.38);
-  --shadow-soft: 0 12px 40px rgba(107, 142, 107, 0.14);
-  --shadow-card: 0 8px 28px rgba(107, 142, 107, 0.1);
-  --danger: #c45c6a;
-  --accent: #7eb8ff;
-  --accent-pink: #f8a8c8;
-  --accent-green: #6b8e6b;
-  --accent-dim: rgba(107, 142, 107, 0.14);
-  --bg: #eef5e8;
-  --text: #3a3548;
-  --text-soft: #5a5068;
-  --muted: #6a7068;
-  --vn-panel: #faf6ed;
-  --vn-ink: #2a2438;
-  --vn-ink-soft: #4a4058;
+  /* ── Dark VN Menu · Core ── */
+  --vn-gold: #D6B06A;
+  --vn-ivory: #F4EFE6;
+  --vn-text: #ECE7DD;
+  --vn-text-muted: rgba(255, 255, 255, 0.65);
+  --vn-glass: rgba(255, 255, 255, 0.08);
+  --vn-glass-strong: rgba(255, 255, 255, 0.12);
+  --vn-border: rgba(255, 255, 255, 0.12);
+  --vn-border-gold: rgba(214, 176, 106, 0.38);
+  --vn-overlay: rgba(10, 14, 20, 0.35);
+  --vn-bg-deep: #0a0e14;
+  --vn-bg-mid: #121820;
+  --vn-glow-gold: rgba(214, 176, 106, 0.22);
+  --vn-glow-warm: rgba(244, 239, 230, 0.06);
 
-  --gradient-hero: linear-gradient(165deg, #a8d4ff 0%, #b8d4c8 32%, #6b8e6b 58%, #faf6ed 100%);
-  --gradient-btn: linear-gradient(135deg, #6b8e6b 0%, #7eb8ff 42%, #f8a8c8 100%);
-  --gradient-game-stage: linear-gradient(180deg, var(--sky-soft) 0%, var(--meadow-light) 38%, var(--accent-green) 62%, var(--cream) 100%);
-  --gradient-sunset: linear-gradient(180deg, #a8d4ff 0%, #b8d4c8 35%, rgba(248, 168, 200, 0.22) 65%, #eef5e8 100%);
+  /* World accent tints (dark-friendly) */
+  --world-fantasy: #9b7ad4;
+  --world-urban: #d89aa5;
+  --world-mystery: #8fa4c8;
+  --world-campus: #9bc49d;
+
+  --world-fantasy-soft: rgba(155, 122, 212, 0.35);
+  --world-urban-soft: rgba(216, 154, 165, 0.35);
+  --world-mystery-soft: rgba(143, 164, 200, 0.35);
+  --world-campus-soft: rgba(155, 196, 157, 0.35);
+
+  /* ── Primary aliases (workbench) ── */
+  --gold: var(--vn-gold);
+  --gold-soft: #e8d4b0;
+  --gold-deep: #b8955a;
+  --ivory: var(--vn-ivory);
+
+  --paper: var(--vn-bg-deep);
+  --paper-soft: var(--vn-bg-mid);
+  --ink: var(--vn-text);
+  --ink-soft: var(--vn-ivory);
+  --ink-muted: var(--vn-text-muted);
+
+  /* Legacy aliases */
+  --cream: var(--vn-bg-deep);
+  --cream-warm: var(--vn-bg-mid);
+  --surface: var(--vn-glass);
+  --surface-card: var(--vn-glass-strong);
+  --surface-2: rgba(255, 255, 255, 0.05);
+  --forest: var(--vn-text);
+  --text: var(--vn-text);
+  --text-soft: var(--vn-ivory);
+  --muted: var(--vn-text-muted);
+  --vn-panel: var(--vn-glass);
+  --vn-ink: var(--vn-text);
+  --vn-ink-soft: var(--vn-ivory);
+  --bg: var(--vn-bg-deep);
+  --on-accent: #1a1510;
+  --danger: #e08a8a;
+
+  --sky: #8fa4c8;
+  --sky-soft: rgba(143, 164, 200, 0.35);
+  --sky-deep: #6b84a8;
+  --sakura: var(--world-urban);
+  --sakura-soft: var(--world-urban-soft);
+  --lavender: #b8aac8;
+  --meadow: var(--world-campus);
+  --meadow-soft: var(--world-campus-soft);
+  --meadow-light: rgba(155, 196, 157, 0.45);
+  --wheat: var(--gold-soft);
+  --accent: var(--vn-gold);
+  --accent-pink: var(--world-urban);
+  --accent-green: var(--world-campus);
+  --accent-dim: rgba(214, 176, 106, 0.16);
+
+  --border-soft: var(--vn-border);
+  --border: var(--vn-border-gold);
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.28);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.22);
+  --shadow-glow: 0 0 40px var(--vn-glow-gold);
+
+  /* Dark atmospheric gradients */
+  --gradient-hero: linear-gradient(
+    168deg,
+    rgba(10, 14, 20, 0.92) 0%,
+    rgba(18, 24, 32, 0.88) 42%,
+    rgba(10, 14, 20, 0.95) 100%
+  );
+  --gradient-btn: linear-gradient(
+    135deg,
+    #b8955a 0%,
+    var(--vn-gold) 48%,
+    #e8d4b0 100%
+  );
+  --gradient-game-stage: linear-gradient(
+    180deg,
+    #1a2030 0%,
+    #0a0e14 42%,
+    #121820 100%
+  );
+  --gradient-sunset: linear-gradient(
+    180deg,
+    rgba(214, 176, 106, 0.08) 0%,
+    rgba(155, 122, 212, 0.06) 38%,
+    rgba(10, 14, 20, 0.85) 72%
+  );
+  --gradient-glass: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+
+  /* Light theme preserved for game layer override */
+  --light-paper: #F5F1EA;
+  --light-paper-soft: rgba(245, 241, 234, 0.94);
+  --light-ink: #2D3240;
+  --light-ink-soft: #4a5060;
+  --light-ink-muted: rgba(45, 50, 64, 0.68);
+  --light-surface: rgba(250, 246, 237, 0.72);
+  --light-border: rgba(45, 50, 64, 0.12);
+  --light-on-accent: #2D3240;
+  --light-gradient-game: linear-gradient(
+    180deg,
+    #e4eaf2 0%,
+    #F5F1EA 42%,
+    #ebe6dc 100%
+  );
 
   /* Typography */
   --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --font-display-cn: "ZCOOL XiaoWei", var(--font-body);
+  --font-display-cn: "Noto Serif SC", var(--font-body);
   --font-display-en: "Outfit", var(--font-body);
   --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
 
@@ -72,12 +152,55 @@
   --tracking-body: 0.02em;
   --tracking-ui: 0.04em;
   --tracking-wide: 0.08em;
-  --tracking-brand: 0.06em;
+  --tracking-brand: 0.04em;
   --tracking-en: 0.12em;
+  --tracking-brand-en: 0.28em;
 
-  /* Layout */
-  --nav-h: 60px;
-  --content-max: 1080px;
+  /* Brand lockup · navbar wordmark */
+  --font-brand-num: "Jost", "Cormorant Garamond", "Noto Serif SC", sans-serif;
+  --font-brand-cn: "Noto Serif SC", "ZCOOL XiaoWei", var(--font-display-cn);
+  --font-brand-en: "Cinzel", "Cormorant Garamond", var(--font-display-en);
+  --brand-title-shine: linear-gradient(
+    118deg,
+    #e8c878 0%,
+    #f4efe6 28%,
+    #e4eaf4 52%,
+    #faf7f2 72%,
+    #c8dce8 100%
+  );
+  --brand-title-glow: rgba(143, 196, 220, 0.42);
+  --brand-panel-bg: linear-gradient(
+    168deg,
+    rgba(22, 26, 34, 0.97) 0%,
+    rgba(10, 14, 20, 0.98) 52%,
+    rgba(16, 20, 28, 0.97) 100%
+  );
+  --brand-panel-border: rgba(143, 164, 200, 0.16);
+  --brand-panel-glow: rgba(143, 164, 200, 0.12);
+  --brand-num-shine: linear-gradient(
+    155deg,
+    #faf7f2 0%,
+    #e8edf5 38%,
+    #f4efe6 72%,
+    #c8d4e8 100%
+  );
+  --brand-label-color: rgba(244, 239, 230, 0.96);
+  --brand-subline-color: rgba(168, 178, 196, 0.62);
+  --brand-rule-color: rgba(143, 164, 200, 0.38);
+
+  /* Manuscript paper (open book) */
+  --manuscript-paper: #f7f0e4;
+  --manuscript-paper-warm: #f0e6d4;
+  --manuscript-paper-edge: #e8dcc8;
+  --manuscript-ink: #3d2f24;
+  --manuscript-ink-muted: rgba(61, 47, 36, 0.62);
+  --manuscript-ink-faint: rgba(61, 47, 36, 0.38);
+
+  /* Layout · View A workbench */
+  --nav-h: 64px;
+  --drawer-w: clamp(220px, 18vw, 280px);
+  --manuscript-min: 120px;
+  --content-max: 880px;
   --section-pad: clamp(64px, 10vw, 120px);
   --space-1: 4px;
   --space-2: 8px;
@@ -89,7 +212,7 @@
   --space-10: 40px;
   --space-12: 48px;
 
-  /* Radius — 统一圆角体系 */
+  /* Radius */
   --radius-xs: 8px;
   --radius-sm: 12px;
   --radius-md: 16px;
@@ -99,10 +222,32 @@
   --radius-pill: 999px;
   --radius: var(--radius-lg);
 
+  /* Blur */
+  --blur-glass: 20px;
+  --blur-heavy: 32px;
+
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
   --transition-fast: 0.2s var(--ease-out);
   --transition-base: 0.25s var(--ease-out);
   --transition-slow: 0.35s var(--ease-out);
+}
+
+/* Game layer restores light parchment tokens */
+.game,
+#game {
+  --paper: var(--light-paper);
+  --paper-soft: var(--light-paper-soft);
+  --ink: var(--light-ink);
+  --ink-soft: var(--light-ink-soft);
+  --ink-muted: var(--light-ink-muted);
+  --forest: var(--light-ink);
+  --text: var(--light-ink);
+  --text-soft: var(--light-ink-soft);
+  --muted: var(--light-ink-muted);
+  --surface: var(--light-surface);
+  --on-accent: var(--light-on-accent);
+  --border-soft: var(--light-border);
+  --gradient-game-stage: var(--light-gradient-game);
 }

@@ -1,0 +1,189 @@
+/**
+ * 2711编辑器 · 开始游戏控制台 v3 · DRAFT
+ * Layered transparent cutouts — NOT linked in index.html
+ * Wire notes: frontend/images/workbench/console-v3-SPEC.md
+ */
+
+/* ── Layer 0 · Outer frame ── */
+.workbench__cta--console {
+  position: relative;
+  isolation: isolate;
+  margin-top: clamp(8px, 1.2vh, 14px);
+  width: min(100%, 520px);
+  min-height: clamp(148px, 19vh, 196px);
+  padding: clamp(22px, 2.8vh, 30px) clamp(18px, 2.4vw, 26px) clamp(18px, 2.2vh, 24px);
+  border: none;
+  border-radius: 0;
+  background:
+    url("../images/workbench/console-outer-frame-v3.png?v=3") center / 100% 100% no-repeat;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* ── Layer 1 · Mid wisps (replaces v2 corner ::before) ── */
+.workbench__cta--console::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    url("../images/workbench/console-layer-mid-v3.png?v=3") center / 100% 100% no-repeat;
+  opacity: 0.88;
+}
+
+/* Corners now in frame art — disable v2 ::after */
+.workbench__cta--console::after {
+  display: none;
+}
+
+/* ── Layer 3 · Note line (above wisps, below nothing) ── */
+.workbench__cta--console .workbench__cta-note {
+  position: relative;
+  z-index: 2;
+  margin-bottom: clamp(10px, 1.4vh, 14px);
+  color: var(--vn-text-muted, rgba(255, 255, 255, 0.62));
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 12px rgba(143, 164, 200, 0.25);
+}
+
+/* ── Layer 2 · Button chrome + Layer 3 · button text ── */
+.workbench__cta--console .workbench__new-game {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: min(100%, 300px);
+  min-height: 62px;
+  padding: 14px 24px 12px;
+  border: none;
+  border-radius: 0;
+  clip-path: none;
+  background:
+    url("../images/workbench/console-start-btn-v3.png?v=3") center / 100% 100% no-repeat;
+  color: var(--on-accent, #1a1510);
+  cursor: pointer;
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.22),
+    0 0 20px var(--sakura-soft, rgba(216, 154, 165, 0.28));
+  transition:
+    transform var(--transition-base, 0.2s ease),
+    box-shadow var(--transition-base, 0.2s ease),
+    filter var(--transition-base, 0.2s ease);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .workbench__cta--console .workbench__new-game {
+    animation: console-cta-breathe-v3 5.2s ease-in-out infinite;
+  }
+
+  @keyframes console-cta-breathe-v3 {
+    0%,
+    100% {
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        0 0 14px var(--sakura-soft, rgba(216, 154, 165, 0.22)),
+        0 0 8px var(--sky-soft, rgba(143, 164, 200, 0.14));
+    }
+    50% {
+      box-shadow:
+        0 6px 22px rgba(0, 0, 0, 0.26),
+        0 0 26px var(--sakura-soft, rgba(216, 154, 165, 0.36)),
+        0 0 14px var(--sky-soft, rgba(143, 164, 200, 0.24));
+    }
+  }
+}
+
+.workbench__cta--console .workbench__new-game:hover:not(:disabled) {
+  transform: translateY(-1px) scale(1.02);
+  filter: brightness(1.04);
+  box-shadow:
+    0 8px 26px rgba(0, 0, 0, 0.28),
+    0 0 32px var(--sakura-soft, rgba(216, 154, 165, 0.42)),
+    0 0 18px var(--sky-soft, rgba(143, 164, 200, 0.3));
+}
+
+.workbench__cta--console .workbench__new-game:focus-visible {
+  outline: 2px solid var(--sky, #8fa4c8);
+  outline-offset: 4px;
+}
+
+.workbench__cta--console .new-game__row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.workbench__cta--console .new-game__row::before,
+.workbench__cta--console .new-game__row::after {
+  font-family: var(--font-brand-en);
+  font-size: clamp(14px, 1.8vh, 17px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(26, 21, 16, 0.68);
+  line-height: 1;
+}
+
+.workbench__cta--console .new-game__row::before {
+  content: "[";
+  margin-right: 2px;
+}
+
+.workbench__cta--console .new-game__row::after {
+  content: "]";
+  margin-left: 2px;
+}
+
+.workbench__cta--console .new-game__decor {
+  display: none;
+}
+
+.workbench__cta--console .new-game__zh {
+  font-family: "Noto Serif SC", var(--font-display-cn), serif;
+  font-size: clamp(17px, 2.2vh, 20px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--on-accent, #1a1510);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.workbench__cta--console .new-game__en {
+  font-family: "Cinzel", var(--font-display-en), serif;
+  font-size: clamp(9px, 1.1vh, 10px);
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(26, 21, 16, 0.58);
+}
+
+.workbench__cta--console .workbench__new-game.is-loading {
+  animation: none;
+  pointer-events: none;
+  opacity: 0.78;
+  filter: saturate(0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workbench__cta--console .workbench__new-game {
+    animation: none;
+  }
+
+  .workbench__cta--console .workbench__new-game:hover:not(:disabled) {
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .workbench__cta--console {
+    width: 100%;
+  }
+
+  .workbench__cta--console .workbench__new-game {
+    width: min(100%, 280px);
+  }
+}

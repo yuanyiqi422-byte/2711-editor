@@ -15,10 +15,10 @@ const HistoryPanel = (function () {
   };
 
   const STYLE_THUMBS = {
-    xianxia: "images/workbench/world-xianxia.png?v=12",
-    urban_romance: "images/workbench/world-urban-romance.png?v=12",
-    mystery: "images/workbench/world-mystery.png?v=12",
-    campus: "images/workbench/world-campus.png?v=12",
+    xianxia: "images/workbench/cloud-pavilion.png?v=14",
+    urban_romance: "images/workbench/city-terrace-cafe.png?v=14",
+    mystery: "images/workbench/rainy-library.png?v=14",
+    campus: "images/workbench/school-corridor.png?v=14",
   };
 
   let listEl = null;

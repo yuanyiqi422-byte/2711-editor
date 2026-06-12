@@ -3,9 +3,13 @@ from pydantic import BaseModel, Field
 from document_extract import MAX_CREATE_CHARS
 from models import GamePack, StylePreset
 
+_HISTORY_TEXT_KW: dict = {"min_length": 1}
+if MAX_CREATE_CHARS > 0:
+    _HISTORY_TEXT_KW["max_length"] = MAX_CREATE_CHARS
+
 
 class HistorySaveRequest(BaseModel):
-    text: str = Field(..., min_length=1, max_length=MAX_CREATE_CHARS)
+    text: str = Field(**_HISTORY_TEXT_KW)
     filename: str | None = None
     style: StylePreset = "urban_romance"
     title: str | None = None
@@ -31,6 +35,7 @@ class HistoryItem(BaseModel):
 
 class HistoryProgress(BaseModel):
     unlocked: list[dict] = Field(default_factory=list)
+    checkpoint: dict | None = None
 
 
 class HistoryDetail(BaseModel):

@@ -1,0 +1,9 @@
+# Deps for scripts/process-asset.py
+Pillow>=10.0.0
+# Icon/sticker cutouts (first run downloads ~176MB u2net model):
+rembg>=2.0.50
+onnxruntime
+opencv-python-headless
+pymatting
+pooch
+scikit-image

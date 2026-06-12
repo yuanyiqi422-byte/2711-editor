@@ -26,9 +26,9 @@ const MoodBackgrounds = (function () {
   };
 
   const STYLE_OVERLAY = {
-    xianxia: "linear-gradient(165deg, rgba(107,142,107,0.18), rgba(126,184,255,0.12))",
+    xianxia: "linear-gradient(165deg, rgba(155,122,212,0.18), rgba(122,107,158,0.12))",
     urban_romance: "linear-gradient(140deg, rgba(168,212,255,0.16), rgba(248,168,200,0.1))",
-    mystery: "linear-gradient(180deg, rgba(74,104,80,0.22), rgba(58,64,88,0.16))",
+    mystery: "linear-gradient(180deg, rgba(107,132,168,0.22), rgba(58,72,104,0.16))",
     campus: "linear-gradient(155deg, rgba(107,142,107,0.16), rgba(255,200,221,0.12))",
   };
 
@@ -69,10 +69,10 @@ const MoodBackgrounds = (function () {
     return "saturate(0.96) brightness(1)";
   }
 
-  function resolveScene(mood, style, imagePrompt) {
+  function resolveScene(mood, style, imagePrompt, context) {
     const moodKey = (mood || "neutral").toLowerCase();
     if (typeof SceneImages !== "undefined" && SceneImages.resolve) {
-      return SceneImages.resolve(moodKey, style, imagePrompt || "");
+      return SceneImages.resolve(moodKey, style, imagePrompt || "", context || null);
     }
     return {
       path: null,
@@ -81,14 +81,14 @@ const MoodBackgrounds = (function () {
     };
   }
 
-  function apply(container, mood, style, imagePrompt) {
+  function apply(container, mood, style, imagePrompt, context) {
     const layers = getLayers(container);
     if (!layers.root) return;
 
     const moodKey = MOODS[mood] ? mood : "neutral";
     const gradient = gradientFor(moodKey, style);
     const filter = filterFor(moodKey);
-    const resolved = resolveScene(moodKey, style, imagePrompt);
+    const resolved = resolveScene(moodKey, style, imagePrompt, context);
     const veil = resolved.veil || "linear-gradient(180deg, rgba(250,246,237,0.08) 0%, rgba(58,72,58,0.14) 100%)";
 
     const next = activeLayerId === "a" ? layers.b : layers.a;

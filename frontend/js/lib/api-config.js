@@ -2,17 +2,45 @@
 
 (function (global) {
 
-  var BACKEND_COLD_START_MSG =
-    "故事解析服务正在唤醒（Render 免费实例冷启动约 30～60 秒）。请稍候再试，或刷新页面。";
+  function isLocalDevHost() {
+    if (typeof global.location === "undefined") return false;
+    var loc = global.location;
+    var h = loc.hostname;
+    if (h === "localhost" || h === "127.0.0.1" || h === "[::1]" || h === "::1") return true;
+    if (loc.protocol === "file:") return true;
+    var port = loc.port || (loc.protocol === "https:" ? "443" : "80");
+    if (port === "8010") return true;
+    if (h && h.slice(-6) === ".local") return true;
+    return false;
+  }
 
-  var BACKEND_PROXY_MISCONFIG_MSG =
-    "API 代理未生效：/api 返回了网页而非接口数据。请确认 Netlify 已设置 API_BACKEND_URL 并重新部署前端。";
+  function localBackendDownMessage() {
+    return "本地后端未响应，请运行 start.bat 或 restart-server.ps1";
+  }
 
-  var BACKEND_UNAVAILABLE_MSG =
-    "故事解析服务暂时不可用。请稍后重试；若持续失败，请检查 Render 后端是否在线。";
+  function backendColdStartMessage() {
+    return isLocalDevHost()
+      ? localBackendDownMessage()
+      : "故事解析服务正在唤醒（Render 免费实例冷启动约 30～60 秒）。请稍候再试，或刷新页面。";
+  }
 
-  var STREAM_INCOMPLETE_MSG =
-    "生成流意外结束，未收到完整游戏数据。常见原因：网络中断、Netlify 代理截断长连接，或 AI 接口超时。请刷新后重试；若仍失败，稍等 Render 唤醒后再试。";
+  function backendUnavailableMessage() {
+    return isLocalDevHost()
+      ? localBackendDownMessage()
+      : "故事解析服务暂时不可用。请稍后重试；若持续失败，请检查 Render 后端是否在线。";
+  }
+
+  function backendProxyMisconfigMessage() {
+    return isLocalDevHost()
+      ? "API 请求返回了网页而非接口数据。请通过 http://127.0.0.1:8010 访问，不要直接双击打开 frontend/index.html。"
+      : "API 代理未生效：/api 返回了网页而非接口数据。请确认 Netlify 已设置 API_BACKEND_URL 并重新部署前端。";
+  }
+
+  function streamIncompleteMessage() {
+    return isLocalDevHost()
+      ? "生成流意外结束，未收到完整游戏数据。常见原因：网络中断、AI 接口超时，或本地后端被中断。请刷新后重试；若仍失败，检查 backend/.env 中的 AI_API_KEY。"
+      : "生成流意外结束，未收到完整游戏数据。常见原因：网络中断、Netlify 代理截断长连接，或 AI 接口超时。请刷新后重试；若仍失败，稍等 Render 唤醒后再试。";
+  }
 
 
 
@@ -26,10 +54,26 @@
 
 
 
+  var LOCAL_BACKEND_BASE = "http://127.0.0.1:8010";
+
+  function localBackendBase() {
+    return LOCAL_BACKEND_BASE;
+  }
+
+  function needsLocalBackendBase() {
+    if (!isLocalDevHost()) return false;
+    if (typeof global.location === "undefined") return false;
+    var loc = global.location;
+    if (loc.protocol === "file:") return true;
+    var port = loc.port || (loc.protocol === "https:" ? "443" : "80");
+    return port !== "8010";
+  }
+
   function getBase() {
-
+    // Local dev: same-origin on :8010; otherwise talk to the local FastAPI server.
+    if (needsLocalBackendBase()) return normalizeBase(localBackendBase());
+    if (isLocalDevHost()) return "";
     return normalizeBase(global.__API_BASE__ || "");
-
   }
 
 
@@ -98,17 +142,109 @@
 
     if (res && isTransientBackendStatus(res.status)) {
 
-      return new Error(BACKEND_COLD_START_MSG);
+      return new Error(backendColdStartMessage());
 
     }
 
     if (res && res.ok) {
 
-      return new Error(BACKEND_PROXY_MISCONFIG_MSG);
+      return new Error(backendProxyMisconfigMessage());
 
     }
 
-    return new Error(BACKEND_UNAVAILABLE_MSG);
+    return new Error(backendUnavailableMessage());
+
+  }
+
+
+
+  function isRetryableFetchError(err) {
+
+    if (!err) return false;
+
+    if (
+
+      global.ApiErrors &&
+
+      global.ApiErrors.isNetworkFetchError &&
+
+      global.ApiErrors.isNetworkFetchError(err)
+
+    ) {
+
+      return true;
+
+    }
+
+    const m = err.message ? String(err.message) : String(err);
+
+    const lower = m.toLowerCase();
+
+    return (
+
+      lower === "failed to fetch" ||
+
+      lower.indexOf("networkerror") !== -1 ||
+
+      lower.indexOf("network request failed") !== -1 ||
+
+      lower.indexOf("load failed") !== -1 ||
+
+      (err.name === "TypeError" && lower.indexOf("fetch") !== -1)
+
+    );
+
+  }
+
+
+
+  function attachFetchTimeout(userSignal, timeoutMs) {
+
+    if (!timeoutMs || timeoutMs <= 0) return null;
+
+    const controller = new AbortController();
+
+    const state = { timedOut: false };
+
+    const timer = setTimeout(function () {
+
+      state.timedOut = true;
+
+      controller.abort();
+
+    }, timeoutMs);
+
+    function cleanup() {
+
+      clearTimeout(timer);
+
+    }
+
+    if (userSignal) {
+
+      if (userSignal.aborted) {
+
+        cleanup();
+
+        controller.abort(userSignal.reason);
+
+        return { signal: controller.signal, cleanup: cleanup, state: state };
+
+      }
+
+      userSignal.addEventListener("abort", function () {
+
+        cleanup();
+
+        controller.abort(userSignal.reason);
+
+      }, { once: true });
+
+    }
+
+    controller.signal.addEventListener("abort", cleanup, { once: true });
+
+    return { signal: controller.signal, cleanup: cleanup, state: state };
 
   }
 
@@ -122,29 +258,79 @@
 
     const delayMs = opts.delayMs != null ? opts.delayMs : 12000;
 
+    const timeoutMs = opts.timeoutMs != null ? opts.timeoutMs : 0;
+
+    const retryNetwork = opts.retryNetwork != null ? opts.retryNetwork : true;
+
     let lastRes = null;
+
+    let lastErr = null;
 
     for (let attempt = 0; attempt <= retries; attempt++) {
 
-      const res = await apiFetch(path, init);
+      const timeoutCtx = attachFetchTimeout(init && init.signal, timeoutMs);
 
-      lastRes = res;
+      const fetchInit = init ? Object.assign({}, init) : {};
 
-      const transient = isTransientBackendStatus(res.status);
+      if (timeoutCtx) fetchInit.signal = timeoutCtx.signal;
 
-      const html = isLikelyHtmlResponse(res);
+      try {
 
-      if (attempt < retries && (transient || html)) {
+        const res = await apiFetch(path, fetchInit);
 
-        await sleep(delayMs);
+        if (timeoutCtx) timeoutCtx.cleanup();
 
-        continue;
+        lastRes = res;
+
+        const transient = isTransientBackendStatus(res.status);
+
+        const html = isLikelyHtmlResponse(res);
+
+        if (attempt < retries && (transient || html)) {
+
+          await sleep(delayMs);
+
+          continue;
+
+        }
+
+        return res;
+
+      } catch (err) {
+
+        if (timeoutCtx) timeoutCtx.cleanup();
+
+        lastErr = err;
+
+        const timedOut = timeoutCtx && timeoutCtx.state.timedOut;
+
+        const network = retryNetwork && isRetryableFetchError(err);
+
+        if (attempt < retries && (network || timedOut)) {
+
+          await sleep(delayMs);
+
+          continue;
+
+        }
+
+        if (timedOut) {
+
+          const timeoutErr = new Error("连接超时，本地后端可能仍在启动");
+
+          timeoutErr.cause = "timeout";
+
+          throw timeoutErr;
+
+        }
+
+        throw err;
 
       }
 
-      return res;
-
     }
+
+    if (lastErr) throw lastErr;
 
     return lastRes;
 
@@ -316,13 +502,21 @@
 
     ensureSseResponse: ensureSseResponse,
 
-    backendUnavailableMessage: BACKEND_UNAVAILABLE_MSG,
+    isLocalDev: isLocalDevHost,
 
-    backendColdStartMessage: BACKEND_COLD_START_MSG,
+    localBackendDownMessage: localBackendDownMessage,
 
-    backendProxyMisconfigMessage: BACKEND_PROXY_MISCONFIG_MSG,
+    localBackendBase: localBackendBase,
 
-    streamIncompleteMessage: STREAM_INCOMPLETE_MSG,
+    needsLocalBackendBase: needsLocalBackendBase,
+
+    backendUnavailableMessage: backendUnavailableMessage,
+
+    backendColdStartMessage: backendColdStartMessage,
+
+    backendProxyMisconfigMessage: backendProxyMisconfigMessage,
+
+    streamIncompleteMessage: streamIncompleteMessage,
 
   };
 

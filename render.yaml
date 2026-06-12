@@ -16,4 +16,4 @@ services:
       - key: AI_API_KEY
         sync: false
       - key: CORS_ORIGINS
-        value: https://2711editor.netlify.app,https://2711editor.netlify.app/
+        value: https://2711editor.netlify.app,https://2711editor.pages.dev,https://2711editor.pages.dev/

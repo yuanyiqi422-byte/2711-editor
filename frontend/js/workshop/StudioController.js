@@ -2,6 +2,29 @@
  * StudioController — 创作工坊编排入口
  */
 (function (global) {
+  async function trySharedPlay() {
+    if (typeof ShareWorld === "undefined" || typeof NarrativeGame === "undefined") return false;
+    const token = ShareWorld.getPlayTokenFromUrl();
+    if (!token) return false;
+    try {
+      const data = await ShareWorld.loadSharedGame(token);
+      if (!data.game || !data.game.nodes) {
+        throw new Error("分享内容不完整");
+      }
+      ShareWorld.clearPlayParam();
+      NarrativeGame.startShared(data.game, data.text || "");
+      return true;
+    } catch (err) {
+      console.warn("shared play", err);
+      const errEl = document.getElementById("studio-error");
+      if (errEl) {
+        errEl.hidden = false;
+        errEl.textContent = err.message || "分享链接无效";
+      }
+      return false;
+    }
+  }
+
   function initStudio() {
     const studioError = document.getElementById("studio-error");
     let currentHistoryId = null;
@@ -26,8 +49,17 @@
       return currentHistoryId;
     }
 
+    if (typeof MusicPicker !== "undefined") {
+      MusicPicker.init();
+    }
+
     const styles = StylePresets.create({
       initialStyle: "urban_romance",
+      onChange: function (style) {
+        if (typeof MusicPicker !== "undefined" && MusicPicker.suggestForStyle) {
+          MusicPicker.suggestForStyle(style);
+        }
+      },
     });
 
     const editor = EditorInput.create({
@@ -39,6 +71,8 @@
       uploadProgressFillEl: document.getElementById("upload-progress-fill"),
       uploadLabelEl: document.querySelector(".workshop-btn--upload"),
       uploadFormatsEl: document.getElementById("upload-formats"),
+      uploadLimitsEl: document.getElementById("upload-limits"),
+      clearBtnEl: document.getElementById("manuscript-clear-btn"),
       onboardEl: document.getElementById("workshop-onboard"),
       getSelectedStyle: function () { return styles.getStyle(); },
       onHistorySave: saveHistory,
@@ -50,38 +84,39 @@
       fillEl: document.getElementById("pipeline-fill"),
       pctEl: document.getElementById("pipeline-pct"),
       msgEl: document.getElementById("pipeline-msg"),
-      bibleEl: document.getElementById("bible-preview"),
+      elapsedEl: document.getElementById("pipeline-elapsed"),
+      studioEl: document.getElementById("studio"),
     });
 
     CreateFlow.create({
       createBtnEl: document.getElementById("create-btn"),
-      demoBtnEl: document.getElementById("demo-btn"),
-      heroDemoBtnEl: document.getElementById("hero-demo-btn"),
+      demoBtnEl: document.getElementById("nav-demo-btn"),
+      heroDemoBtnEl: null,
       editor: editor,
       styles: styles,
       pipeline: pipeline,
       onError: setError,
       onHistorySave: saveHistory,
+      onEntryId: function (id) { currentHistoryId = id; },
     });
 
     NarrativeGame.init({
       onBack: function () {
-        if (typeof LandingPages !== "undefined") {
-          LandingPages.goTo("create");
+        if (currentHistoryId) {
+          HistoryPanel.touch(currentHistoryId);
         }
       },
-      onEnter: function () {
-        /* 全屏分页模式下无需记录滚动位置 */
-      },
+      onEnter: function () {},
     });
 
     HistoryPanel.init({
       getStyle: function () { return styles.getStyle(); },
       setStyle: function (style) { styles.setStyle(style); },
       setText: function (text) { editor.setText(text); },
-      onPlay: function (gamePack, text) {
+      onPlay: function (gamePack, text, id) {
         setError("");
-        NarrativeGame.start(gamePack, text || "");
+        currentHistoryId = id;
+        NarrativeGame.start(gamePack, text || "", { entryId: id });
       },
       onEntryLoaded: function (id) {
         currentHistoryId = id;
@@ -91,6 +126,8 @@
         else editor.setUploadStatus(msg, type === "ok" ? "ok" : type);
       },
     });
+
+    trySharedPlay();
   }
 
   global.StudioController = { init: initStudio };

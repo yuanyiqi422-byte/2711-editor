@@ -1,4 +1,4 @@
-"""本地快速验证 PDF 采样与截取（无需启动服务）。"""
+"""本地快速验证 PDF 提取与截取（无需启动服务）。"""
 
 from __future__ import annotations
 
@@ -6,10 +6,9 @@ import io
 import sys
 
 from document_extract import (
-    LLM_INPUT_CHARS,
-    MAX_PDF_PAGES,
     PDF_PAGE_HARD_CAP,
     extract_from_bytes,
+    prepare_llm_text,
     smart_truncate,
     _select_pdf_page_indices,
 )
@@ -28,14 +27,12 @@ def _make_pdf(page_count: int) -> bytes:
     return buf.getvalue()
 
 
-def test_page_sampling() -> None:
-    over = PDF_PAGE_HARD_CAP + 500
-    indices, note = _select_pdf_page_indices(over, 0)
-    assert len(indices) <= PDF_PAGE_HARD_CAP
-    assert 0 in indices
-    assert over - 1 in indices
-    assert note
-    print("page_sampling ok:", len(indices), "pages,", note[:60], "...")
+def test_page_sampling_unlimited() -> None:
+    assert PDF_PAGE_HARD_CAP == 0
+    indices, note = _select_pdf_page_indices(500, 0)
+    assert len(indices) == 500
+    assert note == ""
+    print("page_sampling_unlimited ok:", len(indices), "pages")
 
 
 def test_extract_long_pdf() -> None:
@@ -46,6 +43,7 @@ def test_extract_long_pdf() -> None:
     assert result.char_count > 1000
     assert len(result.text) == result.char_count
     assert result.llm_char_count == result.char_count
+    assert result.truncated is False
     print(
         "extract_long_pdf ok:",
         result.pages_processed,
@@ -53,8 +51,6 @@ def test_extract_long_pdf() -> None:
         result.total_pages,
         "chars",
         result.char_count,
-        "truncated",
-        result.truncated,
     )
 
 
@@ -70,9 +66,17 @@ def test_chapter_truncate() -> None:
     print("chapter_truncate ok:", len(out), note[:80], "...")
 
 
+def test_prepare_llm_unlimited() -> None:
+    text = "字" * 100_000
+    out, truncated, note = prepare_llm_text(text)
+    assert not truncated
+    assert len(out) == len(text)
+    print("prepare_llm_unlimited ok:", len(out))
+
+
 if __name__ == "__main__":
-    test_page_sampling()
+    test_page_sampling_unlimited()
     test_extract_long_pdf()
     test_chapter_truncate()
-    print("LLM_INPUT_CHARS=", LLM_INPUT_CHARS)
+    test_prepare_llm_unlimited()
     print("all passed")

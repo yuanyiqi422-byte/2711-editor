@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import io
 
+import pytest
+
 from document_extract import (
-    LLM_INPUT_CHARS,
     PDF_PAGE_HARD_CAP,
     _select_pdf_page_indices,
     extract_from_bytes,
+    prepare_llm_text,
     smart_truncate,
 )
 
@@ -26,12 +28,19 @@ def _make_pdf(page_count: int) -> bytes:
     return buf.getvalue()
 
 
-def test_page_sampling() -> None:
-    over = PDF_PAGE_HARD_CAP + 500
-    indices, note = _select_pdf_page_indices(over, 0)
-    assert len(indices) <= PDF_PAGE_HARD_CAP
+def test_page_sampling_unlimited_by_default() -> None:
+    assert PDF_PAGE_HARD_CAP == 0
+    indices, note = _select_pdf_page_indices(500, 0)
+    assert len(indices) == 500
+    assert note == ""
+
+
+def test_page_sampling_when_capped(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("document_extract.PDF_PAGE_HARD_CAP", 200)
+    indices, note = _select_pdf_page_indices(500, 0)
+    assert len(indices) <= 200
     assert 0 in indices
-    assert over - 1 in indices
+    assert 499 in indices
     assert note
 
 
@@ -43,6 +52,7 @@ def test_extract_long_pdf() -> None:
     assert result.char_count > 1000
     assert len(result.text) == result.char_count
     assert result.llm_char_count == result.char_count
+    assert result.truncated is False
 
 
 def test_chapter_truncate() -> None:
@@ -54,5 +64,9 @@ def test_chapter_truncate() -> None:
     assert len(out) <= 5000
 
 
-def test_llm_input_chars_is_int() -> None:
-    assert isinstance(LLM_INPUT_CHARS, int)
+def test_prepare_llm_text_unlimited_by_default() -> None:
+    text = "字" * 200_000
+    out, truncated, note = prepare_llm_text(text)
+    assert truncated is False
+    assert note == ""
+    assert len(out) == len(text)

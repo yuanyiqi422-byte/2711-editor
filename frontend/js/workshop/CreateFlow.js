@@ -2,15 +2,25 @@
  * CreateFlow — 故事转化与 SSE 生成流程
  */
 (function (global) {
-  const { formatApiDetail, errorMessage, friendlyValidationMessage } = global.ApiErrors;
+  const { formatApiDetail, errorMessage, friendlyValidationMessage, isTimeoutError, CREATE_PHASE_LABELS } =
+    global.ApiErrors;
+  const resolvePipelineStep =
+    global.PipelineView && global.PipelineView.resolveStep
+      ? global.PipelineView.resolveStep
+      : function (pct, explicitStep) {
+          if (pct > 52 || pct >= 80) return "scene";
+          if (pct >= 52) return "branch";
+          if (pct >= 32) return "weave";
+          return explicitStep || "read";
+        };
   const consumeSSE = global.SseClient.consume;
 
-  function reportCreateError(err, context) {
+  function reportCreateError(err, context, createContext) {
     const raw =
       (err && err.message) ||
       (err && err.detail != null ? formatApiDetail(err.detail) : "") ||
       String(err || "");
-    const friendly = errorMessage(err, "生成失败");
+    const friendly = errorMessage(err, "生成失败", createContext);
     if (raw && raw !== friendly) {
       console.error("[CreateFlow] " + (context || "生成失败"), { raw: raw, friendly: friendly });
     } else {
@@ -34,7 +44,59 @@
     let createAbort = null;
     let elapsedTimer = null;
     let lastProgressAt = 0;
+    let lastProgressPct = -1;
+    let lastProgressMsg = "";
+    let lastPipelineStep = "read";
     let lastEntryId = null;
+    let createEtaLabel = "";
+    let createEtaScale = null;
+
+    function estimateWaitLabel(charCount) {
+      if (charCount < 1500) return "约 1–2 分钟";
+      if (charCount < 4000) return "约 1–3 分钟";
+      if (charCount < 8000) return "约 2–4 分钟";
+      if (charCount < 15000) return "约 3–6 分钟";
+      return "约 5–8 分钟";
+    }
+
+    function resolveEtaLabel(eta) {
+      if (!eta) return "";
+      if (typeof eta === "object") return eta.label || "";
+      return String(eta);
+    }
+
+    function applyEtaPayload(eta) {
+      if (!eta) return;
+      if (typeof eta === "object") {
+        createEtaScale = eta;
+        createEtaLabel = eta.label || createEtaLabel;
+        return;
+      }
+      createEtaLabel = String(eta);
+    }
+
+    function parseEtaRange(label) {
+      const m = /(\d+)[–-](\d+)/.exec(label || "");
+      if (!m) return null;
+      return { min: parseInt(m[1], 10), max: parseInt(m[2], 10) };
+    }
+
+    function formatElapsed(sec) {
+      if (sec < 60) return sec + " 秒";
+      return Math.floor(sec / 60) + " 分 " + (sec % 60) + " 秒";
+    }
+
+    function inferPipelineStep(pct, explicitStep) {
+      return resolvePipelineStep(pct, explicitStep);
+    }
+
+    function markProgressActivity(pct, msg, step) {
+      const now = Date.now();
+      lastProgressAt = now;
+      if (pct !== lastProgressPct) lastProgressPct = pct;
+      if (msg && msg !== lastProgressMsg) lastProgressMsg = msg;
+      lastPipelineStep = inferPipelineStep(pct, step);
+    }
 
     function setLoading(loading) {
       isRunning = loading;
@@ -55,20 +117,48 @@
       }
     }
 
-    function startElapsedTimer() {
+    function touchStreamActivity() {
+      /* keepalive / raw bytes — does not reset progress-idle timer */
+    }
+
+    function buildElapsedNote(sec) {
+      let note = "已等待 " + formatElapsed(sec);
+      const range = parseEtaRange(createEtaLabel);
+      if (!range) {
+        if (createEtaLabel && sec < 20) note += " · 预计总耗时 " + createEtaLabel;
+        return note;
+      }
+      const elapsedMin = sec / 60;
+      if (elapsedMin > range.max + 2) {
+        note += " · 略长于预期，仍在生成中";
+        return note;
+      }
+      const remainMin = Math.max(0, Math.ceil(range.min - elapsedMin));
+      const remainMax = Math.max(remainMin, Math.ceil(range.max - elapsedMin));
+      if (elapsedMin < range.min * 0.3 && sec < 20) {
+        note += " · 预计总耗时 " + createEtaLabel;
+      } else if (remainMax > 0) {
+        note += " · 预计还需 " + remainMin + "–" + remainMax + " 分钟";
+      } else {
+        note += " · 即将完成";
+      }
+      return note;
+    }
+
+    function startElapsedTimer(charCount) {
       clearElapsedTimer();
+      pipeline.setElapsed("");
       const start = Date.now();
-      lastProgressAt = start;
+      createEtaLabel = estimateWaitLabel(charCount || 0);
+      createEtaScale = null;
+      lastProgressPct = -1;
+      lastProgressMsg = "";
+      lastPipelineStep = "read";
+      lastProgressAt = Date.now();
+      pipeline.setElapsed(buildElapsedNote(0));
       elapsedTimer = setInterval(function () {
         const sec = Math.floor((Date.now() - start) / 1000);
-        const idle = Math.floor((Date.now() - lastProgressAt) / 1000);
-        let note = "已等待 " + sec + " 秒";
-        if (idle >= 45) {
-          note += " · 长故事可能需要数分钟，请稍候";
-        } else if (idle >= 20) {
-          note += " · 命运分支正在编织";
-        }
-        pipeline.setElapsed(note);
+        pipeline.setElapsed(buildElapsedNote(sec));
       }, 1000);
     }
 
@@ -107,40 +197,34 @@
       onError("");
 
       const text = editor.getText();
-      const maxCreateChars = editor.getMaxCreateChars();
-      const llmEffectiveChars = editor.getLlmEffectiveChars();
 
       if (text.length < 80) {
         onError("文本太短，请至少输入 80 字。可粘贴故事、上传文件，或试玩 Demo。");
         return;
       }
-      if (maxCreateChars > 0 && text.length > maxCreateChars) {
-        onError(
-          "文本过长（" + text.length.toLocaleString() + " 字）。单次提交上限 " +
-          maxCreateChars.toLocaleString() + " 字，请删减或按章节拆分。"
-        );
-        return;
-      }
-
-      const gate = await ProtagonistGate.show(text);
-      if (!gate) return;
 
       pipeline.reset();
       setLoading(true);
-      startElapsedTimer();
-      const createHint =
-        llmEffectiveChars > 0 && text.length > llmEffectiveChars
-          ? "全文 " + text.length.toLocaleString() + " 字 · 智能采样 " +
-            llmEffectiveChars.toLocaleString() + " 字…"
-          : "正在构筑世界……";
-      pipeline.setProgress(2, createHint, { step: "read" });
+      startElapsedTimer(text.length);
+      pipeline.setProgress(2, "正在构筑世界……", {
+        step: "read",
+        eta: createEtaLabel,
+        scale: createEtaScale,
+        charCount: text.length,
+      });
 
+      let handledTimeout = false;
       try {
         const healthFetch =
           global.ApiConfig && global.ApiConfig.apiFetchWithRetry
             ? global.ApiConfig.apiFetchWithRetry.bind(global.ApiConfig)
             : fetch;
-        const healthRes = await healthFetch("/api/health", undefined, { retries: 2, delayMs: 15000 });
+        const healthRes = await healthFetch("/api/health", undefined, {
+          retries: 3,
+          delayMs: 8000,
+          timeoutMs: 25000,
+          retryNetwork: true,
+        });
         const health = global.ApiConfig && global.ApiConfig.readJsonOrApiError
           ? await global.ApiConfig.readJsonOrApiError(healthRes, "无法连接故事解析服务")
           : await healthRes.json().catch(function () { return {}; });
@@ -165,17 +249,22 @@
         }
 
         let gamePack = null;
-        const sseMeta = await consumeSSE(res, function (event, data) {
+        const sseMeta = await consumeSSE(
+          res,
+          function (event, data) {
+          touchStreamActivity();
           if (event === "status") {
-            lastProgressAt = Date.now();
-            let msg = data.msg || "处理中…";
-            let step = data.step || "read";
-            if (data.progress >= 55 && !data.step) step = "branch";
-            if (data.progress >= 75 && !data.step) step = "scene";
-            pipeline.setProgress(data.progress || 0, msg, {
-              step: step,
+            const pct = data.progress || 0;
+            const msg = data.msg || "处理中…";
+            markProgressActivity(pct, msg, data.step);
+            applyEtaPayload(data.eta);
+            pipeline.setProgress(pct, msg, {
+              step: inferPipelineStep(pct, data.step),
               branch_count: data.branch_count,
               ending_count: data.ending_count,
+              eta: resolveEtaLabel(data.eta) || createEtaLabel,
+              scale: createEtaScale,
+              charCount: text.length,
             });
           }
           if (event === "done") {
@@ -186,7 +275,12 @@
           }
           if (event === "error") {
             const detail = data.detail || data;
-            const friendly = formatApiDetail(detail) || "生成失败";
+            const rawDetail = formatApiDetail(detail) || "生成失败";
+            const friendly = errorMessage(
+              { message: rawDetail },
+              "生成失败",
+              { phase: lastPipelineStep }
+            );
             if (data.debug) {
               console.error("[CreateFlow] SSE error debug:", data.debug);
             } else if (typeof detail === "string" && friendlyValidationMessage(detail)) {
@@ -194,11 +288,16 @@
             }
             throw new Error(friendly);
           }
-        }, createAbort.signal);
+        },
+          createAbort.signal,
+          touchStreamActivity
+        );
 
         if (!gamePack) {
           const incompleteMsg =
-            (global.ApiConfig && global.ApiConfig.streamIncompleteMessage) ||
+            (global.ApiConfig && global.ApiConfig.streamIncompleteMessage
+              ? global.ApiConfig.streamIncompleteMessage()
+              : "") ||
             "生成流意外结束，未收到完整游戏数据。请检查网络是否稳定、AI 接口是否可用后重试。";
           if (sseMeta && sseMeta.eventCount > 0 && !sseMeta.receivedError) {
             console.error("[CreateFlow] SSE ended early", sseMeta);
@@ -207,16 +306,6 @@
         }
         if (!gamePack.nodes || !Object.keys(gamePack.nodes).length) {
           throw new Error("未生成有效场景，请缩短文本后重试。");
-        }
-
-        if (gate.originalName && gate.protagonistName) {
-          const applied = ProtagonistGate.applyNameToPack(
-            gamePack,
-            gate.originalName,
-            gate.protagonistName
-          );
-          gamePack = applied.pack;
-          gamePack.protagonist_name = applied.protagonistName;
         }
 
         fetchCover(gamePack)
@@ -255,20 +344,38 @@
         }
 
         pipeline.finish();
-        NarrativeGame.start(gamePack, text, {
-          entryId: lastEntryId,
-          protagonistName: gamePack.protagonist_name,
-        });
+        NarrativeGame.start(gamePack, text, { entryId: lastEntryId });
       } catch (err) {
         if (err && err.name === "AbortError") {
           onError("已取消生成");
+          pipeline.reset();
         } else {
-          onError(reportCreateError(err, "生成流程异常"));
+          const createContext = { phase: lastPipelineStep, pct: lastProgressPct };
+          const friendly = reportCreateError(err, "生成流程异常", createContext);
+          if (isTimeoutError(err, friendly) && pipeline.showTimeoutRetry) {
+            handledTimeout = true;
+            onError("");
+            const phaseLabel = CREATE_PHASE_LABELS[lastPipelineStep] || "";
+            const retryMsg = phaseLabel
+              ? phaseLabel + "阶段超时。生成超时，可点击重试"
+              : "生成超时，可点击重试";
+            pipeline.showTimeoutRetry({
+              message: retryMsg,
+              onRetry: function () {
+                onError("");
+                startCreate();
+              },
+            });
+          } else {
+            onError(friendly);
+            pipeline.reset();
+          }
         }
-        pipeline.reset();
       } finally {
         clearElapsedTimer();
-        pipeline.setElapsed("");
+        if (!handledTimeout) {
+          pipeline.setElapsed("");
+        }
         setLoading(false);
       }
     }

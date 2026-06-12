@@ -25,31 +25,35 @@ def _env_int(name: str, default: str, *, zero_unlimited: bool = False) -> int:
     return value
 
 
-MAX_UPLOAD_BYTES = _env_int("MAX_UPLOAD_MB", "50") * 1024 * 1024
+_max_upload_mb = _env_int("MAX_UPLOAD_MB", "0", zero_unlimited=True)
+MAX_UPLOAD_BYTES = _max_upload_mb * 1024 * 1024 if _max_upload_mb > 0 else 0
 
 
 def upload_max_mb() -> int:
-    """Return max upload size in MB for health API."""
+    """Return max upload size in MB for health API (0 = unlimited)."""
+    if MAX_UPLOAD_BYTES <= 0:
+        return 0
     return MAX_UPLOAD_BYTES // (1024 * 1024)
 
 
-MAX_EXTRACT_CHARS = _env_int("MAX_EXTRACT_CHARS", "10000000")
-# 创建/展开 API 正文硬上限（与提取上限独立，默认与 MAX_EXTRACT_CHARS 对齐）
-MAX_CREATE_CHARS = _env_int("MAX_CREATE_CHARS", str(MAX_EXTRACT_CHARS))
-# 0 = 不截取；>0 时仅影响「生成游戏」API，上传后文本框显示全文
+# 0 = 不限制
+MAX_EXTRACT_CHARS = _env_int("MAX_EXTRACT_CHARS", "0", zero_unlimited=True)
+MAX_CREATE_CHARS = _env_int("MAX_CREATE_CHARS", "0", zero_unlimited=True)
+# 0 = 全文送入 LLM，不智能采样；>0 为显式采样上限
 LLM_INPUT_CHARS = _env_int("LLM_INPUT_CHARS", "0", zero_unlimited=True)
-# LLM_INPUT_CHARS=0 时，超过此字数则在「开始转化」前自动智能采样（不拒绝请求）
-LLM_MODEL_SAFE_CHARS = _env_int("LLM_MODEL_SAFE_CHARS", "120000")
+LLM_MODEL_SAFE_CHARS = _env_int("LLM_MODEL_SAFE_CHARS", "0", zero_unlimited=True)
 
 
 def effective_llm_limit() -> int:
-    """送入 LLM 的目标字数上限（用于智能采样，非 API 拒绝）。"""
+    """送入 LLM 的字数上限；0 表示不截取。"""
     if LLM_INPUT_CHARS > 0:
         return LLM_INPUT_CHARS
     return LLM_MODEL_SAFE_CHARS
-# 0 = 处理全部 PDF 页（硬上限 PDF_PAGE_HARD_CAP 防 OCR 失控）
+
+
+# 0 = 处理全部 PDF 页，无页数上限
 MAX_PDF_PAGES = _env_int("MAX_PDF_PAGES", "0", zero_unlimited=True)
-PDF_PAGE_HARD_CAP = _env_int("PDF_PAGE_HARD_CAP", "2000")
+PDF_PAGE_HARD_CAP = _env_int("PDF_PAGE_HARD_CAP", "0", zero_unlimited=True)
 OCR_MIN_CHARS_PER_PAGE = 40
 _CHAPTER_HEADING = re.compile(
     r"^\s*(?:第[零一二三四五六七八九十百千万0-9]+[章节回幕]|Chapter\s+\d+)",
@@ -99,7 +103,7 @@ class ExtractResult:
 def validate_upload(filename: str, size: int) -> str:
     if size <= 0:
         raise ExtractError("文件为空。")
-    if size > MAX_UPLOAD_BYTES:
+    if MAX_UPLOAD_BYTES > 0 and size > MAX_UPLOAD_BYTES:
         mb = MAX_UPLOAD_BYTES // (1024 * 1024)
         raise ExtractError(f"文件超过 {mb} MB 上限，请拆分章节后分别上传。")
     ext = Path(filename or "").suffix.lower()
@@ -128,6 +132,40 @@ def _find_chapter_spans(text: str) -> list[tuple[int, int, str]]:
         end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
         spans.append((start, end, m.group(0).strip()[:48]))
     return spans
+
+
+def segment_text_for_slots(text: str, slot_count: int) -> list[str]:
+    """将正文切成 slot_count 段；优先按章节均匀分组，否则按字数均分。"""
+    body = text.strip()
+    if not body or slot_count <= 0:
+        return []
+    if slot_count == 1:
+        return [body]
+
+    spans = _find_chapter_spans(body)
+    if len(spans) >= slot_count:
+        chapter_count = len(spans)
+        groups: list[list[int]] = [[] for _ in range(slot_count)]
+        for i in range(chapter_count):
+            group_idx = min(int(i * slot_count / chapter_count), slot_count - 1)
+            groups[group_idx].append(i)
+        parts: list[str] = []
+        for group in groups:
+            if not group:
+                parts.append("")
+                continue
+            start = spans[group[0]][0]
+            end = spans[group[-1]][1]
+            parts.append(body[start:end].strip())
+        return parts
+
+    size = max(1, len(body) // slot_count)
+    parts: list[str] = []
+    for i in range(slot_count):
+        start = i * size
+        end = len(body) if i == slot_count - 1 else (i + 1) * size
+        parts.append(body[start:end].strip())
+    return parts
 
 
 def _truncate_by_chapters(text: str, max_chars: int) -> tuple[str, bool, str] | None:
@@ -228,14 +266,19 @@ def smart_truncate(text: str, max_chars: int) -> tuple[str, bool, str]:
 
 
 def _effective_pdf_page_limit(max_pages: int) -> int:
+    """0 表示不限制页数。"""
     if max_pages <= 0:
+        if PDF_PAGE_HARD_CAP <= 0:
+            return 0
         return PDF_PAGE_HARD_CAP
+    if PDF_PAGE_HARD_CAP <= 0:
+        return max_pages
     return min(max_pages, PDF_PAGE_HARD_CAP)
 
 
 def _select_pdf_page_indices(page_count: int, max_pages: int) -> tuple[list[int], str]:
     limit = _effective_pdf_page_limit(max_pages)
-    if page_count <= limit:
+    if limit <= 0 or page_count <= limit:
         return list(range(page_count)), ""
 
     head_n = max(1, int(limit * 0.5))
@@ -574,15 +617,11 @@ def extract_from_bytes(data: bytes, filename: str) -> ExtractResult:
         raise ExtractError(f"未实现的格式：{ext}")
 
     text = _normalize_text(raw)
-    if len(text) > MAX_EXTRACT_CHARS:
+    if MAX_EXTRACT_CHARS > 0 and len(text) > MAX_EXTRACT_CHARS:
         text = text[:MAX_EXTRACT_CHARS]
         warnings.append(f"提取结果已限制在 {MAX_EXTRACT_CHARS:,} 字以内。")
 
     llm_body, llm_truncated, llm_note = prepare_llm_text(text)
-    if llm_truncated and llm_note:
-        warnings.append(
-            llm_note + " 文本框已载入全文；点击「开始转化」时将按上述字数送入 AI。"
-        )
 
     return ExtractResult(
         text=text,

@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
 title 2711编辑器 · 2711 Editor
 cd /d "%~dp0"
@@ -24,16 +24,26 @@ powershell -NoProfile -Command "Get-NetTCPConnection -LocalPort 8010 -State List
 cd /d "%~dp0backend"
 
 echo 正在安装/检查依赖…
+set "PY=python"
 if exist "%~dp0.venv\Scripts\python.exe" (
-  "%~dp0.venv\Scripts\python.exe" -m pip install -r requirements.txt -q
-  set "PY=%~dp0.venv\Scripts\python.exe"
+  "%~dp0.venv\Scripts\python.exe" -c "import sys" >nul 2>&1
+  if not errorlevel 1 (
+    "%~dp0.venv\Scripts\python.exe" -m pip install -r requirements.txt -q
+    set "PY=%~dp0.venv\Scripts\python.exe"
+  ) else (
+    echo [警告] .venv 已损坏（原 Python 已卸载），改用系统 python。可运行: python -m venv .venv
+    python -m pip install -r requirements.txt -q
+  )
 ) else (
   python -m pip install -r requirements.txt -q
-  set "PY=python"
 )
 
 echo.
-echo 启动中… http://127.0.0.1:8010
+echo [启动] 重置本地 API 配置…
+node "%~dp0scripts\inject-env-config.mjs" >nul 2>&1
+
+echo.
+echo 启动中： http://127.0.0.1:8010
 echo 后端代码与 .env 变更会自动 reload，无需手动重启
 echo 按 Ctrl+C 停止
 echo.

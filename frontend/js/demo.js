@@ -1,14 +1,21 @@
-/** 视觉小说 Demo — 点击继续 + 短句对白 */
+/** 视觉小说 Demo — 点击继续 + 短句对白 + 章节弹窗 */
 const DEMO_GAME_PACK = {
   title: "社团招新日 · Demo",
   style: "campus",
   style_label: "校园青春",
   synopsis: "视觉小说式试玩：点击继续翻句，仅在分支处做选择。",
   start_node_id: "booth",
+  characters: [
+    { name: "林知夏", role: "男主", trait: "温柔执着" },
+    { name: "社长", role: "配角", trait: "干练" },
+  ],
   nodes: {
     booth: {
       id: "booth",
       title: "话剧社摊位",
+      chapter: 1,
+      chapter_title: "第一章 · 社团招新",
+      chapter_blurb: "九月的阳光把操场晒得发白，你抱着报名表，故事从这里开始。",
       mood: "golden_dawn",
       image_prompt: "sunny school club fair tents students",
       lines: [
@@ -25,6 +32,9 @@ const DEMO_GAME_PACK = {
     script: {
       id: "script",
       title: "剧本最后一页",
+      chapter: 1,
+      chapter_title: "第一章 · 社团招新",
+      chapter_blurb: "",
       mood: "neutral",
       image_prompt: "open script notebook pencil note school",
       lines: [
@@ -41,6 +51,9 @@ const DEMO_GAME_PACK = {
     fork: {
       id: "fork",
       title: "操场边分岔",
+      chapter: 2,
+      chapter_title: "第二章 · 心意分岔",
+      chapter_blurb: "校庆前，你们得把话说清楚——可乐、剧本，还有没说出口的话。",
       mood: "golden_dawn",
       image_prompt: "school track sunset two students talking",
       lines: [
@@ -58,6 +71,9 @@ const DEMO_GAME_PACK = {
     confess: {
       id: "confess",
       title: "看台角落",
+      chapter: 2,
+      chapter_title: "第二章 · 心意分岔",
+      chapter_blurb: "",
       mood: "golden_dawn",
       image_prompt: "school bleachers golden hour two teens",
       lines: [
@@ -73,6 +89,9 @@ const DEMO_GAME_PACK = {
     distance: {
       id: "distance",
       title: "各自忙碌",
+      chapter: 2,
+      chapter_title: "第二章 · 心意分岔",
+      chapter_blurb: "",
       mood: "neutral",
       image_prompt: "busy school corridor students passing",
       lines: [
@@ -88,6 +107,9 @@ const DEMO_GAME_PACK = {
     good_end: {
       id: "good_end",
       title: "校庆谢幕",
+      chapter: 3,
+      chapter_title: "第三章 · 共同的结局",
+      chapter_blurb: "幕布落下，这个秋天终于有了一个共同的结局。",
       mood: "golden_dawn",
       image_prompt: "school stage curtain call applause lights",
       lines: [
@@ -101,6 +123,9 @@ const DEMO_GAME_PACK = {
     neutral_end: {
       id: "neutral_end",
       title: "未完待续",
+      chapter: 3,
+      chapter_title: "第三章 · 共同的结局",
+      chapter_blurb: "剧目获奖了，有些话还留在下次排练。",
       mood: "neutral",
       image_prompt: "empty school rooftop sunset quiet",
       lines: [

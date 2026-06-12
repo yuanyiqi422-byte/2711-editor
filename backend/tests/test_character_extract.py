@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+
 from character_extract import (
     extract_protagonist_candidates,
     extract_protagonist_candidates_enhanced,
@@ -31,6 +33,18 @@ _DIALOGUE_TRAP = """
 师兄道：「不逼你了。」
 李青云抬头：「我知道。」
 李青云的剑在鞘中轻鸣。李青云转身离去。
+"""
+
+TOLSTOY = (
+    "列夫·托尔斯泰是俄国最伟大的作家之一。他下个礼拜要在莫斯科会见朋友。"
+    "渥伦斯基在车站遇见了安娜。伦斯基对这一切感到困惑。"
+)
+
+_TOLSTOY_TRAP = TOLSTOY
+
+_TOLSTOY_CLASSIC = """
+列夫·托尔斯泰是俄国最伟大的作家之一。
+渥伦斯基在车站遇见了安娜·卡列尼娜。
 """
 
 
@@ -90,10 +104,45 @@ def test_candidates_include_confidence() -> None:
     assert chars[0]["confidence"] >= 55
 
 
-async def test_enhanced_returns_low_confidence_flag() -> None:
-    result = await extract_protagonist_candidates_enhanced(
-        "这儿风很大。师兄说：不逼你了。"
+def test_tolstoy_fragment_trap() -> None:
+    for sample in (_TOLSTOY_TRAP, _TOLSTOY_CLASSIC):
+        chars = extract_protagonist_candidates(sample)
+        names = _names(chars)
+        assert "他下个礼" not in names
+        assert "尔斯泰" not in names
+        assert "伦斯基" not in names
+
+
+def test_surnames_is_char_level_frozenset() -> None:
+    from character_extract import _SURNAMES
+
+    assert isinstance(_SURNAMES, frozenset)
+    assert all(len(ch) == 1 for ch in _SURNAMES)
+    assert "李" in _SURNAMES
+    assert "李王" not in _SURNAMES
+
+
+def test_tolstoy_full_names_not_suffix_fragments() -> None:
+    from character_extract import _is_bad_token_slice, _is_plausible_name
+
+    text = TOLSTOY
+    for bad in ("尔斯泰", "伦斯基", "他下个礼"):
+        assert _is_bad_token_slice(bad, text)
+        assert not _is_plausible_name(bad, text=text)
+
+
+def test_enhanced_returns_low_confidence_flag() -> None:
+    result = asyncio.run(
+        extract_protagonist_candidates_enhanced("这儿风很大。师兄说：不逼你了。")
     )
     assert "low_confidence" in result
     assert "characters" in result
     assert result["low_confidence"] is True
+
+
+def test_known_bad_name_slices_blocklist() -> None:
+    from character_extract import _is_plausible_name
+
+    assert not _is_plausible_name("伦斯基", text="伦斯基对这一切感到困惑。")
+    assert not _is_plausible_name("尔斯泰", text="列夫·托尔斯泰是伟大的作家。")
+

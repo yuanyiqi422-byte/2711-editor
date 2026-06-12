@@ -3,6 +3,7 @@ import hashlib
 import json
 import logging
 import os
+import re
 import time
 from pathlib import Path
 
@@ -30,6 +31,7 @@ from document_extract import (
     prepare_llm_text,
 )
 from env_check import validate_env
+from primary_api import consume_provider_switch_notice, has_usable_api_key, primary_api_status
 from ingest_models import IngestFileResponse
 from llm import LLMError
 from models import CreateGameRequest, ExpandNodeRequest, GamePack, STYLE_LABELS
@@ -52,13 +54,32 @@ from image_service import (
     is_image_gen_configured,
     read_cached_image,
 )
-from narrative_service import analyze_story, estimate_play_minutes, expand_branch, generate_game_nodes
+from narrative_service import (
+    analyze_story,
+    build_create_eta,
+    outline_progress_message,
+    scene_batch_progress_message,
+    estimate_play_minutes,
+    expand_branch,
+    generate_game_nodes,
+)
 
 logger = logging.getLogger(__name__)
 
 # 圣经分析缓存：同文本+风格重复提交时跳过 analyze（TTL 秒）
 _BIBLE_CACHE_TTL = int(os.getenv("BIBLE_CACHE_TTL", "1800"))
+_BIBLE_INPUT_CHARS = int(os.getenv("BIBLE_INPUT_CHARS", "12000"))
 _bible_cache: dict[str, tuple[float, object]] = {}
+
+
+def _prepare_bible_text(full_text: str) -> tuple[str, bool, str]:
+    """圣经分析用采样文本；场景节选仍用全文。"""
+    explicit = effective_llm_limit()
+    if explicit > 0:
+        return prepare_llm_text(full_text, max_chars=explicit)
+    if _BIBLE_INPUT_CHARS > 0 and len(full_text) > _BIBLE_INPUT_CHARS:
+        return prepare_llm_text(full_text, max_chars=_BIBLE_INPUT_CHARS)
+    return full_text, False, ""
 
 
 def _bible_cache_key(text: str, style: str) -> str:
@@ -152,6 +173,7 @@ def _cors_origins() -> list[str]:
     origins = [
         "http://127.0.0.1:8010",
         "http://localhost:8010",
+        "null",  # file:// 页面跨域探测本地后端
         "https://2711editor.netlify.app",
         "https://2711editor.pages.dev",
     ]
@@ -170,6 +192,7 @@ app.add_middleware(
     allow_origin_regex=(
         r"https://([a-zA-Z0-9-]+--)?2711editor\.netlify\.app"
         r"|https://([a-zA-Z0-9-]+\.)*2711editor\.pages\.dev"
+        r"|http://(localhost|127\.0\.0\.1|\[::1\]|::1)(:\d+)?"
     ),
     allow_credentials=True,
     allow_methods=["*"],
@@ -190,8 +213,8 @@ async def health():
     return {
         "ok": len(_startup_issues) == 0,
         "model": os.getenv("AI_MODEL", "deepseek-chat"),
-        "has_key": bool(os.getenv("AI_API_KEY", "").strip())
-        and os.getenv("AI_API_KEY", "").strip() != "your-secret-key-here",
+        "has_key": has_usable_api_key(),
+        "primary_api": primary_api_status(),
         "version": APP_VERSION,
         "styles": STYLE_LABELS,
         "env_issues": _startup_issues,
@@ -254,17 +277,97 @@ def _sse(event: str, payload: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
 
 
+def _log_provider_switch_if_any() -> None:
+    """Consume switch notice for server logs only — never emit to SSE/UI."""
+    notice = consume_provider_switch_notice()
+    if notice:
+        logger.warning("PRIMARY_API_EXHAUSTED — silent fallback to DeepSeek (%s)", notice)
+
+
 _SSE_KEEPALIVE = ": keepalive\n\n"
 _SSE_HEARTBEAT_SEC = float(os.getenv("SSE_HEARTBEAT_SEC", "12"))
 
 
-async def _await_with_sse_heartbeats(coro):
-    """Yield SSE comment keepalives while waiting on a long LLM call."""
+def _progress_step(pct: int) -> str:
+    if pct >= 80:
+        return "scene"
+    if pct > 52:
+        return "scene"
+    if pct >= 52:
+        return "branch"
+    if pct >= 32:
+        return "weave"
+    return "read"
+
+
+async def _await_with_sse_heartbeats(
+    coro,
+    progress_queue: asyncio.Queue | None = None,
+    *,
+    source_char_count: int | None = None,
+    last_status: dict | None = None,
+):
+    """Yield progress dicts, SSE keepalives, then the coroutine result."""
     task = asyncio.create_task(coro)
+    idle_idx = 0
     while not task.done():
+        if progress_queue is not None:
+            try:
+                while True:
+                    upd = progress_queue.get_nowait()
+                    if last_status is not None:
+                        last_status.update(upd)
+                    yield upd
+            except asyncio.QueueEmpty:
+                pass
         _done, _ = await asyncio.wait({task}, timeout=_SSE_HEARTBEAT_SEC)
         if not task.done():
             yield _SSE_KEEPALIVE
+            if last_status is not None and source_char_count:
+                pct = int(last_status.get("progress") or 0)
+                idle_idx += 1
+                eta = last_status.get("eta")
+                if 52 <= pct < 55:
+                    yield {
+                        "progress": pct,
+                        "msg": outline_progress_message(
+                            source_char_count,
+                            elapsed_sec=idle_idx * int(_SSE_HEARTBEAT_SEC),
+                            attempt=0,
+                            tick=idle_idx,
+                        ),
+                        "step": "branch",
+                        "eta": eta,
+                    }
+                elif 55 <= pct < 80:
+                    scene_done = int(last_status.get("scene_completed") or 0)
+                    scene_total = int(last_status.get("scene_total") or 0)
+                    yield {
+                        "progress": min(72, pct + min(2, idle_idx // 3)),
+                        "msg": last_status.get("msg")
+                        or scene_batch_progress_message(
+                            source_char_count,
+                            completed=scene_done,
+                            total=max(scene_total, 1),
+                            elapsed_sec=idle_idx * int(_SSE_HEARTBEAT_SEC),
+                            tick=idle_idx,
+                        ),
+                        "step": "scene",
+                        "eta": eta,
+                    }
+                elif pct >= 80:
+                    yield {
+                        "progress": pct,
+                        "msg": last_status.get("msg") or "正在生成场景…",
+                        "step": _progress_step(pct),
+                        "eta": eta,
+                    }
+    if progress_queue is not None:
+        while not progress_queue.empty():
+            upd = progress_queue.get_nowait()
+            if last_status is not None:
+                last_status.update(upd)
+            yield upd
     yield await task
 
 
@@ -282,11 +385,28 @@ PIPELINE_STEPS = [
 async def create_game_stream(body: CreateGameRequest):
     async def events():
         try:
-            yield _sse("status", {"progress": 5, "msg": "正在构筑世界……", "step": "read"})
-            yield _sse("status", {"progress": 15, "msg": "✓ 阅读原著", "step": "read"})
-
             source_char_count = len(body.text)
-            llm_text, truncated, trunc_note = prepare_llm_text(body.text)
+            create_eta = build_create_eta(source_char_count)
+
+            yield _sse(
+                "status",
+                {
+                    "progress": 5,
+                    "msg": "正在构筑世界……",
+                    "step": "read",
+                    "eta": create_eta,
+                },
+            )
+            yield _sse(
+                "status",
+                {
+                    "progress": 15,
+                    "msg": "✓ 阅读原著",
+                    "step": "read",
+                    "eta": create_eta,
+                },
+            )
+            llm_text, truncated, trunc_note = _prepare_bible_text(body.text)
             if truncated and trunc_note:
                 yield _sse(
                     "status",
@@ -298,13 +418,16 @@ async def create_game_stream(body: CreateGameRequest):
                 )
 
             bible = None
+            bible_status: dict = {"progress": 15, "step": "read", "eta": create_eta}
             async for chunk in _await_with_sse_heartbeats(
                 _cached_analyze_story(llm_text, body.style, source_char_count=source_char_count)
             ):
+                _log_provider_switch_if_any()
                 if isinstance(chunk, str):
                     yield chunk
                 else:
                     bible = chunk
+            _log_provider_switch_if_any()
             yield _sse(
                 "status",
                 {
@@ -315,37 +438,62 @@ async def create_game_stream(body: CreateGameRequest):
             )
 
             progress_queue: asyncio.Queue = asyncio.Queue()
+            last_status = {
+                "progress": 40,
+                "msg": "✓ 编织剧情",
+                "step": "weave",
+                "eta": create_eta,
+            }
+            async def on_progress(
+                pct: int,
+                msg: str,
+                *,
+                scene_completed: int | None = None,
+                scene_total: int | None = None,
+                ending_count: int | None = None,
+            ) -> None:
+                upd = {
+                    "progress": pct,
+                    "msg": msg,
+                    "step": _progress_step(pct),
+                    "eta": create_eta,
+                }
+                if scene_completed is not None:
+                    upd["scene_completed"] = scene_completed
+                if scene_total is not None:
+                    upd["scene_total"] = scene_total
+                if ending_count is not None:
+                    upd["ending_count"] = ending_count
+                elif 55 <= pct <= 72 and "/" in msg:
+                    m = re.search(r"(\d+)/(\d+)", msg)
+                    if m:
+                        upd["scene_completed"] = int(m.group(1))
+                        upd["scene_total"] = int(m.group(2))
+                last_status.update(upd)
+                await progress_queue.put(upd)
 
-            async def on_progress(pct: int, msg: str) -> None:
-                await progress_queue.put({"progress": pct, "msg": msg})
-
-            gen_task = asyncio.create_task(
+            game = None
+            async for chunk in _await_with_sse_heartbeats(
                 generate_game_nodes(
                     bible,
                     body.style,
                     source_char_count=source_char_count,
                     source_text=body.text,
                     on_progress=on_progress,
-                )
-            )
-
-            idle_ticks = 0
-            while not gen_task.done():
-                try:
-                    upd = progress_queue.get_nowait()
-                    idle_ticks = 0
-                    yield _sse("status", upd)
-                except asyncio.QueueEmpty:
-                    idle_ticks += 1
-                    if idle_ticks * 0.2 >= _SSE_HEARTBEAT_SEC:
-                        yield _SSE_KEEPALIVE
-                        idle_ticks = 0
-                    await asyncio.sleep(0.2)
-
-            while not progress_queue.empty():
-                yield _sse("status", progress_queue.get_nowait())
-
-            game = await gen_task
+                ),
+                progress_queue=progress_queue,
+                source_char_count=source_char_count,
+                last_status=last_status,
+            ):
+                _log_provider_switch_if_any()
+                if isinstance(chunk, str):
+                    yield chunk
+                elif isinstance(chunk, dict):
+                    last_status.update(chunk)
+                    yield _sse("status", chunk)
+                else:
+                    game = chunk
+            _log_provider_switch_if_any()
 
             node_count = len(game.nodes)
             ending_count = sum(1 for n in game.nodes.values() if n.is_ending)
@@ -451,6 +599,8 @@ async def history_touch(entry_id: str):
     return touch_entry(entry_id)
 
 
+
+
 class CharacterPreviewRequest(BaseModel):
     text: str = Field(..., min_length=20)
 
@@ -461,7 +611,6 @@ async def characters_preview(body: CharacterPreviewRequest):
 
     result = await extract_protagonist_candidates_enhanced(body.text)
     return result
-
 
 @app.post("/api/history/{entry_id}/share")
 async def history_share(entry_id: str):
