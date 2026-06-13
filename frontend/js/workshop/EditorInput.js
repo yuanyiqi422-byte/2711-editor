@@ -462,7 +462,7 @@
 
           if (uploadLimits) {
 
-            uploadLimits.textContent = "不限制字数、文件大小与 PDF 页数；全文送入 AI 生成";
+            uploadLimits.textContent = "不限制字数、文件大小与页数";
 
           }
 

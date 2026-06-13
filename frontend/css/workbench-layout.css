@@ -19,6 +19,7 @@
 
 /* ─── 顶栏 · flex 三列（品牌 | 居中 epigraph | 操作） ─── */
 .workbench__topbar {
+  --brand-header-scale: 0.8;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,8 +28,8 @@
   position: relative;
   z-index: 10;
   flex-shrink: 0;
-  min-height: 72px;
-  max-height: 96px;
+  min-height: calc(72px * var(--brand-header-scale));
+  max-height: calc(96px * var(--brand-header-scale));
   border: none;
   border-radius: 0;
   backdrop-filter: none;
@@ -329,9 +330,9 @@
   transition: opacity 0.45s var(--ease-out);
 }
 
-/* ─── 三栏工作区 ─── */
+/* ─── 三栏工作区（顶栏缩小后占满剩余高度） ─── */
 .workbench__workspace {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-height: 0;
   display: grid;
   grid-template-columns: minmax(240px, 26%) minmax(0, 1.48fr) minmax(220px, 24%);
@@ -2969,8 +2970,8 @@
 
 @media (max-width: 640px) {
   .workbench__topbar {
-    min-height: 72px;
-    max-height: 96px;
+    min-height: calc(72px * var(--brand-header-scale, 0.8));
+    max-height: calc(96px * var(--brand-header-scale, 0.8));
     padding: 0 10px;
   }
 

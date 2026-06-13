@@ -752,3 +752,46 @@
     padding: clamp(6px, 1vw, 10px) clamp(10px, 2.5vw, 16px);
   }
 }
+
+/* ─── Topbar sigil lockup · 80% of hero scale ─── */
+.workbench__topbar .workbench__brand--logo {
+  max-width: calc(360px * 0.8);
+}
+
+.workbench__topbar .logo-lockup-unified {
+  gap: clamp(8px, 0.96vw, 12.8px);
+  padding: clamp(6.4px, 0.96vw, 11.2px) clamp(9.6px, 1.44vw, 16px);
+}
+
+.workbench__topbar .workbench__brand--logo .logo-lockup-unified__icon,
+.workbench__topbar .workbench__brand--logo .sigil-numerals {
+  font-size: clamp(2.28rem, 5.2vw, 3.2rem);
+}
+
+.workbench__topbar .workbench__brand--logo .logo-lockup-unified__icon {
+  height: clamp(2.28rem, 5.2vw, 3.2rem);
+}
+
+.workbench__topbar .workbench__brand--logo .sigil-editor {
+  font-size: clamp(0.416rem, 0.896vw, 0.496rem);
+}
+
+.workbench__topbar .workbench__brand--logo .sigil-zh-wrap {
+  width: clamp(2.28rem, 5.2vw, 2.8rem);
+  height: clamp(2.28rem, 5.2vw, 2.8rem);
+}
+
+.workbench__topbar .workbench__brand--logo .sigil-zh {
+  font-size: clamp(0.512rem, 1vw, 0.608rem);
+}
+
+@media (max-width: 768px) {
+  .workbench__topbar .workbench__brand--logo {
+    max-width: min(100%, calc(320px * 0.8));
+  }
+
+  .workbench__topbar .workbench__brand--logo .logo-lockup-unified {
+    gap: clamp(6.4px, 1.6vw, 9.6px);
+    padding: clamp(4.8px, 0.8vw, 8px) clamp(8px, 2vw, 12.8px);
+  }
+}

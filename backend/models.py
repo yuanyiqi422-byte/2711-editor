@@ -248,9 +248,9 @@ _LEGACY_GENERIC_CHOICE_TEXTS = (
 
 GENERIC_CHOICE_TEXTS: frozenset[str] = frozenset(
     {
-        *CAREFUL_CHOICE_LABELS,
-        *BOLD_CHOICE_LABELS,
         *_LEGACY_GENERIC_CHOICE_TEXTS,
+        "先观望",
+        "果断应允",
         "沉默应对",
         "答应对方",
         "坚持本心",
@@ -262,18 +262,26 @@ GENERIC_CHOICE_TEXTS: frozenset[str] = frozenset(
 
 _BEAT_SNIPPET_RE = re.compile(r"[，。！？、；：""''\s…—\-·]+")
 
-_CAREFUL_BEAT_TEMPLATES: tuple[str, ...] = (
-    "沉默{snip}",
-    "观望{snip}",
-    "暂缓{snip}",
-    "试探{snip}",
+# Enrich-only fallbacks: standalone verbs, never concatenate beat fragments.
+_CAREFUL_FALLBACK_LABELS: tuple[str, ...] = (
+    "沉默观察",
+    "暂不表态",
+    "按兵不动",
+    "委婉试探",
+    "暂且沉默",
 )
 
-_BOLD_BEAT_TEMPLATES: tuple[str, ...] = (
-    "追问{snip}",
-    "质问{snip}",
-    "答应{snip}",
-    "离开{snip}",
+_BOLD_FALLBACK_LABELS: tuple[str, ...] = (
+    "当面追问",
+    "转身离开",
+    "点头答应",
+    "摇头拒绝",
+    "直接离开",
+)
+
+_BROKEN_CHOICE_FRAGMENT_RE = re.compile(
+    r"(?:先|立刻)?(?:观望|介入).*(?:说|接|逾)"
+    r"|^(?:沉默|观望|暂缓|试探)[\u4e00-\u9fff]{3,}$"
 )
 
 
@@ -305,6 +313,8 @@ def is_generic_choice_text(text: str) -> bool:
         return True
     if is_formulaic_choice_text(clean):
         return True
+    if is_broken_choice_fragment(clean):
+        return True
     return normalize_choice_text_key(clean) in _GENERIC_CHOICE_KEYS
 
 
@@ -314,6 +324,14 @@ def is_formulaic_choice_text(text: str) -> bool:
     if not clean:
         return False
     return bool(_FORMULAIC_CHOICE_RE.search(clean))
+
+
+def is_broken_choice_fragment(text: str) -> bool:
+    """Detect verb+beat-snippet garbage like 观望逾白说 or 先观望…说接近."""
+    clean = sanitize_choice_display_text(text)
+    if not clean:
+        return True
+    return bool(_BROKEN_CHOICE_FRAGMENT_RE.search(clean))
 
 
 def choice_text_set_signature(choices: list) -> tuple[str, ...]:
@@ -357,19 +375,20 @@ def derive_beat_choice_pair(
     variant: int = 0,
     avoid_signatures: set[tuple[str, ...]] | None = None,
 ) -> tuple[str, str]:
-    """Context-specific careful/bold pair from plot beat or node title."""
-    snip = _beat_snippet(beat, title)
+    """Rotate standalone careful/bold fallback labels; never inject beat fragments."""
+    _ = beat, title  # kept for call-site compatibility
     avoid = avoid_signatures or set()
-    for offset in range(len(_CAREFUL_BEAT_TEMPLATES) * 3):
-        idx = (variant + offset) % len(_CAREFUL_BEAT_TEMPLATES)
-        careful = _CAREFUL_BEAT_TEMPLATES[idx].format(snip=snip)
-        bold = _BOLD_BEAT_TEMPLATES[idx].format(snip=snip)
+    n = len(_CAREFUL_FALLBACK_LABELS)
+    for offset in range(n * 3):
+        idx = (variant + offset) % n
+        careful = _CAREFUL_FALLBACK_LABELS[idx]
+        bold = _BOLD_FALLBACK_LABELS[idx % len(_BOLD_FALLBACK_LABELS)]
+        if is_broken_choice_fragment(careful) or is_broken_choice_fragment(bold):
+            continue
         sig = tuple(sorted(normalize_choice_text_key(t) for t in (careful, bold)))
         if len(sig) == 2 and sig not in avoid:
             return careful, bold
-    careful = f"观望{snip}"
-    bold = f"追问{snip}"
-    return careful, bold
+    return _CAREFUL_FALLBACK_LABELS[0], _BOLD_FALLBACK_LABELS[0]
 
 
 def derive_ending_choice_labels(bible_dict: dict) -> list[str] | None:
@@ -469,7 +488,7 @@ def ensure_distinct_choice_texts(
             )
         key = normalize_choice_text_key(clean)
         if not clean or key in seen:
-            while fb_idx < len(_CAREFUL_BEAT_TEMPLATES) * 6:
+            while fb_idx < len(_CAREFUL_FALLBACK_LABELS) * 6:
                 careful, bold = derive_beat_choice_pair(
                     beat,
                     title,
