@@ -234,12 +234,25 @@
           );
         }
 
-        const res = await fetch("/api/create/stream", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: text, style: styles.getStyle() }),
-          signal: createAbort.signal,
-        });
+        const createFetch =
+          global.ApiConfig && global.ApiConfig.apiFetchWithRetry
+            ? global.ApiConfig.apiFetchWithRetry.bind(global.ApiConfig)
+            : fetch;
+        const res = await createFetch(
+          "/api/create/stream",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: text, style: styles.getStyle() }),
+            signal: createAbort.signal,
+          },
+          {
+            retries: 2,
+            delayMs: 10000,
+            timeoutMs: 0,
+            retryNetwork: true,
+          }
+        );
 
         if (global.ApiConfig && global.ApiConfig.ensureSseResponse) {
           await global.ApiConfig.ensureSseResponse(res, "生成请求失败");

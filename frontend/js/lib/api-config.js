@@ -21,7 +21,7 @@
   function backendColdStartMessage() {
     return isLocalDevHost()
       ? localBackendDownMessage()
-      : "故事解析服务正在唤醒（Render 免费实例冷启动约 30～60 秒）。请稍候再试，或刷新页面。";
+      : "故事解析服务正在唤醒（Render 免费实例冷启动约 30～60 秒）。请稍候再点「开始游戏」重试。";
   }
 
   function backendUnavailableMessage() {
@@ -183,6 +183,10 @@
     return (
 
       lower === "failed to fetch" ||
+
+      lower === "network error" ||
+
+      lower.indexOf("network error") !== -1 ||
 
       lower.indexOf("networkerror") !== -1 ||
 

@@ -24,6 +24,8 @@
     const lower = m.toLowerCase();
     return (
       lower === "failed to fetch" ||
+      lower === "network error" ||
+      lower.indexOf("network error") !== -1 ||
       lower.indexOf("networkerror") !== -1 ||
       lower.indexOf("network request failed") !== -1 ||
       lower.indexOf("load failed") !== -1 ||
@@ -66,9 +68,15 @@
         : "API 请求返回了网页而非接口数据。请通过 http://127.0.0.1:8010 访问，不要直接双击打开 frontend/index.html。";
     }
     if (isLocalDev()) return localBackendDownMessage();
+    if (global.ApiConfig && global.ApiConfig.backendColdStartMessage && !global.ApiConfig.isLocalDev()) {
+      return (
+        global.ApiConfig.backendColdStartMessage() +
+        " 若刚打开页面，请等待约 1 分钟后再次点击「开始游戏」。"
+      );
+    }
     return global.ApiConfig && global.ApiConfig.backendUnavailableMessage
       ? global.ApiConfig.backendUnavailableMessage()
-      : "无法连接故事解析服务（网络或跨域被拦截）。请刷新后重试；若持续失败，请确认后端已部署最新版本。";
+      : "无法连接故事解析服务。请检查网络后刷新页面重试；Render 免费实例冷启动约需 30～60 秒，稍等后再点「开始游戏」。";
   }
 
   function friendlyBackendMessage(err) {
