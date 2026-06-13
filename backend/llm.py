@@ -688,7 +688,7 @@ async def chat_json(
     user: str,
     temperature: float = 0.75,
     max_tokens: int = 8192,
-    max_attempts: int = 4,
+    max_attempts: int = 2,
     *,
     fast_model: bool = False,
     timeout_sec: float | None = None,

@@ -385,6 +385,12 @@ PIPELINE_STEPS = [
 async def create_game_stream(body: CreateGameRequest):
     async def events():
         try:
+            if not has_usable_api_key():
+                yield _sse(
+                    "error",
+                    {"detail": "未配置 AI 密钥。请在 Render 环境变量中设置 AI_API_KEY 或备用密钥。"},
+                )
+                return
             source_char_count = len(body.text)
             create_eta = build_create_eta(source_char_count)
 
@@ -537,16 +543,10 @@ async def create_game_stream(body: CreateGameRequest):
             yield _sse("error", {"detail": str(exc)})
         except ValidationError as exc:
             logger.warning("game generation validation failed: %s", exc)
-            yield _sse(
-                "error",
-                {
-                    "detail": "故事结构数据格式异常，请重试生成。",
-                    "debug": str(exc),
-                },
-            )
+            yield _sse("error", {"detail": "故事结构数据格式异常，请重试生成。"})
         except Exception as exc:
             logger.exception("game generation failed")
-            yield _sse("error", {"detail": f"生成过程出错：{exc}"})
+            yield _sse("error", {"detail": "生成过程出错，请稍后重试。"})
 
     return StreamingResponse(
         events(),

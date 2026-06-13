@@ -7,6 +7,8 @@ FAITHFULNESS_RULE = (
     "必须忠实于原文情节，保留关键人物、冲突、转折与细节，禁止泛泛而谈或跳过重要段落；"
     "不得压缩为梗概式场景，每场景对白须承接原文细节、人物语气与因果链，"
     "让玩家通过点击对白逐步经历完整故事而非读摘要。"
+    "选项文案去重时不得减少场景数、对白句数、plot_beats 覆盖或抉择点数量；"
+    "仅可在全剧第 3 次及以上重复时改写该选项 text，禁止为避重复而删节点或合并场景。"
 )
 
 DIALOGUE_QUOTE_RULE = (
@@ -133,8 +135,9 @@ def narrative_scale(source_char_count: int) -> dict[str, int | str]:
 
     density["coverage"] = (
         f"原文约 {chars:,} 字（{tier}）。全剧可点击对白 {min_total_lines}–{max_total_lines} 句；"
-        f"抉择时刻 {choice_min}–{min(65, choice_min + 15)} 次；场景 {nodes_min}–{nodes_max} 个。"
-        "须覆盖开端/发展/高潮/收束，禁止梗概式带过。"
+        f"抉择时刻 {choice_min}–{min(65, choice_min + 15)} 次；场景 {nodes_min}–{nodes_max} 个"
+        f"（须覆盖 bible 全部 plot_beats，禁止为提速或选项去重而删减节拍/场景）。"
+        "须覆盖开端/发展/高潮/收束，禁止梗概式带过；climax 场景 10–15 句，buildup 6–8 句。"
     )
     return density
 
@@ -302,15 +305,15 @@ def build_nodes_user(
 1. 每个节点是一个「场景」，有独立 image_prompt 对应画面氛围。
 2. lines：每场景 {scale["lines_per_scene"]} 句，每句 24-80 汉字（至少 15 字，勿超 90 字）。忠于 story bible / plot_beats 与原文细节，写清情境、人物动机与情绪，禁止拆成 10 字以内的碎句。可写对白、旁白、心理活动。禁止梗概式缩写。
 3. 约 40% 节点：纯过渡，lines 播完后 after_lines_next 自动进入下一场景，choices 为空。连续自动过渡不得超过 4 个场景。
-4. 约 60% 非结局节点应为抉择点：lines 播完后展示 {scale["choices_per_branch"]} 个 choices，after_lines_next 留空。选项 text 须为完整、可读的短句行动（如「追问项链下落」「沉默不语」「直接离开」「答应帮忙」「断然拒绝」），主谓齐全、禁止截断原文片段拼接；禁止括号附带后果；禁止「观望某某说」「介入某某说」及「徐徐图之」「围绕…图之」「三思后回应」「果断抉择」等模板套话。后果写 immediate_consequence，长线影响写 narrative_impact。同节点各 text 须互不相同。各选项 next 须不同，impact 须标注 low/medium/high：low=氛围/好感微调，medium=剧情波动，high=路线/结局分叉。全剧至少 {scale["min_high_impact"]} 个 impact=high 的选项。抉择时刻总数须 ≥{scale["min_choice_moments"]}。
-5. 结局节点（硬性）：至少 {scale["endings_min"]} 个互不相同的结局（is_ending=true），ending_type 须含 good/bad/neutral 中至少两种（ending_type 仅填英文枚举 good/bad/neutral/true/hidden/open，供内部校验）；每个结局须有独立因果链与情感收束，让玩家有动力重玩收集全结局。choices 空，after_lines_next 空，lines 3-5 句收束（每句仍须 24-80 字、交代结局因果）。title 须为 4-12 字中文文学收束语（结局式、略带文采，如「尘埃落定，各归其所」「潮起潮落，故事至此」），禁止在 title 中写 good/bad/neutral 等英文 ending_type，也禁止写「好结局」「坏结局」「普通结局」「平和结局」等道德评判标签；对白引号优先用「」，勿用英文单引号 ' 或 ASCII 双引号。
+4. 约 60% 非结局节点应为抉择点：lines 播完后展示 {scale["choices_per_branch"]} 个 choices，after_lines_next 留空。选项 text 须为完整、可读的短句行动（如「追问项链下落」「沉默不语」「直接离开」「答应帮忙」「断然拒绝」），主谓齐全、禁止截断原文片段拼接；禁止括号附带后果；禁止「观望某某说」「介入某某说」及「徐徐图之」「围绕…图之」「三思后回应」「果断抉择」等模板套话。后果写 immediate_consequence，长线影响写 narrative_impact。同节点各 text 须互不相同。【全剧去重】各选项 text 在全剧须尽量不重复：同一句文案最多出现 2 次（建议各 1 次）；仅可保留 1 处主题回响式重复。各选项 next 须不同，impact 须标注 low/medium/high：low=氛围/好感微调，medium=剧情波动，high=路线/结局分叉。全剧至少 {scale["min_high_impact"]} 个 impact=high 的选项。抉择时刻总数须 ≥{scale["min_choice_moments"]}。
+5. 结局节点（硬性）：至少 {scale["endings_min"]} 个互不相同的结局（is_ending=true），ending_type 须含 good/bad/neutral 中至少两种（ending_type 仅填英文 enum good/bad/neutral/true/hidden/open，供内部校验）；每个结局须有独立因果链与情感收束，让玩家有动力重玩收集全结局。choices 空，after_lines_next 空，lines 3-5 句收束（每句仍须 24-80 字、交代结局因果）。title 须为 4-12 字完整中文文学收束语（如「晚风里的秘密」「青春就此落款」），须自成一句、主谓或意象完整，禁止从 plot_beats/节拍原文截取片段拼接（如「备战高已远，平淡收场」类截断拼接），禁止「关键词+已远/成空/落定」式模板拼接；禁止在 title 中写 good/bad/neutral 等英文 ending_type，也禁止写「好结局」「坏结局」「普通结局」「平和结局」等道德评判标签；对白引号优先用「」，勿用英文单引号 ' 或 ASCII 双引号。
 6. 所有 next / after_lines_next 必须指向已定义节点 id。
 7. portrait：旁白用 none；NPC 常用 left；玩家「你」常用 right。
 8. narrative 字段可留空，内容全部放进 lines。
 9. 空字符串字段一律用 ""，禁止输出 null（尤其 after_lines_next、ending_type、chapter_blurb）。
 10. 结局数量不得少于 {scale["endings_min"]} 个；剧情连贯，人物称呼一致；主线（无分支直达结局的最短路径）至少 {max(scale["nodes_min"] // 2, 8)} 个场景。
 11. {scale["coverage"]}
-12. 场景总数须在 {scale["nodes_range"]} 范围内，不得因篇幅压缩而只写少量泛化场景；宁可多写过渡场景与对白，也不要跳过 bible 中的节拍。
+12. 场景总数须在 {scale["nodes_range"]} 范围内（可因 bible 节拍略上浮），不得因篇幅压缩或选项去重而只写少量泛化场景；宁可多写过渡场景与对白，也不要跳过 bible 中的任一 plot_beats。
 13. 【章节】将全剧分为 3-5 章（chapter 从 1 递增）。每节点须含 chapter、chapter_title（如「第二章 · 雨夜追踪」）；每章第一个场景节点另填 chapter_blurb（20-40 字引子），同章其余节点 chapter_blurb 可留空。章节边界对齐 plot_beats 大转折，勿每场景一章。
 14. 【引号】{DIALOGUE_QUOTE_RULE}"""
 
@@ -522,13 +525,13 @@ def build_graph_outline_user(
 {SCENE_TYPE_GUIDE}
 
 规则：
-- 【密度】全剧对白目标 {scale["min_total_lines"]}–{scale["max_total_lines"]} 句；抉择时刻 {scale["min_choice_moments"]}–{choice_max} 次；{scale["coverage"]}
+- 【密度】全剧对白目标 {scale["min_total_lines"]}–{scale["max_total_lines"]} 句；抉择时刻 {scale["min_choice_moments"]}–{choice_max} 次；{scale["coverage"]} 禁止为选项去重而减少抉择点或 scene 节点。
 - 场景数 {scale["nodes_range"]}；约 {scale["choice_ratio"]} 非结局节点含 choices（2-4 项），其余用 after_lines_next 过渡；密度可略浮动，但须保证分支与结局可达。
 - 每个非结局节点须含 scene_type 与 emotion_open/trigger/close/action 四字段。
-- 每个 choices 项须含 impact（low/medium/high）、immediate_consequence、narrative_impact、relationship_delta。text 须为完整短句行动（如「当面质问」「沉默不语」「直接离开」「答应帮忙」「断然拒绝」），主谓齐全、禁止截断原文片段拼接；禁止「观望某某说」「介入某某说」及「徐徐图之」「围绕…图之」「三思后回应」「果断抉择」等模板；禁止在 text 中用括号附带后果/影响；后果写在 immediate_consequence，长线影响写在 narrative_impact。同节点各选项 text 须互不相同，禁止同义伪分支。
+- 每个 choices 项须含 impact（low/medium/high）、immediate_consequence、narrative_impact、relationship_delta。text 须为完整短句行动（如「当面质问」「沉默不语」「直接离开」「答应帮忙」「断然拒绝」），主谓齐全、禁止截断原文片段拼接；禁止「观望某某说」「介入某某说」及「徐徐图之」「围绕…图之」「三思后回应」「果断抉择」等模板；禁止在 text 中用括号附带后果/影响；后果写在 immediate_consequence，长线影响写在 narrative_impact。同节点各选项 text 须互不相同，禁止同义伪分支。【全剧去重】各选项 text 在全剧须尽量不重复：同一句文案最多出现 2 次（建议各 1 次）；仅可保留 1 处主题回响式重复。
 - 全剧至少 {scale["min_high_impact"]} 个 impact=high 选项，导向不同路线或结局；禁止整条主线无选项直达结局。
 - 骨架须落实 bible.endings 的 trigger_logic，关键 key_nodes 须出现在图中。
-- 至少 {scale["endings_min"]} 个结局节点（is_ending=true，互不相同的 ending_type，须含 good/bad/neutral 至少两种；ending_type 仅填英文枚举 good/bad/neutral/true/hidden/open）。title 须为 4-12 字中文文学收束语（结局式、略带文采），禁止 title 含 good/bad/neutral 等英文，也禁止「好结局」「坏结局」「普通结局」「平和结局」；从 start 可达至少一 good 与一 bad/neutral。禁止只写 1 个结局。
+- 至少 {scale["endings_min"]} 个结局节点（is_ending=true，互不相同的 ending_type，须含 good/bad/neutral 至少两种；ending_type 仅填英文 enum good/bad/neutral/true/hidden/open）。title 须为 4-12 字完整中文文学收束语（如「晚风里的秘密」「青春就此落款」），须自成一句、禁止从节拍原文截取片段拼接或「关键词+已远/成空/落定」式模板拼接；禁止 title 含 good/bad/neutral 等英文，也禁止「好结局」「坏结局」「普通结局」「平和结局」；从 start 可达至少一 good 与一 bad/neutral。禁止只写 1 个结局。
 - 所有 next / after_lines_next 必须指向已定义 id。
 - 【章节】全剧 5–10 章（长篇）或 3–5 章（短篇）；章节对齐 plot_beats 大转折。{_outline_retry_block(prior_errors)}"""
 
@@ -620,8 +623,8 @@ synopsis: {bible.get("synopsis", "")}
   }}
 }}
 
-【choices 硬性保留】若骨架节点含 choices（2-4 项），输出时必须原样保留 id/next/impact/immediate_consequence/narrative_impact/relationship_delta，禁止清空或删减。text 须结合该节点 title/情节节拍写完整短句行动（如「追问项链下落」「沉默不语」「直接离开」「答应帮忙」「断然拒绝」），主谓齐全、禁止截断原文片段拼接；禁止「观望某某说」「介入某某说」及「徐徐图之」「围绕…图之」「三思后回应」「果断抉择」等全剧模板；勿把 immediate_consequence 或 narrative_impact 塞进 text 或括号后缀。同节点各 text 须互不相同。
-不要修改 after_lines_next / is_ending / scene_type / emotion_*。不要新增或删除节点 id。
+【choices 硬性保留】若骨架节点含 choices（2-4 项），输出时必须原样保留 id/next/impact/immediate_consequence/narrative_impact/relationship_delta，禁止清空或删减。text 须结合该节点 title/情节节拍写完整短句行动（如「追问项链下落」「沉默不语」「直接离开」「答应帮忙」「断然拒绝」），主谓齐全、禁止截断原文片段拼接；禁止「观望某某说」「介入某某说」及「徐徐图之」「围绕…图之」「三思后回应」「果断抉择」等全剧模板；勿把 immediate_consequence 或 narrative_impact 塞进 text 或括号后缀。同节点各 text 须互不相同。【全剧去重】各选项 text 在全剧须尽量不重复：同一句文案最多出现 2 次（建议各 1 次）；仅可保留 1 处主题回响式重复。
+不要修改 after_lines_next / is_ending / scene_type / emotion_*。不要新增或删除节点 id；选项去重仅改写 text，不得删 choices 或合并场景。
 
 【再次强调】你的回复必须是且仅是上述 JSON 对象：不要解释、不要规划、不要 Markdown、不要「我们根据…为 scene_x 补充」等文字。只输出 JSON。"""
 

@@ -97,12 +97,20 @@ def test_plan_batches_parallel_siblings() -> None:
     assert flat.count("merge") == 1
 
 
-def test_effective_batch_size_scales_for_long_text() -> None:
+def test_effective_batch_size_scales_for_long_text(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "narrative_service.resolved_model_is_reasoning",
+        lambda fast=False: False,
+    )
     assert _effective_batch_size(20_000) >= 8
     assert _effective_batch_size(3_000) == 8
 
 
-def test_effective_batch_size_fast_path_single_batch() -> None:
+def test_effective_batch_size_fast_path_single_batch(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "narrative_service.resolved_model_is_reasoning",
+        lambda fast=False: False,
+    )
     assert _effective_batch_size(2000, fast_path=True, node_count=8) == 8
     linear = {
         "start": {"id": "start", "after_lines_next": "s2", "choices": [], "is_ending": False},
@@ -182,12 +190,17 @@ def test_truncate_node_context_caps_excerpt() -> None:
     assert trimmed.endswith("……")
 
 
-def test_skeleton_from_bible_caps_excess_beats_for_short_text() -> None:
-    bible = {"plot_beats": [f"节拍{i}" for i in range(30)], "key_events": []}
+def test_skeleton_from_bible_preserves_all_bible_beats_even_for_short_text() -> None:
+    beats = [f"节拍{i}" for i in range(30)]
+    bible = {"plot_beats": beats, "key_events": []}
     skeleton, start_id = _skeleton_from_bible(bible, 500)
     assert start_id == "start"
-    scale = narrative_scale(500)
-    assert len(skeleton) <= int(scale["nodes_max"])
+    scene_nodes = [
+        raw
+        for raw in skeleton.values()
+        if isinstance(raw, dict) and not raw.get("is_ending")
+    ]
+    assert len(scene_nodes) >= len(beats)
 
 
 def test_skeleton_from_bible_builds_linear_chain() -> None:

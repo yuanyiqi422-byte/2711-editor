@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import Counter
 from collections.abc import Mapping
 
-from models import choice_text_set_signature
+from models import choice_text_set_signature, normalize_choice_text_key, MAX_CHOICE_TEXT_USES
 
 
 def count_ending_nodes(nodes: Mapping[str, dict]) -> int:
@@ -44,6 +44,39 @@ def validate_choice_text_diversity(
             f"（{dup_count}/{len(signatures)} 组重复，示例：{list(most_common_sig)[:2]}）"
         ]
     return []
+
+
+def validate_choice_text_frequency(
+    nodes: Mapping[str, dict],
+    *,
+    max_uses: int = MAX_CHOICE_TEXT_USES,
+) -> list[str]:
+    """Fail when any normalized choice text appears more than max_uses times game-wide."""
+    counts: Counter[str] = Counter()
+    display: dict[str, str] = {}
+    for raw in nodes.values():
+        if not isinstance(raw, dict) or raw.get("is_ending"):
+            continue
+        choices = raw.get("choices") or []
+        if not isinstance(choices, list):
+            continue
+        for ch in choices:
+            if not isinstance(ch, dict):
+                continue
+            text = str(ch.get("text") or "").strip()
+            key = normalize_choice_text_key(text)
+            if not key:
+                continue
+            counts[key] += 1
+            display.setdefault(key, text)
+    errors: list[str] = []
+    for key, count in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])):
+        if count > max_uses:
+            sample = display.get(key, key)
+            errors.append(
+                f"选项文案「{sample}」全剧出现 {count} 次，超过上限 {max_uses} 次"
+            )
+    return errors
 
 
 def count_choice_nodes(nodes: Mapping[str, dict]) -> int:
@@ -261,6 +294,7 @@ def validate_outline_structure(
         errors.append("结局类型缺少 bad 或 neutral")
 
     errors.extend(validate_choice_text_diversity(nodes))
+    errors.extend(validate_choice_text_frequency(nodes))
 
     return errors
 
@@ -282,6 +316,7 @@ _OUTLINE_SOFT_KEYWORDS = (
     "伪分支",
     "impact（low/medium/high）",
     "narrative_impact",
+    "全剧出现",
 )
 
 

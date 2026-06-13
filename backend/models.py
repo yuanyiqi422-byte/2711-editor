@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
@@ -48,13 +49,59 @@ ENDING_TYPE_ALIASES: dict[str, str] = {
     "开放结局": "open",
 }
 
+_LITERARY_ENDING_TITLE_POOL: dict[str, tuple[str, ...]] = {
+    "good": (
+        "青春就此落款",
+        "误会终于冰释",
+        "晨曦微照前程",
+        "各得其所而安",
+        "雨过天晴重逢",
+        "前路仍向光明",
+    ),
+    "bad": (
+        "风过徒留怅惘",
+        "从此山高水长",
+        "再无归期",
+        "错付的情义",
+        "暮色四合归途",
+        "天涯一别难追",
+    ),
+    "neutral": (
+        "晚风里的秘密",
+        "云卷云舒各安",
+        "潮起潮落至此",
+        "生活回到寻常",
+        "平淡收场也罢",
+        "各安其所如是",
+    ),
+    "true": (
+        "真相终于揭晓",
+        "万事同归一处",
+        "谜底水落石出",
+        "一切尘埃落定",
+        "昭然若揭之时",
+        "迷雾散尽见真",
+    ),
+    "hidden": (
+        "幽径独行无人知",
+        "秘而不宣的终章",
+        "极少人知的收束",
+        "暗线于此闭合",
+        "隐秘的另一种可能",
+        "无人抵达的彼岸",
+    ),
+    "open": (
+        "前路未竟余音在",
+        "故事仍将继续",
+        "余音袅袅未绝",
+        "未完待续的明天",
+        "开放式留白",
+        "后话尚待书写",
+    ),
+}
+
 LITERARY_ENDING_FALLBACKS: dict[str, str] = {
-    "good": "尘埃落定，各归其所",
-    "bad": "风过无痕，徒留怅惘",
-    "neutral": "潮起潮落，故事至此",
-    "true": "真相昭然，万事同归",
-    "hidden": "幽径独行，此中无人知",
-    "open": "前路未竟，余音袅袅",
+    canon: pool[0] for canon, pool in _LITERARY_ENDING_TITLE_POOL.items()
 }
 
 MORAL_JUDGMENT_ENDING_TITLES: frozenset[str] = frozenset(
@@ -70,14 +117,10 @@ _ENDING_MOOD_BY_TYPE: dict[str, str] = {
     "open": "neon_rain",
 }
 
-_SKELETON_ENDING_TITLE_TEMPLATES: dict[str, tuple[str, ...]] = {
-    "good": ("{snip}落定，曙光可期", "尘埃落定，各归其所", "晨曦微照，前路舒展"),
-    "bad": ("{snip}成空，徒留怅惘", "风过无痕，天涯一别", "暮色四合，归途渺然"),
-    "neutral": ("潮起潮落，故事至此", "{snip}已远，平淡收场", "云卷云舒，各安其所"),
-    "true": ("真相昭然，万事同归", "{snip}揭晓，尘埃落定"),
-    "hidden": ("幽径独行，此中无人知", "{snip}深处，秘而不宣"),
-    "open": ("前路未竟，余音袅袅", "{snip}之后，故事仍续"),
-}
+_BROKEN_ENDING_TEMPLATE_RE = re.compile(
+    r"^[\u4e00-\u9fff·…]{1,6}(?:已远，|成空，|落定，|揭晓，|深处，|之后，)"
+    r"(?:平淡收场|徒留怅惘|曙光可期|尘埃落定|秘而不宣|故事仍续)$"
+)
 
 _RAW_ENDING_TITLE_RE = re.compile(
     r"^(good|bad|neutral|true|hidden|open)(?:[\s_\-·：:]+|(?=结局))(?:结局)?$",
@@ -135,6 +178,38 @@ def sanitize_ending_node_title(title: str, ending_type: str = "") -> str:
     return stripped
 
 
+def _trim_literary_ending_title(text: str, *, max_len: int = 12) -> str:
+    t = re.sub(r"\s+", "", str(text or "").strip())
+    if not t:
+        return ""
+    if len(t) <= max_len:
+        return t
+    chunk = t[:max_len]
+    punct = max(chunk.rfind(p) for p in "，。！？、；：…")
+    if punct >= 3:
+        return chunk[: punct + 1]
+    return chunk
+
+
+def is_broken_ending_title(title: str) -> bool:
+    """Reject beat-snippet拼接、模板残片、截断短语等非完整文学收束语."""
+    clean = str(title or "").strip()
+    if not clean or len(clean) < 4:
+        return True
+    if is_moral_judgment_ending_title(clean):
+        return True
+    if is_raw_ending_type_title(clean):
+        return True
+    if is_broken_choice_fragment(clean):
+        return True
+    compact = re.sub(r"\s+", "", clean)
+    if _BROKEN_ENDING_TEMPLATE_RE.match(compact):
+        return True
+    if re.search(r"^[\u4e00-\u9fff]{2,5}已远", compact):
+        return True
+    return False
+
+
 def ending_type_label(ending_type: str) -> str:
     """Mood-based literary fallback when no node title is available."""
     canon = canonical_ending_type(ending_type)
@@ -148,21 +223,21 @@ def derive_literary_ending_title(
     mood: str = "",
     title: str = "",
 ) -> str:
-    """User-facing / skeleton ending title: literary收束语, never 好/坏/普通结局."""
+    """User-facing / skeleton ending title: complete literary收束语, never beat-snippet拼接."""
     canon = canonical_ending_type(ending_type)
     clean = sanitize_ending_node_title(title, canon)
-    if clean and not is_moral_judgment_ending_title(clean):
-        return clean[:16]
-    beat_text = str(beat or "").strip()
-    if beat_text:
-        snip = _beat_snippet(beat, "", max_len=4)
-        templates = _SKELETON_ENDING_TITLE_TEMPLATES.get(canon, ())
-        if templates:
-            idx = (hash(snip + canon + str(mood or "")) % len(templates) + len(templates)) % len(
-                templates
-            )
-            result = templates[idx].format(snip=snip)
-            return result[:16]
+    if clean and not is_moral_judgment_ending_title(clean) and not is_broken_ending_title(clean):
+        return _trim_literary_ending_title(clean)
+    pool = _LITERARY_ENDING_TITLE_POOL.get(canon, ())
+    if pool:
+        beat_text = str(beat or "").strip()
+        mood_text = str(mood or "").strip()
+        if beat_text or mood_text:
+            seed = f"{canon}|{mood_text}|{beat_text}"
+            idx = (hash(seed) % len(pool) + len(pool)) % len(pool)
+        else:
+            idx = 0
+        return pool[idx]
     return ending_type_label(canon)
 
 
@@ -179,6 +254,8 @@ def normalize_ending_node_fields(
     if not canon and title:
         canon = canonical_ending_type(title)
     clean_title = sanitize_ending_node_title(title, canon)
+    if clean_title and is_broken_ending_title(clean_title):
+        clean_title = ""
     if not clean_title:
         clean_title = (
             derive_literary_ending_title(canon, title=title)
@@ -269,6 +346,13 @@ _CAREFUL_FALLBACK_LABELS: tuple[str, ...] = (
     "按兵不动",
     "委婉试探",
     "暂且沉默",
+    "沉默不语",
+    "转移话题",
+    "避而不答",
+    "侧耳倾听",
+    "低头沉思",
+    "故作轻松",
+    "退一步想",
 )
 
 _BOLD_FALLBACK_LABELS: tuple[str, ...] = (
@@ -277,7 +361,50 @@ _BOLD_FALLBACK_LABELS: tuple[str, ...] = (
     "点头答应",
     "摇头拒绝",
     "直接离开",
+    "答应帮忙",
+    "断然拒绝",
+    "揭穿真相",
+    "主动示好",
+    "拂袖而去",
+    "坚持己见",
+    "冒险一试",
 )
+
+_EXTRA_UNIQUE_LABELS: tuple[str, ...] = (
+    "轻声追问",
+    "默然离去",
+    "坦诚相告",
+    "装作不知",
+    "驻足观望",
+    "试探开口",
+    "岔开闲话",
+    "索性直说",
+    "暂且不理",
+    "暗暗记下",
+    "缓声相问",
+    "转身回避",
+    "点头应允",
+    "摇头推辞",
+    "上前一步",
+    "退后半步",
+    "压低声音",
+    "抬眼对视",
+    "移开视线",
+    "握住对方的手",
+    "松开手转身",
+    "留下联系方式",
+    "删除那条消息",
+    "改天再谈",
+    "此刻说清",
+)
+
+_STANDALONE_CHOICE_POOL: tuple[str, ...] = tuple(
+    dict.fromkeys(
+        _CAREFUL_FALLBACK_LABELS + _BOLD_FALLBACK_LABELS + _EXTRA_UNIQUE_LABELS
+    )
+)
+
+MAX_CHOICE_TEXT_USES = 2
 
 _BROKEN_CHOICE_FRAGMENT_RE = re.compile(
     r"(?:先|立刻)?(?:观望|介入).*(?:说|接|逾)"
@@ -368,27 +495,135 @@ def _beat_snippet(beat: str, title: str, *, max_len: int = 5) -> str:
     return chunk or src[:max_len]
 
 
+def _choice_key_under_limit(key: str, used: Counter, max_uses: int) -> bool:
+    return bool(key) and used.get(key, 0) < max_uses
+
+
+def pick_choice_label(
+    *,
+    variant: int = 0,
+    used_choice_keys: Counter | None = None,
+    node_seen: set[str] | None = None,
+    beat: str = "",
+    title: str = "",
+    max_uses: int = MAX_CHOICE_TEXT_USES,
+) -> str:
+    """Pick a short action label under per-game reuse cap and within-node uniqueness."""
+    used = used_choice_keys if used_choice_keys is not None else Counter()
+    seen = node_seen or set()
+    pool = _STANDALONE_CHOICE_POOL
+    n = len(pool)
+    for offset in range(n * 3 + 12):
+        label = pool[(variant + offset) % n]
+        if is_broken_choice_fragment(label) or is_formulaic_choice_text(label):
+            continue
+        key = normalize_choice_text_key(label)
+        if key in seen or not _choice_key_under_limit(key, used, max_uses):
+            continue
+        return label
+    return _derive_unique_choice_label(
+        beat,
+        title,
+        variant=variant,
+        node_seen=seen,
+        used_choice_keys=used,
+        max_uses=max_uses,
+    )
+
+
+def _derive_unique_choice_label(
+    beat: str,
+    title: str,
+    *,
+    variant: int,
+    node_seen: set[str],
+    used_choice_keys: Counter,
+    max_uses: int,
+) -> str:
+    """Beat/title-hash unique label for 3rd+ global duplicates (never drops nodes)."""
+    snip = _beat_snippet(beat, title, max_len=4)
+    seed = hash((beat, title, variant)) & 0xFFFF_FFFF
+    actions = _EXTRA_UNIQUE_LABELS + _BOLD_FALLBACK_LABELS + _CAREFUL_FALLBACK_LABELS
+    suffixes = ("", "片刻", "今夜", "此刻", "再说")
+    for offset in range(len(actions) * len(suffixes) * 3):
+        idx = (seed + variant + offset) % len(actions)
+        action = actions[idx]
+        suffix = suffixes[(seed + offset // len(actions)) % len(suffixes)]
+        label = f"{action}{suffix}" if suffix else action
+        if snip and offset % max(len(suffixes), 1) == 0:
+            label = f"{action}·{snip}"
+        if is_broken_choice_fragment(label) or is_formulaic_choice_text(label):
+            continue
+        key = normalize_choice_text_key(label)
+        if key in node_seen or not _choice_key_under_limit(key, used_choice_keys, max_uses):
+            continue
+        return label[:16]
+    fallback = actions[(seed + variant) % len(actions)]
+    return fallback[:16]
+
+
+def _bump_choice_keys(
+    choices: list[dict],
+    used_choice_keys: Counter,
+) -> None:
+    for ch in choices:
+        if not isinstance(ch, dict):
+            continue
+        key = normalize_choice_text_key(str(ch.get("text") or ""))
+        if key:
+            used_choice_keys[key] += 1
+
+
 def derive_beat_choice_pair(
     beat: str,
     title: str,
     *,
     variant: int = 0,
     avoid_signatures: set[tuple[str, ...]] | None = None,
+    used_choice_keys: Counter | None = None,
+    max_uses: int = MAX_CHOICE_TEXT_USES,
 ) -> tuple[str, str]:
     """Rotate standalone careful/bold fallback labels; never inject beat fragments."""
-    _ = beat, title  # kept for call-site compatibility
+    _ = beat, title  # kept for call-site compatibility in unique-label fallback
     avoid = avoid_signatures or set()
+    used = used_choice_keys if used_choice_keys is not None else Counter()
     n = len(_CAREFUL_FALLBACK_LABELS)
-    for offset in range(n * 3):
+    for offset in range(n * 4):
         idx = (variant + offset) % n
         careful = _CAREFUL_FALLBACK_LABELS[idx]
         bold = _BOLD_FALLBACK_LABELS[idx % len(_BOLD_FALLBACK_LABELS)]
         if is_broken_choice_fragment(careful) or is_broken_choice_fragment(bold):
             continue
-        sig = tuple(sorted(normalize_choice_text_key(t) for t in (careful, bold)))
+        c_key = normalize_choice_text_key(careful)
+        b_key = normalize_choice_text_key(bold)
+        if c_key == b_key:
+            continue
+        if not _choice_key_under_limit(c_key, used, max_uses):
+            continue
+        if not _choice_key_under_limit(b_key, used, max_uses):
+            continue
+        sig = tuple(sorted((c_key, b_key)))
         if len(sig) == 2 and sig not in avoid:
             return careful, bold
-    return _CAREFUL_FALLBACK_LABELS[0], _BOLD_FALLBACK_LABELS[0]
+    node_seen: set[str] = set()
+    careful = pick_choice_label(
+        variant=variant,
+        used_choice_keys=used,
+        node_seen=node_seen,
+        beat=beat,
+        title=title,
+        max_uses=max_uses,
+    )
+    node_seen.add(normalize_choice_text_key(careful))
+    bold = pick_choice_label(
+        variant=variant + 1,
+        used_choice_keys=used,
+        node_seen=node_seen,
+        beat=beat,
+        title=title,
+        max_uses=max_uses,
+    )
+    return careful, bold
 
 
 def derive_ending_choice_labels(bible_dict: dict) -> list[str] | None:
@@ -414,11 +649,13 @@ def enrich_node_choices(
     variant: int,
     avoid_signatures: set[tuple[str, ...]],
     ending_labels: list[str] | None = None,
+    used_choice_signatures: Counter | None = None,
 ) -> list[dict]:
     """Replace only empty/legacy generic choice labels; never overwrite specific LLM text."""
     if len(choices) < 2:
         return choices
 
+    used = used_choice_signatures if used_choice_signatures is not None else Counter()
     out = [dict(c) for c in choices if isinstance(c, dict)]
     generic_indices = [
         i
@@ -429,18 +666,34 @@ def enrich_node_choices(
     if not generic_indices:
         if sig:
             avoid_signatures.add(sig)
+        _bump_choice_keys(out, used)
         return out
 
     if len(out) >= 3 and ending_labels and len(ending_labels) >= len(out):
         for i in generic_indices:
             if i < len(ending_labels):
-                out[i]["text"] = ending_labels[i]
+                label = ending_labels[i]
+                key = normalize_choice_text_key(label)
+                if not _choice_key_under_limit(key, used, MAX_CHOICE_TEXT_USES):
+                    label = pick_choice_label(
+                        variant=variant + i,
+                        used_choice_keys=used,
+                        node_seen={
+                            normalize_choice_text_key(str(out[j].get("text") or ""))
+                            for j in range(len(out))
+                            if j != i
+                        },
+                        beat=beat,
+                        title=title,
+                    )
+                out[i]["text"] = label
     elif len(out) >= 2:
         careful, bold = derive_beat_choice_pair(
             beat,
             title,
             variant=variant,
             avoid_signatures=avoid_signatures,
+            used_choice_keys=used,
         )
         pair_texts = (careful, bold)
         extra_offset = 0
@@ -448,18 +701,31 @@ def enrich_node_choices(
             if i < len(pair_texts):
                 out[i]["text"] = pair_texts[i]
             else:
-                extra, _ = derive_beat_choice_pair(
-                    beat,
-                    title,
+                node_seen = {
+                    normalize_choice_text_key(str(out[j].get("text") or ""))
+                    for j in range(len(out))
+                    if j != i
+                }
+                out[i]["text"] = pick_choice_label(
                     variant=variant + extra_offset + 2,
-                    avoid_signatures=avoid_signatures,
+                    used_choice_keys=used,
+                    node_seen=node_seen,
+                    beat=beat,
+                    title=title,
                 )
-                out[i]["text"] = extra
                 extra_offset += 1
     new_sig = choice_text_set_signature(out)
     if new_sig:
         avoid_signatures.add(new_sig)
-    return ensure_distinct_choice_texts(out, beat=beat, title=title, variant=variant)
+    result = ensure_distinct_choice_texts(
+        out,
+        beat=beat,
+        title=title,
+        variant=variant,
+        used_choice_signatures=used,
+    )
+    _bump_choice_keys(result, used)
+    return result
 
 
 def ensure_distinct_choice_texts(
@@ -468,10 +734,12 @@ def ensure_distinct_choice_texts(
     beat: str = "",
     title: str = "",
     variant: int = 0,
+    used_choice_signatures: Counter | None = None,
 ) -> list[dict]:
     """Ensure each choice in a node has a unique display label after sanitization."""
     if not choices:
         return []
+    used = used_choice_signatures if used_choice_signatures is not None else Counter()
     out: list[dict] = []
     seen: set[str] = set()
     fb_idx = 0
@@ -487,14 +755,17 @@ def ensure_distinct_choice_texts(
                 re.split(r"[（(]", str(c.get("text") or ""), maxsplit=1)[0].strip()
             )
         key = normalize_choice_text_key(clean)
-        if not clean or key in seen:
-            while fb_idx < len(_CAREFUL_FALLBACK_LABELS) * 6:
-                careful, bold = derive_beat_choice_pair(
-                    beat,
-                    title,
+        # Within-node only; global 3rd+ dedup is rewrite_graph_choice_text_frequency.
+        needs_replace = not clean or key in seen
+        if needs_replace:
+            while fb_idx < len(_STANDALONE_CHOICE_POOL) * 8:
+                candidate = pick_choice_label(
                     variant=variant + fb_idx,
+                    used_choice_keys=used,
+                    node_seen=seen,
+                    beat=beat,
+                    title=title,
                 )
-                candidate = careful if fb_idx % 2 == 0 else bold
                 fb_idx += 1
                 ck = normalize_choice_text_key(candidate)
                 if ck not in seen:
@@ -505,6 +776,55 @@ def ensure_distinct_choice_texts(
         c["text"] = clean or "继续"
         out.append(c)
     return out
+
+
+def rewrite_graph_choice_text_frequency(
+    nodes: dict,
+    *,
+    max_uses: int = MAX_CHOICE_TEXT_USES,
+    node_order: list[str] | None = None,
+) -> None:
+    """In-place: rewrite 3rd+ occurrence of the same normalized choice text."""
+    order = node_order or sorted(nodes.keys())
+    used: Counter = Counter()
+    variant = 0
+    for nid in order:
+        raw = nodes.get(nid)
+        if not isinstance(raw, dict) or raw.get("is_ending"):
+            continue
+        choices = raw.get("choices") or []
+        if not isinstance(choices, list) or len(choices) < 2:
+            continue
+        beat = str(raw.get("emotion_trigger") or raw.get("title") or nid)
+        title = str(raw.get("title") or nid)
+        node_seen: set[str] = set()
+        for ch in choices:
+            if not isinstance(ch, dict):
+                continue
+            clean = sanitize_choice_display_text(str(ch.get("text") or ""))
+            key = normalize_choice_text_key(clean)
+            if (
+                key
+                and key not in node_seen
+                and _choice_key_under_limit(key, used, max_uses)
+            ):
+                node_seen.add(key)
+                used[key] += 1
+                ch["text"] = clean
+                continue
+            replacement = _derive_unique_choice_label(
+                beat,
+                title,
+                variant=variant,
+                node_seen=node_seen,
+                used_choice_keys=used,
+                max_uses=max_uses,
+            )
+            variant += 1
+            ch["text"] = replacement
+            r_key = normalize_choice_text_key(replacement)
+            node_seen.add(r_key)
+            used[r_key] += 1
 
 
 def prepare_choice_dicts(choices: list) -> list[dict]:

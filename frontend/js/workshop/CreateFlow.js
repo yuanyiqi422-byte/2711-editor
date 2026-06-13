@@ -203,6 +203,14 @@
         return;
       }
 
+      if (global.ApiConfig && global.ApiConfig.isBackendAvailable && !global.ApiConfig.isBackendAvailable()) {
+        onError(
+          (global.ApiConfig.backendStatusMessage && global.ApiConfig.backendStatusMessage()) ||
+            "故事解析服务暂时不可用，请稍后再试。"
+        );
+        return;
+      }
+
       pipeline.reset();
       setLoading(true);
       startElapsedTimer(text.length);
@@ -220,7 +228,7 @@
             ? global.ApiConfig.apiFetchWithRetry.bind(global.ApiConfig)
             : fetch;
         const healthRes = await healthFetch("/api/health", undefined, {
-          retries: 3,
+          retries: 1,
           delayMs: 8000,
           timeoutMs: 25000,
           retryNetwork: true,
@@ -228,6 +236,12 @@
         const health = global.ApiConfig && global.ApiConfig.readJsonOrApiError
           ? await global.ApiConfig.readJsonOrApiError(healthRes, "无法连接故事解析服务")
           : await healthRes.json().catch(function () { return {}; });
+        if (health.ok === false) {
+          throw new Error(
+            (health.env_issues && health.env_issues[0]) ||
+              "故事解析服务尚未就绪，请稍后再试。"
+          );
+        }
         if (!health.has_key) {
           throw new Error(
             "未配置 AI_API_KEY。请复制 backend/.env.example 为 backend/.env 并填入密钥，然后重启服务。"

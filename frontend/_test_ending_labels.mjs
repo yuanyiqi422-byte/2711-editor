@@ -22,9 +22,12 @@ const neutralNode = {
 const metaNeutral = EndingLabels.meta("neutral", neutralNode);
 console.log("meta neutral:", JSON.stringify(metaNeutral));
 assert(
-  metaNeutral.typeLine.includes("人间") || metaNeutral.typeLine === "潮起潮落，故事至此",
-  "typeLine from excerpt or literary fallback"
+  metaNeutral.typeLine.includes("晚风") ||
+    metaNeutral.typeLine.includes("人间") ||
+    metaNeutral.typeLine === "晚风里的秘密",
+  "typeLine from excerpt clause or literary fallback, got " + metaNeutral.typeLine
 );
+assert(metaNeutral.subtitle.includes("人间") || metaNeutral.subtitle === "", "subtitle from last line, not stacked generic");
 assert(metaNeutral.typeLine !== "平和结局" && metaNeutral.typeLine !== "普通结局", "no moral judgment");
 assert(!metaNeutral.synopsis.includes("neutral"), "synopsis must not contain English enum");
 
@@ -55,9 +58,19 @@ assert(galleryLiterary === "尘埃落定，各归其所", "gallery should use no
 
 const galleryFallback = EndingLabels.galleryLabel("neutral", { title: "neutral 结局", lines: [] });
 assert(
-  galleryFallback === "潮起潮落，故事至此",
+  galleryFallback === "晚风里的秘密",
   "gallery fallback should be literary, got " + galleryFallback
 );
+
+const brokenCampus = EndingLabels.meta("neutral", {
+  title: "夏备战高已远，平淡收场",
+  lines: [{ text: "高考结束的那个夏天，他们各自走向不同的城市，把未说出口的话留在了晚风里。" }],
+});
+console.log("meta campus broken:", JSON.stringify(brokenCampus));
+assert(brokenCampus.typeLine !== "夏备战高已远，平淡收场", "reject broken snippet title");
+assert(!EndingLabels.isBrokenEndingTitle(brokenCampus.typeLine), "typeLine must be complete phrase");
+assert(brokenCampus.typeLine.length >= 4 && brokenCampus.typeLine.length <= 12, "typeLine length 4-12");
+assert(brokenCampus.subtitle !== "尘埃落定，生活回到寻常轨道。", "no stacked generic subtitle");
 
 console.log("gallery fallback:", galleryFallback);
 if (failed) {

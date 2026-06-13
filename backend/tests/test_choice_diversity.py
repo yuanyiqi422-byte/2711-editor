@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from graph_validate import validate_choice_text_diversity
+from graph_validate import validate_choice_text_diversity, validate_choice_text_frequency
 from models import choice_text_set_signature, is_generic_choice_text
 from narrative_service import _enrich_pack_choices, _skeleton_from_bible
 
@@ -26,7 +26,7 @@ def _mid_choice_signatures(skeleton: dict) -> list[tuple[str, ...]]:
     return sigs
 
 
-def test_two_bibles_produce_different_choice_texts() -> None:
+def test_two_bibles_each_respect_choice_frequency_cap() -> None:
     bible_campus = {
         "plot_beats": [
             "开学暗恋同桌",
@@ -60,13 +60,38 @@ def test_two_bibles_produce_different_choice_texts() -> None:
     sk_campus, _ = _skeleton_from_bible(bible_campus, 5000)
     sk_xianxia, _ = _skeleton_from_bible(bible_xianxia, 5000)
 
-    campus_sigs = _mid_choice_signatures(sk_campus)
-    xianxia_sigs = _mid_choice_signatures(sk_xianxia)
-    assert campus_sigs
-    assert xianxia_sigs
-    assert campus_sigs != xianxia_sigs
+    for skeleton in (sk_campus, sk_xianxia):
+        assert not validate_choice_text_frequency(skeleton)
+        for raw in skeleton.values():
+            if not isinstance(raw, dict):
+                continue
+            for ch in raw.get("choices") or []:
+                if not isinstance(ch, dict):
+                    continue
+                text = str(ch.get("text") or "")
+                assert not is_generic_choice_text(text), text
 
-    assert set(campus_sigs).isdisjoint(set(xianxia_sigs))
+    campus_fork = next(
+        raw.get("choices")
+        for raw in sk_campus.values()
+        if isinstance(raw, dict)
+        and any(
+            isinstance(ch, dict) and str(ch.get("next") or "").startswith("ending_")
+            for ch in (raw.get("choices") or [])
+        )
+    )
+    xianxia_fork = next(
+        raw.get("choices")
+        for raw in sk_xianxia.values()
+        if isinstance(raw, dict)
+        and any(
+            isinstance(ch, dict) and str(ch.get("next") or "").startswith("ending_")
+            for ch in (raw.get("choices") or [])
+        )
+    )
+    campus_fork_texts = {str(ch.get("text") or "") for ch in campus_fork or []}
+    xianxia_fork_texts = {str(ch.get("text") or "") for ch in xianxia_fork or []}
+    assert campus_fork_texts != xianxia_fork_texts
 
 
 def test_skeleton_choice_nodes_not_generic_templates() -> None:

@@ -33,13 +33,62 @@
   function backendProxyMisconfigMessage() {
     return isLocalDevHost()
       ? "API 请求返回了网页而非接口数据。请通过 http://127.0.0.1:8010 访问，不要直接双击打开 frontend/index.html。"
-      : "API 代理未生效：/api 返回了网页而非接口数据。请确认 Netlify 已设置 API_BACKEND_URL 并重新部署前端。";
+      : "API 配置异常：/api 返回了网页而非接口数据。请确认 Cloudflare Pages 部署时已注入 API_BACKEND_URL 并重新部署前端。";
   }
 
   function streamIncompleteMessage() {
     return isLocalDevHost()
       ? "生成流意外结束，未收到完整游戏数据。常见原因：网络中断、AI 接口超时，或本地后端被中断。请刷新后重试；若仍失败，检查 backend/.env 中的 AI_API_KEY。"
-      : "生成流意外结束，未收到完整游戏数据。常见原因：网络中断、Netlify 代理截断长连接，或 AI 接口超时。请刷新后重试；若仍失败，稍等 Render 唤醒后再试。";
+      : "生成流意外结束，未收到完整游戏数据。常见原因：网络中断、AI 接口超时，或 Render 实例休眠。请刷新后重试；若仍失败，稍等 Render 唤醒后再试。";
+  }
+
+  var backendState = {
+    ok: null,
+    hasKey: null,
+    version: "",
+    checkedAt: 0,
+  };
+
+  function isBackendAvailable() {
+    return backendState.ok !== false;
+  }
+
+  function backendStatusMessage() {
+    if (backendState.ok === false) {
+      return backendUnavailableMessage();
+    }
+    if (backendState.hasKey === false) {
+      return "故事解析服务未配置 AI 密钥，暂时无法生成。";
+    }
+    return "";
+  }
+
+  async function probeBackendHealth(options) {
+    var opts = options || {};
+    var fetchFn = opts.fetchFn || apiFetchWithRetry;
+    try {
+      var res = await fetchFn(
+        "/api/health",
+        undefined,
+        {
+          retries: opts.retries != null ? opts.retries : 1,
+          delayMs: opts.delayMs != null ? opts.delayMs : 6000,
+          timeoutMs: opts.timeoutMs != null ? opts.timeoutMs : 20000,
+          retryNetwork: true,
+        }
+      );
+      var health = await readJsonOrApiError(res, "无法连接故事解析服务");
+      backendState.ok = health.ok !== false;
+      backendState.hasKey = health.has_key !== false;
+      backendState.version = health.version || "";
+      backendState.checkedAt = Date.now();
+      return health;
+    } catch (err) {
+      backendState.ok = false;
+      backendState.hasKey = null;
+      backendState.checkedAt = Date.now();
+      throw err;
+    }
   }
 
 
@@ -522,6 +571,22 @@
 
     streamIncompleteMessage: streamIncompleteMessage,
 
+    isBackendAvailable: isBackendAvailable,
+
+    backendStatusMessage: backendStatusMessage,
+
+    probeBackendHealth: probeBackendHealth,
+
+    getBackendState: function () {
+      return Object.assign({}, backendState);
+    },
+
   };
+
+  if (typeof document !== "undefined") {
+    document.addEventListener("DOMContentLoaded", function () {
+      probeBackendHealth({ retries: 1 }).catch(function () {});
+    });
+  }
 
 })(typeof window !== "undefined" ? window : globalThis);

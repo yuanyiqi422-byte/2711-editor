@@ -7,6 +7,7 @@ import os
 import random
 import re
 import time
+from collections import Counter
 from collections.abc import Awaitable, Callable
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,7 @@ from graph_validate import (
     count_choice_nodes,
     outline_soft_pass,
     validate_choice_text_diversity,
+    validate_choice_text_frequency,
     validate_outline_structure,
 )
 from scene_match import assign_node_backgrounds, extract_story_context
@@ -35,10 +37,12 @@ from models import (
     EndingBlueprint,
     EmotionalBeatPoint,
     GamePack,
+    _bump_choice_keys,
     derive_ending_choice_labels,
     derive_beat_choice_pair,
     enrich_node_choices,
     prepare_choice_dicts,
+    rewrite_graph_choice_text_frequency,
     StoryBible,
     StoryNode,
     STYLE_LABELS,
@@ -160,9 +164,12 @@ def _valid_choice_dicts(choices: list) -> list[dict]:
 def _enrich_skeleton_choices(skeleton: dict, bible_dict: dict) -> None:
     """Ensure skeleton choice labels are beat-specific and not repeated across nodes."""
     avoid_signatures: set[tuple[str, ...]] = set()
+    used_choice_keys: Counter = Counter()
     ending_labels = derive_ending_choice_labels(bible_dict)
     variant = 0
-    for nid, raw in skeleton.items():
+    node_order = list(skeleton.keys())
+    for nid in node_order:
+        raw = skeleton.get(nid)
         if not isinstance(raw, dict) or raw.get("is_ending"):
             continue
         choices = raw.get("choices") or []
@@ -181,8 +188,10 @@ def _enrich_skeleton_choices(skeleton: dict, bible_dict: dict) -> None:
             variant=variant,
             avoid_signatures=avoid_signatures,
             ending_labels=ending_labels if fork_ending else None,
+            used_choice_signatures=used_choice_keys,
         )
         variant += 1
+    rewrite_graph_choice_text_frequency(skeleton, node_order=node_order)
 
 
 def _enrich_pack_choices(
@@ -190,10 +199,13 @@ def _enrich_pack_choices(
     bible_dict: dict,
 ) -> dict[str, StoryNode]:
     avoid_signatures: set[tuple[str, ...]] = set()
+    used_choice_keys: Counter = Counter()
     ending_labels = derive_ending_choice_labels(bible_dict)
     variant = 0
     out: dict[str, StoryNode] = {}
-    for nid, node in nodes.items():
+    node_order = list(nodes.keys())
+    for nid in node_order:
+        node = nodes[nid]
         if node.is_ending or len(node.choices) < 2:
             out[nid] = node
             continue
@@ -206,6 +218,7 @@ def _enrich_pack_choices(
             variant=variant,
             avoid_signatures=avoid_signatures,
             ending_labels=ending_labels if fork_ending else None,
+            used_choice_signatures=used_choice_keys,
         )
         variant += 1
         out[nid] = node.model_copy(
@@ -215,6 +228,19 @@ def _enrich_pack_choices(
                 ]
             }
         )
+    raw_nodes = {nid: n.model_dump() for nid, n in out.items()}
+    rewrite_graph_choice_text_frequency(raw_nodes, node_order=node_order)
+    for nid, node in out.items():
+        raw_choices = raw_nodes.get(nid, {}).get("choices") or []
+        if len(raw_choices) >= 2:
+            out[nid] = node.model_copy(
+                update={
+                    "choices": [
+                        ChoiceOption.model_validate(c)
+                        for c in _valid_choice_dicts(raw_choices)
+                    ]
+                }
+            )
     return out
 
 
@@ -762,6 +788,10 @@ def _validate_graph(
     if diversity_errors:
         raise LLMError(f"抉择文案重复度过高：{diversity_errors[0]}")
 
+    frequency_errors = validate_choice_text_frequency(nodes_raw)
+    if frequency_errors:
+        raise LLMError(f"抉择文案重复过多：{frequency_errors[0]}")
+
 
 def _batch_max_tokens(batch_len: int, *, attempt: int = 0) -> int:
     reasoning = resolved_model_is_reasoning(fast=SCENE_BATCH_FAST_MODEL)
@@ -929,10 +959,9 @@ def _skeleton_from_bible(bible_dict: dict, source_char_count: int) -> tuple[dict
     nodes_min = int(scale.get("nodes_min") or 8)
     nodes_max = int(scale.get("nodes_max") or nodes_min + 4)
     fallback_endings = 3
-    beat_cap = max(4, nodes_max - fallback_endings)
     beat_floor = max(4, nodes_min - fallback_endings)
-    target = min(beat_cap, max(len(beats), beat_floor))
-    beats = beats[:target]
+    # Never truncate bible plot_beats for label caps; pad only when too few beats.
+    target = max(len(beats), beat_floor)
     while len(beats) < target:
         beats.append(f"过渡 {len(beats) + 1}")
 
@@ -968,6 +997,7 @@ def _skeleton_from_bible(bible_dict: dict, source_char_count: int) -> tuple[dict
     ratio_floor = math.ceil(len(ids) * 0.35) if len(ids) >= 4 else min_choices
     choice_target = max(min_choices, ratio_floor)
     mid_choices_needed = max(0, choice_target - 1)
+    used_choice_keys: Counter = Counter()
     if len(ids) >= 4 and mid_choices_needed > 0:
         fork_idx = len(ids) - 1
         candidates = list(range(1, fork_idx))
@@ -990,6 +1020,7 @@ def _skeleton_from_bible(bible_dict: dict, source_char_count: int) -> tuple[dict
                 beat,
                 nodes[nid]["title"],
                 variant=idx,
+                used_choice_keys=used_choice_keys,
             )
             nodes[nid]["after_lines_next"] = ""
             nodes[nid]["scene_type"] = "climax"
@@ -1013,14 +1044,19 @@ def _skeleton_from_bible(bible_dict: dict, source_char_count: int) -> tuple[dict
                     "relationship_delta": "+1",
                 },
             ]
+            _bump_choice_keys(nodes[nid]["choices"], used_choice_keys)
 
     fork_id = ids[-1]
     nodes[fork_id]["after_lines_next"] = ""
     nodes[fork_id]["scene_type"] = "climax"
     last_beat = beats[-1] if beats else "收束"
     ending_labels = derive_ending_choice_labels(bible_dict)
-    careful, bold = derive_beat_choice_pair(last_beat, nodes[fork_id]["title"], variant=0)
-    extra, _ = derive_beat_choice_pair(last_beat, nodes[fork_id]["title"], variant=1)
+    careful, bold = derive_beat_choice_pair(
+        last_beat, nodes[fork_id]["title"], variant=0, used_choice_keys=used_choice_keys
+    )
+    extra, _ = derive_beat_choice_pair(
+        last_beat, nodes[fork_id]["title"], variant=1, used_choice_keys=used_choice_keys
+    )
     fork_texts = ending_labels if ending_labels else [careful, bold, extra]
     nodes[fork_id]["choices"] = [
         {
@@ -1048,6 +1084,7 @@ def _skeleton_from_bible(bible_dict: dict, source_char_count: int) -> tuple[dict
             "narrative_impact": "归于平淡收场",
         },
     ]
+    _bump_choice_keys(nodes[fork_id]["choices"], used_choice_keys)
     nodes[fork_id]["is_ending"] = False
 
     for ending_id, ending_type in (
@@ -1323,7 +1360,7 @@ async def _run_scene_batches(
             fast_model=SCENE_BATCH_FAST_MODEL,
             timeout_sec=timeout_sec,
             step_label="场景对白",
-            max_attempts=max(LLM_JSON_MAX_ATTEMPTS, 3),
+            max_attempts=LLM_JSON_MAX_ATTEMPTS,
             strict_json_mode=True,
         )
 
@@ -1473,7 +1510,7 @@ async def analyze_story(
         max_tokens=_bible_max_tokens(),
         fast_model=use_fast,
         step_label="故事圣经",
-        max_attempts=max(LLM_JSON_MAX_ATTEMPTS, 3),
+        max_attempts=LLM_JSON_MAX_ATTEMPTS,
     )
     logger.info(
         "analyze_story done %.1fs chars=%s fast=%s",
