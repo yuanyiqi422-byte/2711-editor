@@ -203,18 +203,10 @@
         return;
       }
 
-      if (global.ApiConfig && global.ApiConfig.isBackendAvailable && !global.ApiConfig.isBackendAvailable()) {
-        onError(
-          (global.ApiConfig.backendStatusMessage && global.ApiConfig.backendStatusMessage()) ||
-            "故事解析服务暂时不可用，请稍后再试。"
-        );
-        return;
-      }
-
       pipeline.reset();
       setLoading(true);
       startElapsedTimer(text.length);
-      pipeline.setProgress(2, "正在构筑世界……", {
+      pipeline.setProgress(1, "正在连接故事解析服务…", {
         step: "read",
         eta: createEtaLabel,
         scale: createEtaScale,
@@ -223,19 +215,37 @@
 
       let handledTimeout = false;
       try {
-        const healthFetch =
-          global.ApiConfig && global.ApiConfig.apiFetchWithRetry
-            ? global.ApiConfig.apiFetchWithRetry.bind(global.ApiConfig)
-            : fetch;
-        const healthRes = await healthFetch("/api/health", undefined, {
-          retries: 1,
-          delayMs: 8000,
-          timeoutMs: 25000,
-          retryNetwork: true,
-        });
-        const health = global.ApiConfig && global.ApiConfig.readJsonOrApiError
-          ? await global.ApiConfig.readJsonOrApiError(healthRes, "无法连接故事解析服务")
-          : await healthRes.json().catch(function () { return {}; });
+        const ensureReady =
+          global.ApiConfig && global.ApiConfig.ensureBackendReady
+            ? global.ApiConfig.ensureBackendReady.bind(global.ApiConfig)
+            : null;
+        const health = ensureReady
+          ? await ensureReady({
+              signal: createAbort.signal,
+              onProgress: function (msg) {
+                pipeline.setProgress(1, msg, {
+                  step: "read",
+                  eta: createEtaLabel,
+                  scale: createEtaScale,
+                  charCount: text.length,
+                });
+              },
+            })
+          : await (async function () {
+              const healthFetch =
+                global.ApiConfig && global.ApiConfig.apiFetchWithRetry
+                  ? global.ApiConfig.apiFetchWithRetry.bind(global.ApiConfig)
+                  : fetch;
+              const healthRes = await healthFetch("/api/health", undefined, {
+                retries: 3,
+                delayMs: 10000,
+                timeoutMs: 90000,
+                retryNetwork: true,
+              });
+              return global.ApiConfig && global.ApiConfig.readJsonOrApiError
+                ? await global.ApiConfig.readJsonOrApiError(healthRes, "无法连接故事解析服务")
+                : await healthRes.json().catch(function () { return {}; });
+            })();
         if (health.ok === false) {
           throw new Error(
             (health.env_issues && health.env_issues[0]) ||
@@ -247,6 +257,13 @@
             "未配置 AI_API_KEY。请复制 backend/.env.example 为 backend/.env 并填入密钥，然后重启服务。"
           );
         }
+
+        pipeline.setProgress(2, "正在构筑世界……", {
+          step: "read",
+          eta: createEtaLabel,
+          scale: createEtaScale,
+          charCount: text.length,
+        });
 
         const createFetch =
           global.ApiConfig && global.ApiConfig.apiFetchWithRetry
@@ -377,15 +394,28 @@
           onError("已取消生成");
           pipeline.reset();
         } else {
-          const createContext = { phase: lastPipelineStep, pct: lastProgressPct };
+          const isConnectionFailure =
+            global.ApiConfig &&
+            global.ApiConfig.isTransientProbeFailure &&
+            global.ApiConfig.isTransientProbeFailure(err);
+          const createContext = {
+            phase: lastPipelineStep,
+            pct: lastProgressPct,
+            afterAutoRetry: isConnectionFailure,
+          };
           const friendly = reportCreateError(err, "生成流程异常", createContext);
-          if (isTimeoutError(err, friendly) && pipeline.showTimeoutRetry) {
+          if (
+            (isTimeoutError(err, friendly) || isConnectionFailure) &&
+            pipeline.showTimeoutRetry
+          ) {
             handledTimeout = true;
             onError("");
             const phaseLabel = CREATE_PHASE_LABELS[lastPipelineStep] || "";
-            const retryMsg = phaseLabel
-              ? phaseLabel + "阶段超时。生成超时，可点击重试"
-              : "生成超时，可点击重试";
+            const retryMsg = isConnectionFailure
+              ? "连接故事解析服务失败，已自动重试仍不可用，可点击重试"
+              : phaseLabel
+                ? phaseLabel + "阶段超时。生成超时，可点击重试"
+                : "生成超时，可点击重试";
             pipeline.showTimeoutRetry({
               message: retryMsg,
               onRetry: function () {

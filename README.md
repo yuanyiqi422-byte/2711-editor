@@ -2,11 +2,40 @@
 
 把小说/故事文本转化为**沉浸式分支互动游戏**：分析文本 → 生成分支剧情 → 视觉小说式游玩。
 
+**线上 Demo：** https://2711editor.pages.dev  
+**API：** https://two711-editor-api.onrender.com
+
 ## 品牌命名
 
-默认产品名为 **「2711编辑器」**（英文 *2711 Editor*）。
+默认产品名为 **2711编辑器**（英文 *2711 Editor*）。
 
 若要换用其他名称，改 `frontend/js/brand.js` 一处即可联动全站。
+
+## Pipeline（诚实版）
+
+当前实现是 **单文本上传 → LLM 分阶段生成 → 场景图匹配**，不是未落地的 map-reduce 全书分块引擎。长文超限时用 `smart_truncate` 做头/中/尾智能截取（可按章优先），圣经分析另受 `BIBLE_INPUT_CHARS` 约束；场景背景由 `scene_match` 按节点文案与风格打分分配。
+
+```mermaid
+flowchart LR
+  A[Upload TXT/MD/DOCX/PDF…] --> B[Extract full text]
+  B --> C{Length vs limits}
+  C -->|over limit| D["smart_truncate<br/>head / mid / tail"]
+  C -->|within limit| E[Full text]
+  D --> F["Bible analyze<br/>BIBLE_INPUT_CHARS"]
+  E --> F
+  F --> G[Outline / graph skeleton]
+  G --> H[Scene batches + dialogue]
+  H --> I["scene_match<br/>assign_node_backgrounds"]
+  I --> J[Playable VN pack + SSE progress]
+```
+
+| 术语 | 含义（代码真实行为） |
+|------|----------------------|
+| `smart_truncate` | `backend/document_extract.py`：超长时优先按章截取，否则头 ~42% + 中段 + 尾部拼接，并返回截断说明 |
+| `BIBLE_INPUT_CHARS` | 默认 12000；圣经/故事分析阶段的采样上限（场景节选仍可走全文策略，见 `main._prepare_bible_text`） |
+| `scene_match` | `backend/scene_match.py`：按 `image_prompt` / mood / style / 关键词为节点分配 `scene_id` 与 `bg_path`，避免全图同一张背景 |
+
+后续可扩展里的“长文本分章摘要 / map-reduce”仍是 **roadmap**，请勿写成已上线能力。
 
 ## 快速开始（一键启动，无需手动重启）
 
@@ -75,7 +104,7 @@ powershell -File scripts/dev-watch.ps1
 - 粘贴或上传故事：**TXT / Markdown / Word (.docx) / PDF / RTF / EPUB**，单文件最大 **50MB**
 - 扫描版 PDF 自动 **OCR**
 - **上传后全文写入文本框**（默认不截字、不采样）；如需控制生成长度，可在 `backend/.env` 配置采样字数
-- **本地历史记录**：上传与生成自动保存，支持「载入文本」「直接游玩」，免重复上传 PDF
+- **本地历史记录**：上传与生成自动保存，支持“载入文本”“直接游玩”，免重复上传 PDF
 - 长篇可生成 **15～25 个场景节点**、2～3 种结局；短篇 **8～12** 节点
 - **背景音乐**：启程台可选内置氛围曲或上传本地 mp3/ogg/wav（会话内有效）。QQ Music 等外链库需平台 API 与版权授权，当前不支持
 
@@ -85,7 +114,7 @@ powershell -File scripts/dev-watch.ps1
 |------|------|------|
 | `MAX_UPLOAD_MB` | 50 | 单文件上传上限 |
 | `MAX_EXTRACT_CHARS` | **0**（不限） | 提取阶段正文上限；0 = 不截断 |
-| `MAX_CREATE_CHARS` | **0**（不限） | 「开始转化」提交上限；0 = 不限制 |
+| `MAX_CREATE_CHARS` | **0**（不限） | “开始转化”提交上限；0 = 不限制 |
 | `LLM_INPUT_CHARS` | **0** | 0 时用 `LLM_MODEL_SAFE_CHARS`；>0 为显式采样上限 |
 | `LLM_MODEL_SAFE_CHARS` | **0**（不采样） | 0 = 全文送入 AI；>0 且超长时智能采样 |
 | `MAX_PDF_PAGES` | **0** | **0 = 处理全部页**（受 `PDF_PAGE_HARD_CAP` 保护） |
@@ -115,7 +144,7 @@ powershell -File scripts/dev-watch.ps1
 
 - [ ] 接入生图 API，按 `image_prompt` 生成场景图（`/api/scene-image` 已预留）
 - [ ] 角色立绘与状态（好感/物品）
-- [ ] 长文本分章摘要 / map-reduce 全书分析
+- [ ] 长文本分章摘要 / map-reduce 全书分析（**未实现**；现状为 `smart_truncate` + 分阶段 LLM）
 - [x] 存档 / 本地历史（`backend/data/history/`）
 
 ## 说明

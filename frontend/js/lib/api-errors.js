@@ -61,26 +61,34 @@
     return typeof global.location !== "undefined" && global.location.protocol === "file:";
   }
 
-  function friendlyNetworkMessage() {
+  function friendlyNetworkMessage(context) {
     if (isFileProtocolPage()) {
       return global.ApiConfig && global.ApiConfig.backendProxyMisconfigMessage
         ? global.ApiConfig.backendProxyMisconfigMessage()
         : "API 请求返回了网页而非接口数据。请通过 http://127.0.0.1:8010 访问，不要直接双击打开 frontend/index.html。";
     }
     if (isLocalDev()) return localBackendDownMessage();
-    if (global.ApiConfig && global.ApiConfig.backendColdStartMessage && !global.ApiConfig.isLocalDev()) {
+    if (
+      context &&
+      context.afterAutoRetry &&
+      global.ApiConfig &&
+      global.ApiConfig.backendUnavailableMessage
+    ) {
       return (
-        global.ApiConfig.backendColdStartMessage() +
-        " 若刚打开页面，请等待约 1 分钟后再次点击「开始游戏」。"
+        global.ApiConfig.backendUnavailableMessage() +
+        " 已自动重试连接仍失败，请检查网络后刷新页面；Render 免费实例冷启动可能需要 1～2 分钟。"
       );
+    }
+    if (global.ApiConfig && global.ApiConfig.backendColdStartMessage && !global.ApiConfig.isLocalDev()) {
+      return global.ApiConfig.backendColdStartMessage();
     }
     return global.ApiConfig && global.ApiConfig.backendUnavailableMessage
       ? global.ApiConfig.backendUnavailableMessage()
-      : "无法连接故事解析服务。请检查网络后刷新页面重试；Render 免费实例冷启动约需 30～60 秒，稍等后再点「开始游戏」。";
+      : "无法连接故事解析服务。请检查网络后刷新页面重试；Render 免费实例冷启动约需 30～90 秒。";
   }
 
-  function friendlyBackendMessage(err) {
-    if (isNetworkFetchError(err)) return friendlyNetworkMessage();
+  function friendlyBackendMessage(err, networkContext) {
+    if (isNetworkFetchError(err)) return friendlyNetworkMessage(networkContext);
     if (!isHtmlJsonParseError(err)) return "";
     if (isLocalDev()) return localBackendDownMessage();
     return global.ApiConfig && global.ApiConfig.backendUnavailableMessage
@@ -253,10 +261,11 @@
     if (typeof err === "string" && isProviderSwitchNoise(err)) {
       return fallback || "";
     }
-    const backendMsg = friendlyBackendMessage(err);
+    var networkContext = context && context.afterAutoRetry ? { afterAutoRetry: true } : undefined;
+    const backendMsg = friendlyBackendMessage(err, networkContext);
     if (backendMsg) return backendMsg;
     if (typeof err === "string") {
-      const backendFromStr = friendlyBackendMessage(err);
+      const backendFromStr = friendlyBackendMessage(err, networkContext);
       if (backendFromStr) return backendFromStr;
       const llmFromStr = classifyLlmError(err, context);
       if (llmFromStr) return llmFromStr;

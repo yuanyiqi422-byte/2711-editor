@@ -82,6 +82,21 @@ curl -i -X OPTIONS https://two711-editor-api.onrender.com/api/health ^
 
 ---
 
+## Render 免费实例保活（可选）
+
+Render 免费 tier 约 **15 分钟无请求** 后会休眠；冷启动通常需 **30～90 秒**。前端已在页面加载时后台 ping `/api/health`，并在点击「开始游戏」时 **自动重试连接**（最多约 8 次，单次超时 90 秒），无需用户手动等待。
+
+若仍频繁遇到唤醒延迟，可用 **外部免费 cron** 每 10～14 分钟 ping 一次（仅 health，不调用 LLM，几乎零成本）：
+
+| 服务 | 设置 |
+|------|------|
+| [UptimeRobot](https://uptimerobot.com/) | Monitor type: HTTP(s)，URL: `https://two711-editor-api.onrender.com/api/health`，Interval: 5 min（免费档） |
+| [cron-job.org](https://cron-job.org/) | URL 同上，Schedule: `*/14 * * * *`（每 14 分钟） |
+
+> 注意：过于频繁（如每分钟）的 ping 可能触发 Render 公平使用限制；10～14 分钟间隔足够避免大多数冷启动。
+
+---
+
 ## Netlify（已停用）
 
 原站点 `https://2711editor.netlify.app` 因额度暂停。配置仍保留在 `netlify.toml` 供参考，生产请使用 Cloudflare Pages。

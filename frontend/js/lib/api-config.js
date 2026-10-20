@@ -21,7 +21,7 @@
   function backendColdStartMessage() {
     return isLocalDevHost()
       ? localBackendDownMessage()
-      : "故事解析服务正在唤醒（Render 免费实例冷启动约 30～60 秒）。请稍候再点「开始游戏」重试。";
+      : "故事解析服务正在唤醒（Render 免费实例冷启动约 30～90 秒），正在自动重试连接…";
   }
 
   function backendUnavailableMessage() {
@@ -47,14 +47,27 @@
     hasKey: null,
     version: "",
     checkedAt: 0,
+    warming: false,
+    permanentDown: false,
   };
 
+  var BACKEND_READY_CACHE_MS = 30000;
+
   function isBackendAvailable() {
+    if (backendState.permanentDown) return false;
+    if (backendState.warming) return true;
     return backendState.ok !== false;
   }
 
+  function isBackendWarming() {
+    return backendState.warming === true;
+  }
+
   function backendStatusMessage() {
-    if (backendState.ok === false) {
+    if (backendState.warming) {
+      return "正在连接故事解析服务…";
+    }
+    if (backendState.ok === false && backendState.permanentDown) {
       return backendUnavailableMessage();
     }
     if (backendState.hasKey === false) {
@@ -63,32 +76,160 @@
     return "";
   }
 
+  function isTransientProbeFailure(err, res) {
+    if (res && isTransientBackendStatus(res.status)) return true;
+    if (!err) return false;
+    if (err.cause === "timeout") return true;
+    if (isRetryableFetchError(err)) return true;
+    var m = err.message ? String(err.message) : "";
+    if (
+      m.indexOf("正在唤醒") !== -1 ||
+      m.indexOf("冷启动") !== -1 ||
+      m.indexOf("502") !== -1 ||
+      m.indexOf("503") !== -1 ||
+      m.indexOf("504") !== -1
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  function markBackendProbeSuccess(health) {
+    backendState.ok = health.ok !== false;
+    backendState.hasKey = health.has_key !== false;
+    backendState.version = health.version || "";
+    backendState.checkedAt = Date.now();
+    backendState.warming = false;
+    backendState.permanentDown = false;
+  }
+
+  function markBackendProbeFailure(err, opts) {
+    backendState.checkedAt = Date.now();
+    var soft = opts && opts.transientSoftFail;
+    if (soft || isTransientProbeFailure(err)) {
+      backendState.warming = true;
+      backendState.permanentDown = false;
+      return;
+    }
+    backendState.ok = false;
+    backendState.hasKey = null;
+    backendState.warming = false;
+    backendState.permanentDown = true;
+  }
+
+  function sleepWithAbort(ms, signal) {
+    return new Promise(function (resolve, reject) {
+      if (signal && signal.aborted) {
+        reject(signal.reason || new DOMException("Aborted", "AbortError"));
+        return;
+      }
+      var timer = setTimeout(resolve, ms);
+      if (!signal) return;
+      function onAbort() {
+        clearTimeout(timer);
+        reject(signal.reason || new DOMException("Aborted", "AbortError"));
+      }
+      signal.addEventListener("abort", onAbort, { once: true });
+    });
+  }
+
+  function defaultWakeProbeOptions() {
+    if (isLocalDevHost()) {
+      return { retries: 2, delayMs: 4000, timeoutMs: 15000 };
+    }
+    return { retries: 5, delayMs: 10000, timeoutMs: 90000 };
+  }
+
   async function probeBackendHealth(options) {
     var opts = options || {};
     var fetchFn = opts.fetchFn || apiFetchWithRetry;
+    var probeOpts = defaultWakeProbeOptions();
     try {
       var res = await fetchFn(
         "/api/health",
         undefined,
         {
-          retries: opts.retries != null ? opts.retries : 1,
-          delayMs: opts.delayMs != null ? opts.delayMs : 6000,
-          timeoutMs: opts.timeoutMs != null ? opts.timeoutMs : 20000,
+          retries: opts.retries != null ? opts.retries : probeOpts.retries,
+          delayMs: opts.delayMs != null ? opts.delayMs : probeOpts.delayMs,
+          timeoutMs: opts.timeoutMs != null ? opts.timeoutMs : probeOpts.timeoutMs,
           retryNetwork: true,
         }
       );
       var health = await readJsonOrApiError(res, "无法连接故事解析服务");
-      backendState.ok = health.ok !== false;
-      backendState.hasKey = health.has_key !== false;
-      backendState.version = health.version || "";
-      backendState.checkedAt = Date.now();
+      markBackendProbeSuccess(health);
       return health;
     } catch (err) {
-      backendState.ok = false;
-      backendState.hasKey = null;
-      backendState.checkedAt = Date.now();
+      markBackendProbeFailure(err, opts);
       throw err;
     }
+  }
+
+  async function ensureBackendReady(options) {
+    var opts = options || {};
+    var onProgress = opts.onProgress || function () {};
+    var signal = opts.signal;
+    var isProd = !isLocalDevHost();
+
+    if (
+      backendState.ok === true &&
+      backendState.hasKey !== false &&
+      Date.now() - backendState.checkedAt < BACKEND_READY_CACHE_MS
+    ) {
+      return {
+        ok: true,
+        has_key: backendState.hasKey !== false,
+        version: backendState.version,
+      };
+    }
+
+    var maxAttempts = opts.attempts != null ? opts.attempts : isProd ? 8 : 4;
+    var baseDelay = opts.delayMs != null ? opts.delayMs : isProd ? 8000 : 3000;
+    var timeoutMs = opts.timeoutMs != null ? opts.timeoutMs : isProd ? 90000 : 20000;
+    var lastErr = null;
+
+    backendState.warming = true;
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (signal && signal.aborted) {
+        backendState.warming = false;
+        throw signal.reason || new DOMException("Aborted", "AbortError");
+      }
+
+      var progressMsg = isProd
+        ? "正在连接故事解析服务…（" + attempt + "/" + maxAttempts + "）"
+        : "正在检查本地后端…（" + attempt + "/" + maxAttempts + "）";
+      if (attempt > 1 && isProd) {
+        progressMsg += " · Render 实例唤醒中";
+      }
+      onProgress(progressMsg, attempt, maxAttempts);
+
+      try {
+        var health = await probeBackendHealth({
+          retries: 0,
+          delayMs: baseDelay,
+          timeoutMs: timeoutMs,
+          transientSoftFail: true,
+          fetchFn: apiFetchWithRetry,
+        });
+        backendState.warming = false;
+        return health;
+      } catch (err) {
+        lastErr = err;
+        if (signal && signal.aborted) {
+          backendState.warming = false;
+          throw err;
+        }
+        if (attempt < maxAttempts && isTransientProbeFailure(err)) {
+          await sleepWithAbort(Math.min(baseDelay * attempt, 20000), signal);
+          continue;
+        }
+        backendState.warming = false;
+        throw err;
+      }
+    }
+
+    backendState.warming = false;
+    throw lastErr || new Error(backendUnavailableMessage());
   }
 
 
@@ -369,7 +510,11 @@
 
         if (timedOut) {
 
-          const timeoutErr = new Error("连接超时，本地后端可能仍在启动");
+          const timeoutErr = new Error(
+            isLocalDevHost()
+              ? "连接超时，本地后端可能仍在启动"
+              : "连接超时，故事解析服务可能仍在唤醒（Render 冷启动约 30～90 秒）"
+          );
 
           timeoutErr.cause = "timeout";
 
@@ -573,9 +718,15 @@
 
     isBackendAvailable: isBackendAvailable,
 
+    isBackendWarming: isBackendWarming,
+
     backendStatusMessage: backendStatusMessage,
 
     probeBackendHealth: probeBackendHealth,
+
+    ensureBackendReady: ensureBackendReady,
+
+    isTransientProbeFailure: isTransientProbeFailure,
 
     getBackendState: function () {
       return Object.assign({}, backendState);
@@ -585,7 +736,7 @@
 
   if (typeof document !== "undefined") {
     document.addEventListener("DOMContentLoaded", function () {
-      probeBackendHealth({ retries: 1 }).catch(function () {});
+      probeBackendHealth({ transientSoftFail: true }).catch(function () {});
     });
   }
 
