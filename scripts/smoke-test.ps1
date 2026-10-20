@@ -49,11 +49,11 @@ try {
     & $venvPython -m ruff check backend/tests
     if ($LASTEXITCODE -ne 0) { throw "ruff failed" }
 
-    # 6. Pytest
+    # 6. Pytest — never embed real keys; use env or harmless placeholders
     Write-Host "[smoke] pytest..."
-    $env:AI_API_KEY = "test-key-for-smoke"
-    $env:AI_API_BASE = "https://api.example.com"
-    $env:AI_MODEL = "test-model"
+    if (-not $env:AI_API_KEY) { $env:AI_API_KEY = "test-key-for-smoke" }
+    if (-not $env:AI_API_BASE) { $env:AI_API_BASE = "https://api.example.com" }
+    if (-not $env:AI_MODEL) { $env:AI_MODEL = "test-model" }
     & $venvPython -m pytest backend/tests -q --tb=short
     if ($LASTEXITCODE -ne 0) { throw "pytest failed" }
 
