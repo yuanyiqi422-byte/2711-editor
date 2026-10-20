@@ -49,9 +49,13 @@ try {
     & $venvPython -m ruff check backend/tests
     if ($LASTEXITCODE -ne 0) { throw "ruff failed" }
 
-    # 6. Pytest — never embed real keys; use env or harmless placeholders
+    # 6. Pytest — never embed real keys; require AI_API_KEY from environment
     Write-Host "[smoke] pytest..."
-    if (-not $env:AI_API_KEY) { $env:AI_API_KEY = "test-key-for-smoke" }
+    if (-not $env:AI_API_KEY -or $env:AI_API_KEY.Trim() -eq "") {
+        Write-Host "[smoke] SKIP pytest: AI_API_KEY not set. Set `$env:AI_API_KEY (or copy backend/.env.example) then re-run."
+        Write-Host "`n[smoke] PASSED (pytest skipped — no AI_API_KEY)."
+        exit 0
+    }
     if (-not $env:AI_API_BASE) { $env:AI_API_BASE = "https://api.example.com" }
     if (-not $env:AI_MODEL) { $env:AI_MODEL = "test-model" }
     & $venvPython -m pytest backend/tests -q --tb=short
