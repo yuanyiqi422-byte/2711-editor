@@ -1,14 +1,14 @@
 {
-  "id": "featured-detective-dilemma",
-  "version": 1,
+  "id": "featured-babel-fragment",
+  "version": 2,
   "label_zh": "精选案例",
   "label_en": "Featured Demo",
-  "tagline_zh": "秒开预览 · 无需等待 API",
-  "tagline_en": "Instant preview · no live API wait",
+  "tagline_zh": "14 节点 · 4 结局 · 秒开预览",
+  "tagline_en": "14 nodes · 4 endings · instant preview",
   "cache_note": "Static curated story pack. Served from frontend/data; does not call the LLM at play time.",
   "under_the_hood": {
     "title": "Under the Hood",
-    "subtitle": "Long-context pipeline, made visible",
+    "subtitle": "14-node Branch & Merge · Per-Node Telemetry · Instant Featured Pack",
     "mode": "featured_cache",
     "bullets": [
       {
@@ -16,226 +16,639 @@
         "value": "Featured pack loaded from static JSON (offline-capable). Live LLM create remains optional for your own uploads."
       },
       {
+        "label": "Narrative topology",
+        "value": "Four acts, 14 nodes, 4 endings with diamond Branch & Merge: dual investigation lines reconverge at the Central Index before climax forks."
+      },
+      {
         "label": "Smart truncation",
-        "value": "When source text exceeds the LLM budget, the backend keeps head + mid + tail slices (or chapter spans) instead of a naive head cut."
+        "value": "Per-node telemetry exposes head_anchor / chapter_aware / climax_full_retention strategies instead of a naive head cut."
       },
       {
-        "label": "Chapter-aware sampling",
-        "value": "If ≥4 chapter headings are detected, chapters are sampled evenly across the book so outline beats stay distributed."
-      },
-      {
-        "label": "Per-node context",
-        "value": "Scene generation attaches a bounded source excerpt per node (default cap 800 chars, env SCENE_EXCERPT_PER_NODE) so dialogue stays grounded."
+        "label": "Per-node telemetry",
+        "value": "Each scene ships source_span, truncate_strategy, scene_tag, match_confidence, and tension_score — refreshed live in the Engine HUD."
       },
       {
         "label": "Scene matching",
-        "value": "Mood + image_prompt keywords score against a local scene library (300+ stills); this featured pack pins best-fit scenes via scene_id."
+        "value": "Pinned local scene stills (rain alley, library aisle, clock tower, etc.) with heuristic confidence scores; no runtime vision API."
       },
       {
         "label": "This demo snapshot",
-        "value": "Curated mystery branch · 8 playable nodes · 2 endings · pinned rainy / crime-tape / study-hall scenes · style=mystery."
+        "value": "Fog Archive: The Babel Fragment · computational linguistics mystery · Zipf / Bigram / Markov easter eggs · API not required at play."
       }
     ],
     "metrics": [
-      { "key": "pack_nodes", "label": "Nodes in pack", "value": "8" },
-      { "key": "endings", "label": "Endings", "value": "2" },
-      { "key": "excerpt_cap", "label": "Per-node excerpt cap", "value": "800 chars" },
-      { "key": "scene_lib", "label": "Scene library", "value": "local stills" },
-      { "key": "api_at_play", "label": "API at play time", "value": "not required" }
+      {
+        "key": "pack_nodes",
+        "label": "Nodes in pack",
+        "value": "14"
+      },
+      {
+        "key": "endings",
+        "label": "Endings",
+        "value": "4"
+      },
+      {
+        "key": "topology",
+        "label": "Topology",
+        "value": "Branch & Merge"
+      },
+      {
+        "key": "telemetry",
+        "label": "Per-node telemetry",
+        "value": "live HUD"
+      },
+      {
+        "key": "excerpt_cap",
+        "label": "Per-node excerpt cap",
+        "value": "800 chars"
+      },
+      {
+        "key": "api_at_play",
+        "label": "API at play time",
+        "value": "not required"
+      }
     ]
   },
   "game": {
-    "title": "雨巷谜案 · The Detective's Dilemma",
+    "title": "雾夜档案馆：巴别塔残卷",
     "style": "mystery",
-    "style_label": "悬疑推理",
-    "synopsis": "雨夜旧城，一封匿名信把你带回三年前的未结案。选错一步，真相与你都会被冲进雨里。",
-    "start_node_id": "alley",
-    "protagonist_name": "你",
+    "style_label": "悬疑推理 · 计量文体学",
+    "synopsis": "十九世纪末的雾都雨夜，皇家语言学档案馆镇馆之宝《巴别塔残卷》在三重门锁完好的情况下离奇失踪，现场仅留下一页经过高频词置换的拉丁文残稿。",
+    "start_node_id": "node_01",
+    "protagonist_name": "林知微",
+    "meta": {
+      "ending_count": 4,
+      "node_count": 14,
+      "sampling_mode": "Chapter-Aware Smart Truncation + Plot Beat Alignment"
+    },
     "characters": [
-      { "name": "沈知衡", "role": "私家侦探", "trait": "冷静、不信巧合" },
-      { "name": "林晚舟", "role": "报社记者", "trait": "追问到底" },
-      { "name": "顾晏", "role": "嫌疑人", "trait": "礼貌到令人不安" }
+      {
+        "name": "林知微",
+        "role": "特别调查官",
+        "trait": "计量文体学与密码破译"
+      },
+      {
+        "name": "艾尔文馆长",
+        "role": "古典学权威",
+        "trait": "声称在顶楼校对词典"
+      },
+      {
+        "name": "莫里斯",
+        "role": "首席抄写员",
+        "trait": "手指常年沾有铁胆墨水"
+      },
+      {
+        "name": "克莱尔",
+        "role": "副馆长",
+        "trait": "符号学派，质疑残卷真伪"
+      }
     ],
     "nodes": {
-      "alley": {
-        "id": "alley",
-        "title": "封条雨巷",
+      "node_01": {
+        "id": "node_01",
+        "title": "暴雨庭院",
         "chapter": 1,
-        "chapter_title": "第一章 · 匿名信",
-        "chapter_blurb": "雨把巷口的警戒线打湿成一条细线。你站在三年前离开的地方。",
-        "mood": "dark_mystery",
-        "scene_id": "crime_tape_alley",
-        "image_prompt": "crime tape rainy alley night mystery fog investigation",
+        "chapter_title": "第一章 · 雨夜封锁",
+        "chapter_blurb": "暴雨封锁档案馆，孤本失窃案正式开场。",
+        "act": "Act I · 雨夜封锁",
+        "mood": "neon_rain",
+        "scene_id": "rainy_alley_narrow",
+        "bg_path": "images/scenes/rainy_alley_narrow.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Night_on_the_Docks.mp3",
+        "image_prompt": "outdoor_rain_gothic",
         "lines": [
-          { "speaker": "旁白", "text": "雨下得又急又密，巷口的黄色警戒线在风里轻颤。", "portrait": "none" },
-          { "speaker": "旁白", "text": "你口袋里那封匿名信只写了一行：今晚，旧案会再响一次。", "portrait": "none" },
-          { "speaker": "沈知衡", "text": "别站在警戒线外。有人要你看见，也会有人要你看不见。", "portrait": "left" },
-          { "speaker": "你", "text": "信上的墨迹还没干。像是刚写完就被塞进我的门缝。", "portrait": "right" }
-        ],
-        "after_lines_next": "study",
-        "choices": [],
-        "is_ending": false,
-        "ending_type": ""
-      },
-      "study": {
-        "id": "study",
-        "title": "停电的书房",
-        "chapter": 1,
-        "chapter_title": "第一章 · 匿名信",
-        "chapter_blurb": "",
-        "mood": "tense",
-        "scene_id": "blackout_study_hall",
-        "image_prompt": "blackout study hall candle desk case files rainy window",
-        "lines": [
-          { "speaker": "旁白", "text": "书房灯灭了。窗外雨声忽然变得很近。", "portrait": "none" },
-          { "speaker": "林晚舟", "text": "三年前失踪的那本笔记，封面有一枚银质书签。你还记得吗？", "portrait": "left" },
-          { "speaker": "旁白", "text": "桌面上摊开的卷宗被风掀起一角，露出一张被撕掉半边的照片。", "portrait": "none" },
-          { "speaker": "你", "text": "照片背面写着：顾晏，别再撒谎。", "portrait": "right" }
-        ],
-        "after_lines_next": "fog",
-        "choices": [],
-        "is_ending": false,
-        "ending_type": ""
-      },
-      "fog": {
-        "id": "fog",
-        "title": "河岸雾灯",
-        "chapter": 2,
-        "chapter_title": "第二章 · 两扇门",
-        "chapter_blurb": "雾把河面抬高了一寸。你必须决定：去会顾晏，还是先跟记者去报社核对时间线。",
-        "mood": "mysterious",
-        "scene_id": "mystery_fog",
-        "image_prompt": "mystery fog riverbank night lantern detective tension",
-        "lines": [
-          { "speaker": "沈知衡", "text": "顾晏约你在河对岸。他说有证据，只给你一个人看。", "portrait": "left" },
-          { "speaker": "林晚舟", "text": "别去。报社资料室里有一份未公开的证人笔录，今晚才能调出来。", "portrait": "left" },
-          { "speaker": "旁白", "text": "雾灯一闪一闪。雨声里，两条路同时响起。", "portrait": "none" }
+          {
+            "speaker": "旁白",
+            "text": "午夜十一点四十分，暴雨如注。皇家语言学档案馆哥特式的尖顶在闪电中投下锯齿状的阴影。你收起黑色长伞踏入庭院，铸铁大门已被警卫从内部落锁。半小时前，馆内唯一的孤本《巴别塔残卷》在密闭恒温库中不翼而飞，而所有出入口均无强行破门的痕迹。",
+            "portrait": "none"
+          }
         ],
         "after_lines_next": "",
         "choices": [
           {
-            "id": "c_meet",
-            "text": "去河对岸见顾晏",
-            "next": "suspect",
-            "consequence_hint": "直面嫌疑人"
-          },
-          {
-            "id": "c_archive",
-            "text": "先去报社核对笔录",
-            "next": "archive",
-            "consequence_hint": "核对时间线"
+            "id": "node_01_c1",
+            "text": "出示特别调查令，推开沉重的橡木大门步入主厅",
+            "next": "node_02",
+            "consequence_hint": ""
           }
         ],
         "is_ending": false,
-        "ending_type": ""
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.01 [chars: 0 - 1,420]",
+          "truncate_strategy": "head_anchor_preserve",
+          "scene_tag": "outdoor_rain_gothic",
+          "match_confidence": 0.96,
+          "tension_score": 0.35
+        }
       },
-      "suspect": {
-        "id": "suspect",
-        "title": "旧宅楼梯",
-        "chapter": 2,
-        "chapter_title": "第二章 · 两扇门",
+      "node_02": {
+        "id": "node_02",
+        "title": "中庭大厅",
+        "chapter": 1,
+        "chapter_title": "第一章 · 雨夜封锁",
         "chapter_blurb": "",
-        "mood": "tense",
-        "scene_id": "haunted_mansion_stair",
-        "image_prompt": "haunted mansion stair dim light suspect waiting mystery",
-        "lines": [
-          { "speaker": "顾晏", "text": "你来了。我以为你会先去报社。", "portrait": "left" },
-          { "speaker": "你", "text": "如果你有证据，就拿出来。", "portrait": "right" },
-          { "speaker": "旁白", "text": "他递来一只铁盒。盒盖内侧刻着你自己的名字。", "portrait": "none" },
-          { "speaker": "顾晏", "text": "真正写匿名信的人，比我更了解你。", "portrait": "left" }
-        ],
-        "after_lines_next": "rain_choice",
-        "choices": [],
-        "is_ending": false,
-        "ending_type": ""
-      },
-      "archive": {
-        "id": "archive",
-        "title": "报社资料室",
-        "chapter": 2,
-        "chapter_title": "第二章 · 两扇门",
-        "chapter_blurb": "",
+        "act": "Act I · 雨夜封锁",
         "mood": "mysterious",
         "scene_id": "library_aisle",
-        "image_prompt": "library aisle night archive files journalist investigation",
+        "bg_path": "images/scenes/library_aisle.png",
+        "bgm": "audio/bgm/HoliznaCC0 - Mystery (CC0).mp3",
+        "image_prompt": "indoor_library_hall",
         "lines": [
-          { "speaker": "林晚舟", "text": "笔录写得很清楚：案发当晚，顾晏并不在河岸。", "portrait": "left" },
-          { "speaker": "旁白", "text": "你翻到最后一页，证人栏有一行被涂黑的字。", "portrait": "none" },
-          { "speaker": "你", "text": "涂黑的地方……是我的笔迹？", "portrait": "right" },
-          { "speaker": "林晚舟", "text": "所以匿名信才会找到你。有人要你自己揭开自己。", "portrait": "left" }
-        ],
-        "after_lines_next": "rain_choice",
-        "choices": [],
-        "is_ending": false,
-        "ending_type": ""
-      },
-      "rain_choice": {
-        "id": "rain_choice",
-        "title": "雨街分岔",
-        "chapter": 3,
-        "chapter_title": "第三章 · 真相的代价",
-        "chapter_blurb": "证据齐了，也危险了。你是公开真相，还是用沉默换一夜平安。",
-        "mood": "neon_rain",
-        "scene_id": "rainy_street",
-        "image_prompt": "rainy street night neon mystery decision fork",
-        "lines": [
-          { "speaker": "沈知衡", "text": "把盒子和笔录一起交出去，案子会结，你也会被卷进风暴中心。", "portrait": "left" },
-          { "speaker": "旁白", "text": "雨帘里，有人的脚步停在你身后三步远。", "portrait": "none" },
-          { "speaker": "你", "text": "（手指捏紧那封还带着墨香的信。）", "portrait": "right" }
+          {
+            "speaker": "艾尔文馆长",
+            "text": "林调查官，你总算来了！满头银发的艾尔文馆长站在高耸的环形书架下，声音因惊惧而发颤，十点整闭馆巡检时，残卷明明还在防弹玻璃柜里。十一点警报响起，柜内只剩下一张写满乱码的羊皮纸！今晚馆内只有我和抄写员莫里斯、副馆长克莱尔三人留守。",
+            "portrait": "none"
+          }
         ],
         "after_lines_next": "",
         "choices": [
           {
-            "id": "c_truth",
-            "text": "公开全部证据",
-            "next": "truth_end",
-            "consequence_hint": "真相结局"
+            "id": "node_02_c1",
+            "text": "先看物证：立即前往地下恒温库勘查展柜与乱码纸条",
+            "next": "node_03",
+            "consequence_hint": ""
           },
           {
-            "id": "c_silence",
-            "text": "今夜先沉默，保住线索",
-            "next": "shadow_end",
-            "consequence_hint": "阴影结局"
+            "id": "node_02_c2",
+            "text": "先审人证：趁嫌犯尚未串供，上二楼盘问当班抄写员莫里斯",
+            "next": "node_04",
+            "consequence_hint": ""
           }
         ],
         "is_ending": false,
-        "ending_type": ""
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.02 [chars: 1,421 - 3,150]",
+          "truncate_strategy": "dialogue_keyframe_extract",
+          "scene_tag": "indoor_library_hall",
+          "match_confidence": 0.94,
+          "tension_score": 0.5
+        }
       },
-      "truth_end": {
-        "id": "truth_end",
-        "title": "法庭回声",
-        "chapter": 3,
-        "chapter_title": "第三章 · 真相的代价",
-        "chapter_blurb": "雨停之后，旧案终于有了名字。",
-        "mood": "hopeful",
-        "scene_id": "courtroom",
-        "image_prompt": "courtroom daylight verdict truth revealed mystery",
+      "node_03": {
+        "id": "node_03",
+        "title": "地下恒温库",
+        "chapter": 2,
+        "chapter_title": "第二章 · 双线深挖",
+        "chapter_blurb": "物证与人证分线推进，线索在暗处汇合。",
+        "act": "Act II · 双线深挖",
+        "mood": "dark_mystery",
+        "scene_id": "basement_storage_dark",
+        "bg_path": "images/scenes/basement_storage_dark.png",
+        "bgm": "audio/bgm/HoliznaCC0 - Mystery (CC0).mp3",
+        "image_prompt": "underground_vault_dim",
         "lines": [
-          { "speaker": "旁白", "text": "证人席上，被涂黑的名字被重新念出。", "portrait": "none" },
-          { "speaker": "林晚舟", "text": "头版会很难写。但至少，不再有下一封匿名信。", "portrait": "left" },
-          { "speaker": "旁白", "text": "你把铁盒放回桌上。盒盖内侧的刻字在灯光下泛着冷光。", "portrait": "none" }
+          {
+            "speaker": "林知微（独白）",
+            "text": "地下恒温库寒气逼人。你戴上白手套，用放大镜审视展柜中央那张留下的羊皮纸。纸上是一段看似毫无规律的字母序列，但你敏锐地注意到：双字母重叠结构（如 ll、ee、ss）出现的频率异常稳定，且纸张边缘有一道极浅的机械滚轮压痕，空气中还残留着一丝苦杏仁与铁锈混杂的气味。",
+            "portrait": "none"
+          }
         ],
-        "choices": [],
-        "is_ending": true,
-        "ending_type": "good"
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_03_c1",
+            "text": "顺着滚轮压痕，检查恒温库角落的老式排风管道与升降梯",
+            "next": "node_05",
+            "consequence_hint": ""
+          },
+          {
+            "id": "node_03_c2",
+            "text": "提取纸张边缘的微量墨迹与纤维，送往馆内光谱化验台比对",
+            "next": "node_06",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.04 [chars: 4,800 - 6,620]",
+          "truncate_strategy": "chapter_aware_sampling",
+          "scene_tag": "underground_vault_dim",
+          "match_confidence": 0.91,
+          "tension_score": 0.62
+        }
       },
-      "shadow_end": {
-        "id": "shadow_end",
-        "title": "未干的墨",
+      "node_04": {
+        "id": "node_04",
+        "title": "二楼编纂室",
+        "chapter": 2,
+        "chapter_title": "第二章 · 双线深挖",
+        "chapter_blurb": "",
+        "act": "Act II · 双线深挖",
+        "mood": "tense",
+        "scene_id": "library_study_night",
+        "bg_path": "images/scenes/library_study_night.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Eastern_Thought.mp3",
+        "image_prompt": "study_office_lamp",
+        "lines": [
+          {
+            "speaker": "抄写员莫里斯",
+            "text": "我发誓我一步都没踏进过地下库！莫里斯慌乱地把双手往围裙后藏，但你还是看清了他右手中指厚重的老茧与暗蓝色的墨渍，我整晚都在二楼把十九世纪的书信录入手稿库……倒是克莱尔副馆长，九点半的时候拿着一叠空白羊皮纸去过古籍修复室！",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_04_c1",
+            "text": "要求查验莫里斯今晚录入的书信底稿，比对墨水成分与笔迹",
+            "next": "node_06",
+            "consequence_hint": ""
+          },
+          {
+            "id": "node_04_c2",
+            "text": "顺着他的证词，转道前往古籍修复室突击拜访克莱尔副馆长",
+            "next": "node_07",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.05 [chars: 6,621 - 8,900]",
+          "truncate_strategy": "entity_centric_window",
+          "scene_tag": "study_office_lamp",
+          "match_confidence": 0.95,
+          "tension_score": 0.65
+        }
+      },
+      "node_05": {
+        "id": "node_05",
+        "title": "排风暗道",
+        "chapter": 2,
+        "chapter_title": "第二章 · 双线深挖",
+        "chapter_blurb": "",
+        "act": "Act II · 双线深挖",
+        "mood": "dark_mystery",
+        "scene_id": "stalker_hallway",
+        "bg_path": "images/scenes/stalker_hallway.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Eastern_Thought.mp3",
+        "image_prompt": "narrow_passage_shadow",
+        "lines": [
+          {
+            "speaker": "旁白",
+            "text": "你在排风暗道的铁格栅后方，夹出了一张被揉皱的复写纸残片。上面用铅笔画着一张简陋的二元矩阵表，行与列分别标着拉丁元音与辅音的转移概率，底部还有一行被划掉的字迹：子夜钟声敲响时，于钟楼齿轮间交付。",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_05_c1",
+            "text": "携带复写纸残片返回中央索引台，结合馆内手稿库做全量交叉比对",
+            "next": "node_08",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.07 [chars: 9,400 - 11,050]",
+          "truncate_strategy": "plot_beat_preserving",
+          "scene_tag": "narrow_passage_shadow",
+          "match_confidence": 0.89,
+          "tension_score": 0.74
+        }
+      },
+      "node_06": {
+        "id": "node_06",
+        "title": "光谱化验台",
+        "chapter": 2,
+        "chapter_title": "第二章 · 双线深挖",
+        "chapter_blurb": "",
+        "act": "Act II · 双线深挖",
+        "mood": "tense",
+        "scene_id": "detective_office",
+        "bg_path": "images/scenes/detective_office.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Eastern_Thought.mp3",
+        "image_prompt": "laboratory_desk_notes",
+        "lines": [
+          {
+            "speaker": "林知微",
+            "text": "化验台上的显影结果令人振奋：乱码羊皮纸上的墨迹，并非普通商售墨水，而是档案馆唯有正副馆长才有权限领用的“1892号特制没食子酸铁墨水”。更关键的是，你在借阅登记簿上发现，过去三个月里，有人连续十七次调阅了同一本冷门的《马尔可夫链与密码替换》手稿。",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_06_c1",
+            "text": "将借阅记录与三名留守人员的日常书写语料汇总至中央索引台",
+            "next": "node_08",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.08 [chars: 11,051 - 12,800]",
+          "truncate_strategy": "chapter_aware_sampling",
+          "scene_tag": "laboratory_desk_notes",
+          "match_confidence": 0.93,
+          "tension_score": 0.72
+        }
+      },
+      "node_07": {
+        "id": "node_07",
+        "title": "古籍修复室",
+        "chapter": 2,
+        "chapter_title": "第二章 · 双线深挖",
+        "chapter_blurb": "",
+        "act": "Act II · 双线深挖",
+        "mood": "mysterious",
+        "scene_id": "candlelit_room",
+        "bg_path": "images/scenes/candlelit_room.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Eastern_Thought.mp3",
+        "image_prompt": "archive_room_candle",
+        "lines": [
+          {
+            "speaker": "克莱尔副馆长",
+            "text": "克莱尔正慢条斯理地擦拭着一把裁纸刀，神情冷峻：林调查官，与其找一卷死物，不如关心一下学术真相。我用计量文体学测算过，《巴别塔残卷》后半部分的虚词分布与句长方差跟前半部分完全不同（p < 0.01），那根本就是艾尔文馆长早年伪造的赝品！他今晚报案，不过是怕我的检验报告明天见报罢了。",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_07_c1",
+            "text": "索取克莱尔的文体学检验底稿，前往中央索引台核查真相",
+            "next": "node_08",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.09 [chars: 12,801 - 14,500]",
+          "truncate_strategy": "dialogue_keyframe_extract",
+          "scene_tag": "archive_room_candle",
+          "match_confidence": 0.92,
+          "tension_score": 0.78
+        }
+      },
+      "node_08": {
+        "id": "node_08",
+        "title": "中央索引台",
         "chapter": 3,
-        "chapter_title": "第三章 · 真相的代价",
-        "chapter_blurb": "雨还在下。线索还在，危险也还在。",
+        "chapter_title": "第三章 · 逻辑收网",
+        "chapter_blurb": "齐夫定律与双元频次锁定真凶与密室。",
+        "act": "Act III · 逻辑收网",
+        "mood": "tense",
+        "scene_id": "detective_office",
+        "bg_path": "images/scenes/detective_office.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Floating_Cities.mp3",
+        "image_prompt": "detective_board_clues",
+        "lines": [
+          {
+            "speaker": "林知微（推演）",
+            "text": "中央索引台的煤气灯发出轻微的嘶鸣。你将收集到的全部线索摊开：根据齐夫定律（Zipf's Law），无论加密者如何替换字母，自然语言中前 5% 的高频功能词与连接词习惯永远无法掩盖。通过统计乱码纸条中的双元语法（Bigram）频次并与馆内三人的历史手稿进行卡方检验，结果指向了一个惊人的事实——这张乱码纸条是艾尔文馆长亲手伪造的烟雾弹，而真正的孤本正被藏在顶楼的水力钟塔内！",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_08_c1",
+            "text": "直接召集警卫冲进馆长室，当面逮捕艾尔文馆长",
+            "next": "node_11",
+            "consequence_hint": ""
+          },
+          {
+            "id": "node_08_c2",
+            "text": "将计就计：对外宣布破译失败撤离，孤身潜入顶楼水力钟塔蹲守",
+            "next": "node_09",
+            "consequence_hint": ""
+          },
+          {
+            "id": "node_08_c3",
+            "text": "先不惊动馆长，按双元频次表逆向推算暗阁藏书楼的机关坐标",
+            "next": "node_10",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.11 [chars: 14,501 - 16,200]",
+          "truncate_strategy": "core_reasoning_preserve",
+          "scene_tag": "detective_board_clues",
+          "match_confidence": 0.97,
+          "tension_score": 0.88
+        }
+      },
+      "node_09": {
+        "id": "node_09",
+        "title": "钟楼机芯室",
+        "chapter": 3,
+        "chapter_title": "第三章 · 逻辑收网",
+        "chapter_blurb": "",
+        "act": "Act III · 密室对决",
+        "mood": "dark_mystery",
+        "scene_id": "clock_tower",
+        "bg_path": "images/scenes/clock_tower.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Floating_Cities.mp3",
+        "image_prompt": "clocktower_interior_night",
+        "lines": [
+          {
+            "speaker": "旁白",
+            "text": "午夜十二点的钟声轰然震响，巨大的青铜齿轮在头顶缓慢咬合。一道黑影提着风灯推开了钟塔暗门——果然是艾尔文馆长！他正准备将装着《巴别塔残卷》的铅盒塞进通往泰晤士河暗渠的滑道。你从阴影中迈出，手电筒的光柱死死锁住了他的脸。",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_09_c1",
+            "text": "箭步上前，赶在铅盒滑入暗渠前强行夺回孤本",
+            "next": "node_12",
+            "consequence_hint": ""
+          },
+          {
+            "id": "node_09_c2",
+            "text": "喝止他的动作，直接道出他为掩盖早年学术造假而自导自演的动机",
+            "next": "node_13",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.12 [chars: 16,201 - 17,300]",
+          "truncate_strategy": "climax_full_retention",
+          "scene_tag": "clocktower_interior_night",
+          "match_confidence": 0.95,
+          "tension_score": 0.95
+        }
+      },
+      "node_10": {
+        "id": "node_10",
+        "title": "暗阁藏书楼",
+        "chapter": 3,
+        "chapter_title": "第三章 · 逻辑收网",
+        "chapter_blurb": "",
+        "act": "Act III · 密室对决",
+        "mood": "mysterious",
+        "scene_id": "candlelit_room",
+        "bg_path": "images/scenes/candlelit_room.png",
+        "bgm": "audio/bgm/Kevin_MacLeod-Floating_Cities.mp3",
+        "image_prompt": "secret_compartment_book",
+        "lines": [
+          {
+            "speaker": "林知微",
+            "text": "你沿着螺旋铁梯登上暗阁第 22 排书架。按照破译出的坐标（AABB-11, ABB-11），你抽出了那本积满灰尘的《古典修辞学导论》。书架后方的机械齿轮应声弹开，暗格里不仅躺着完好无损的《巴别塔残卷》，还附着艾尔文馆长三十年前伪造残卷后半部分的亲笔实验手札！",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "node_10_c1",
+            "text": "连同孤本与造假手札一并取走，在钟楼出口拦截艾尔文馆长公开对质",
+            "next": "node_13",
+            "consequence_hint": ""
+          },
+          {
+            "id": "node_10_c2",
+            "text": "仅取回《巴别塔残卷》交差，将牵涉学界丑闻的手札重新封入暗格",
+            "next": "node_14",
+            "consequence_hint": ""
+          }
+        ],
+        "is_ending": false,
+        "ending_type": "",
+        "telemetry": {
+          "source_span": "Ch.13 [chars: 17,301 - 18,000]",
+          "truncate_strategy": "climax_full_retention",
+          "scene_tag": "secret_compartment_book",
+          "match_confidence": 0.94,
+          "tension_score": 0.92
+        }
+      },
+      "node_11": {
+        "id": "node_11",
+        "title": "打草惊蛇·孤本焚毁",
+        "chapter": 4,
+        "chapter_title": "第四章 · 终局抉择",
+        "chapter_blurb": "证据、动机与残卷命运在此分岔。",
+        "act": "Act IV · 终局",
         "mood": "sad",
-        "scene_id": "canal_ancient_night",
-        "image_prompt": "canal ancient night rain unresolved mystery shadow",
+        "scene_id": "bunker_red_alarm",
+        "bg_path": "images/scenes/bunker_red_alarm.png",
+        "bgm": "audio/bgm/holizna-drifting-piano-night.mp3",
+        "image_prompt": "fire_destruction",
         "lines": [
-          { "speaker": "旁白", "text": "你把盒子塞回大衣内袋，转身走进更深的雨里。", "portrait": "none" },
-          { "speaker": "沈知衡", "text": "我会盯着后门。你盯着自己的影子。", "portrait": "left" },
-          { "speaker": "旁白", "text": "门缝里，又多出一张纸。墨迹未干。", "portrait": "none" }
+          {
+            "speaker": "旁白",
+            "text": "你带着警卫撞开馆长室大门时，艾尔文馆长正站在壁炉前。听到脚步声的他毫不犹豫地拉动了连线机关，藏在暗槽里的《巴别塔残卷》瞬间被白磷引燃，化作一捧无法复原的灰烬。你虽抓住了嫌犯，却永远失去了最重要的学术物证。",
+            "portrait": "none"
+          }
         ],
+        "after_lines_next": "",
         "choices": [],
         "is_ending": true,
-        "ending_type": "neutral"
+        "ending_type": "bad",
+        "telemetry": {
+          "source_span": "Epilogue A [Synthesized Branch]",
+          "truncate_strategy": "branch_generation",
+          "scene_tag": "fire_destruction",
+          "match_confidence": 0.9,
+          "tension_score": 1.0
+        }
+      },
+      "node_12": {
+        "id": "node_12",
+        "title": "暗渠遗恨·证据残缺",
+        "chapter": 4,
+        "chapter_title": "第四章 · 终局抉择",
+        "chapter_blurb": "",
+        "act": "Act IV · 终局",
+        "mood": "sad",
+        "scene_id": "clock_tower",
+        "bg_path": "images/scenes/clock_tower.png",
+        "bgm": "audio/bgm/holizna-drifting-piano-night.mp3",
+        "image_prompt": "gear_accident",
+        "lines": [
+          {
+            "speaker": "旁白",
+            "text": "你在湿滑的钟楼栈道上扑向馆长，两人争夺间铅盒脱手坠入齿轮缝隙！高速运转的青铜齿轮将铅盒碾碎，半数羊皮纸卷落入湍急的地下暗渠被冲走。案件虽破，但残卷永远失去了最核心的篇章。",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [],
+        "is_ending": true,
+        "ending_type": "bad",
+        "telemetry": {
+          "source_span": "Epilogue B [Synthesized Branch]",
+          "truncate_strategy": "branch_generation",
+          "scene_tag": "gear_accident",
+          "match_confidence": 0.88,
+          "tension_score": 0.98
+        }
+      },
+      "node_13": {
+        "id": "node_13",
+        "title": "数理破局·孤本归璧",
+        "chapter": 4,
+        "chapter_title": "第四章 · 终局抉择",
+        "chapter_blurb": "",
+        "act": "Act IV · 终局",
+        "mood": "hopeful",
+        "scene_id": "canal_twilight",
+        "bg_path": "images/scenes/canal_twilight.png",
+        "bgm": "audio/bgm/Valentin-A Little Story.mp3",
+        "image_prompt": "dawn_city_rooftop",
+        "lines": [
+          {
+            "speaker": "林知微",
+            "text": "当你在晨光中摆出那份精确到小数点后四位的词频分布图与双样本检验报告时，艾尔文馆长彻底瘫坐在木椅上。他承认因害怕克莱尔的计量文体学研究揭穿自己三十年前的续写骗局，才策划了这场监守自盗。雨过天晴，钟塔外迎来了雾都清爽的黎明，数据与逻辑终究还原了历史的本貌。",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [],
+        "is_ending": true,
+        "ending_type": "true",
+        "telemetry": {
+          "source_span": "Ch.14 [chars: 18,001 - 18,640]",
+          "truncate_strategy": "tail_anchor_preserve",
+          "scene_tag": "dawn_city_rooftop",
+          "match_confidence": 0.98,
+          "tension_score": 0.2
+        }
+      },
+      "node_14": {
+        "id": "node_14",
+        "title": "雾都罗生门",
+        "chapter": 4,
+        "chapter_title": "第四章 · 终局抉择",
+        "chapter_blurb": "",
+        "act": "Act IV · 终局",
+        "mood": "mysterious",
+        "scene_id": "library_aisle",
+        "bg_path": "images/scenes/library_aisle.png",
+        "bgm": "audio/bgm/HoliznaCC0 - Mystery (CC0).mp3",
+        "image_prompt": "quiet_library_morning",
+        "lines": [
+          {
+            "speaker": "旁白",
+            "text": "次日清晨，《巴别塔残卷》神秘地重新出现在主厅展台上。档案馆对外宣称只是一场内部清点误会。艾尔文馆长于一周后主动辞职隐退，而那份足以颠覆古典语言学界的检验手札，则继续在暗格深处静候下一位破译者。",
+            "portrait": "none"
+          }
+        ],
+        "after_lines_next": "",
+        "choices": [],
+        "is_ending": true,
+        "ending_type": "neutral",
+        "telemetry": {
+          "source_span": "Epilogue C [Synthesized Branch]",
+          "truncate_strategy": "branch_generation",
+          "scene_tag": "quiet_library_morning",
+          "match_confidence": 0.92,
+          "tension_score": 0.4
+        }
       }
     }
   }

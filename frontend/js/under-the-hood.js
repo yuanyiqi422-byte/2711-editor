@@ -7,22 +7,27 @@
 
   const FALLBACK = {
     title: "Under the Hood",
-    subtitle: "Long-context pipeline, made visible",
+    subtitle: "14-node Branch & Merge · Per-Node Telemetry · Instant Featured Pack",
     bullets: [
+      {
+        label: "Delivery path",
+        value:
+          "Featured pack loaded from static JSON (offline-capable). Live LLM create remains optional for your own uploads.",
+      },
+      {
+        label: "Narrative topology",
+        value:
+          "Four acts, 14 nodes, 4 endings with diamond Branch & Merge: dual investigation lines reconverge at the Central Index before climax forks.",
+      },
       {
         label: "Smart truncation",
         value:
-          "Long uploads are prepared with head/mid/tail slices (or chapter spans) before LLM calls, instead of a blunt head cut.",
+          "Per-node telemetry exposes head_anchor / chapter_aware / climax_full_retention strategies instead of a naive head cut.",
       },
       {
-        label: "Chapter-aware sampling",
+        label: "Per-node telemetry",
         value:
-          "When chapter headings are detected, the backend samples chapters evenly so outline coverage stays balanced.",
-      },
-      {
-        label: "Per-node grounding",
-        value:
-          "Each scene keeps a bounded source excerpt (default 800 chars) so dialogue stays tied to the manuscript.",
+          "Each scene ships source_span, truncate_strategy, scene_tag, match_confidence, and tension_score — refreshed live in the Engine HUD.",
       },
       {
         label: "Featured vs live",
@@ -31,9 +36,12 @@
       },
     ],
     metrics: [
+      { label: "Nodes in pack", value: "14" },
+      { label: "Endings", value: "4" },
+      { label: "Topology", value: "Branch & Merge" },
+      { label: "Per-node telemetry", value: "live HUD" },
       { label: "Per-node excerpt cap", value: "800 chars" },
-      { label: "Scene matching", value: "local library" },
-      { label: "Live API for Featured", value: "not required" },
+      { label: "API at play time", value: "not required" },
     ],
   };
 

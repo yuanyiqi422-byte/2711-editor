@@ -2,7 +2,7 @@
  * Featured Demo — load curated story pack from static JSON (no live LLM).
  */
 (function (global) {
-  const CACHE_URL = "data/featured-demo.json?v=1";
+  const CACHE_URL = "data/featured-demo.json?v=2";
   let cachedPayload = null;
   let inflight = null;
 

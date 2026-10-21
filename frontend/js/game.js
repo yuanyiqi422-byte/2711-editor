@@ -136,10 +136,34 @@ const NarrativeGame = (function () {
     });
   }
 
+  function encodeAssetUrl(relPath) {
+    if (!relPath) return "";
+    const parts = String(relPath).split("/");
+    const file = parts.pop();
+    return parts.concat([encodeURIComponent(file)]).join("/");
+  }
+
   function startSceneBgm(node) {
     if (!pack || !node || typeof VnAudio === "undefined") return;
     const style = pack.style || "urban_romance";
     const mood = node.mood || "neutral";
+
+    // Featured / curated packs may pin a real local BGM path per node.
+    if (node.bgm) {
+      const fileUrl = encodeAssetUrl(node.bgm);
+      const trackId = "node-bgm:" + node.id + "|" + node.bgm;
+      if (activeBgmTrackId === trackId) return;
+      activeBgmTrackId = trackId;
+      VnAudio.start({
+        style: style,
+        mood: mood,
+        trackId: trackId,
+        fileUrl: fileUrl,
+      });
+      syncBgmToggle();
+      return;
+    }
+
     let pick = null;
     if (typeof MusicPicker !== "undefined" && MusicPicker.resolveForPlay) {
       pick = MusicPicker.resolveForPlay(style, mood);
@@ -800,6 +824,12 @@ const NarrativeGame = (function () {
     }
     hideEnding();
 
+    if (typeof EngineHud !== "undefined" && EngineHud.update) {
+      EngineHud.update(node);
+    } else if (typeof updateEngineHud === "function") {
+      updateEngineHud(node);
+    }
+
     applyScene(node, pack.style);
     hideChoices();
 
@@ -1046,6 +1076,9 @@ const NarrativeGame = (function () {
 
   function hide() {
     if (typeof VnAudio !== "undefined") VnAudio.stop();
+    if (typeof EngineHud !== "undefined" && EngineHud.hide) {
+      EngineHud.hide();
+    }
     showStudio();
     pack = null;
     nodeId = null;

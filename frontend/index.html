@@ -33,7 +33,7 @@
   <link href="css/brand-lockup.css?v=19" rel="stylesheet" />
   <link href="css/workbench-console-cta.css?v=3" rel="stylesheet" />
   <link href="css/workbench-layout.css?v=57" rel="stylesheet" />
-  <link href="css/vn-layout.css?v=14" rel="stylesheet" />
+  <link href="css/vn-layout.css?v=15" rel="stylesheet" />
 </head>
 <body class="workbench-body">
   <a class="skip-link" href="#studio">跳到主内容</a>
@@ -638,6 +638,29 @@
         </button>
       </footer>
 
+      <aside id="engine-hud" class="engine-hud" hidden aria-hidden="true" aria-label="2711 Engine Telemetry">
+        <div class="engine-hud__head">
+          <span class="engine-hud__brand">2711 Engine Telemetry</span>
+          <span id="hud-act" class="engine-hud__act">Act I</span>
+        </div>
+        <div class="engine-hud__body">
+          <div>Node ID: <span id="hud-node" class="engine-hud__val engine-hud__val--node">node_01</span></div>
+          <div>Source Span: <span id="hud-span" class="engine-hud__val engine-hud__val--span">—</span></div>
+          <div>Strategy: <span id="hud-strat" class="engine-hud__val engine-hud__val--strat">—</span></div>
+          <div>Scene Tag: <span id="hud-tag" class="engine-hud__val engine-hud__val--tag">—</span></div>
+          <div>Match Score: <span id="hud-conf" class="engine-hud__val engine-hud__val--conf">—</span></div>
+          <div class="engine-hud__tension">
+            <div class="engine-hud__tension-row">
+              <span>Narrative Tension</span>
+              <span id="hud-tension-val">0%</span>
+            </div>
+            <div class="engine-hud__tension-track" aria-hidden="true">
+              <div id="hud-tension-bar" class="engine-hud__tension-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
       <div id="under-the-hood" class="uth" hidden>
         <div class="uth__backdrop" id="uth-backdrop" aria-hidden="true"></div>
         <aside class="uth__panel" id="uth-panel" role="dialog" aria-modal="true" aria-labelledby="uth-title">
@@ -671,8 +694,9 @@
   <script src="js/lib/api-config.js?v=14"></script>
   <script src="js/brand.js?v=22"></script>
   <script src="js/demo.js?v=15"></script>
-  <script src="js/featured-demo.js?v=1"></script>
-  <script src="js/under-the-hood.js?v=1"></script>
+  <script src="js/featured-demo.js?v=2"></script>
+  <script src="js/under-the-hood.js?v=2"></script>
+  <script src="js/engine-hud.js?v=1"></script>
   <script src="js/scene-images.js?v=26" defer></script>
   <script src="js/mood.js?v=19"></script>
   <script src="js/music-picker.js?v=29"></script>
@@ -680,7 +704,7 @@
   <script src="js/lib/ending-labels.js?v=5"></script>
   <script src="js/progress-store.js?v=8"></script>
   <script src="js/share.js?v=3"></script>
-  <script src="js/game.js?v=44"></script>
+  <script src="js/game.js?v=45"></script>
   <script src="js/lib/sse.js?v=10"></script>
   <script src="js/workshop/EditorInput.js?v=13"></script>
   <script src="js/workshop/StylePresets.js?v=20"></script>
