@@ -1022,6 +1022,24 @@ const NarrativeGame = (function () {
     enterGame(DEMO_GAME_PACK, "", { entryId: "demo" });
   }
 
+  function startFeatured(gamePack, opts) {
+    const options = opts || {};
+    enterGame(gamePack, "", {
+      entryId: options.entryId || "featured",
+      forceRestart: !!options.forceRestart,
+    });
+    if (
+      options.underTheHood &&
+      typeof UnderTheHood !== "undefined" &&
+      UnderTheHood.bindPayload
+    ) {
+      UnderTheHood.bindPayload(options.underTheHood);
+    }
+    if (typeof UnderTheHood !== "undefined" && UnderTheHood.init) {
+      UnderTheHood.init();
+    }
+  }
+
   function startShared(gamePack, text) {
     enterGame(gamePack, text, { shareMode: true });
   }
@@ -1194,5 +1212,5 @@ const NarrativeGame = (function () {
     });
   }
 
-  return { init, start, startDemo, startShared, hide, restart };
+  return { init, start, startDemo, startFeatured, startShared, hide, restart };
 })();

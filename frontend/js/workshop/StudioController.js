@@ -91,6 +91,7 @@
     CreateFlow.create({
       createBtnEl: document.getElementById("create-btn"),
       demoBtnEl: document.getElementById("nav-demo-btn"),
+      featuredBtnEl: document.getElementById("nav-featured-btn"),
       heroDemoBtnEl: null,
       editor: editor,
       styles: styles,
@@ -105,8 +106,15 @@
         if (currentHistoryId) {
           HistoryPanel.touch(currentHistoryId);
         }
+        if (typeof UnderTheHood !== "undefined" && UnderTheHood.hide) {
+          UnderTheHood.hide();
+        }
       },
-      onEnter: function () {},
+      onEnter: function () {
+        if (typeof UnderTheHood !== "undefined" && UnderTheHood.init) {
+          UnderTheHood.init();
+        }
+      },
     });
 
     HistoryPanel.init({

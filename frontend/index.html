@@ -32,8 +32,8 @@
   <link href="css/workbench.css?v=22" rel="stylesheet" />
   <link href="css/brand-lockup.css?v=19" rel="stylesheet" />
   <link href="css/workbench-console-cta.css?v=3" rel="stylesheet" />
-  <link href="css/workbench-layout.css?v=56" rel="stylesheet" />
-  <link href="css/vn-layout.css?v=13" rel="stylesheet" />
+  <link href="css/workbench-layout.css?v=57" rel="stylesheet" />
+  <link href="css/vn-layout.css?v=14" rel="stylesheet" />
 </head>
 <body class="workbench-body">
   <a class="skip-link" href="#studio">跳到主内容</a>
@@ -148,7 +148,11 @@
           </span>
         </div>
         <div class="workbench__topbar-end">
-          <button type="button" class="workbench__demo-btn" id="nav-demo-btn">试玩 Demo</button>
+          <button type="button" class="workbench__demo-btn workbench__demo-btn--featured" id="nav-featured-btn" data-featured-demo-btn title="Load Featured Story (Fast Preview)" data-busy-label="加载中…">
+            <span class="workbench__demo-btn__zh">精选案例</span>
+            <span class="workbench__demo-btn__en">Featured</span>
+          </button>
+          <button type="button" class="workbench__demo-btn" id="nav-demo-btn" title="短篇试玩">试玩 Demo</button>
           <button type="button" class="workbench__theme-toggle is-active" id="workbench-theme-toggle" aria-label="切换为柔和光效" aria-pressed="false" title="切换界面光效">
             <svg class="workbench__theme-toggle-icon workbench__theme-toggle-icon--sun" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <circle cx="8" cy="8" r="3.25" stroke="currentColor" stroke-width="1.3"/>
@@ -629,7 +633,25 @@
           </svg>
           <span class="game__dock-codex__label" id="dock-codex-label">结局图鉴</span>
         </button>
+        <button type="button" class="game__dock-uth" id="uth-open-btn" title="Under the Hood" aria-label="Under the Hood" aria-expanded="false" aria-controls="uth-panel">
+          <span class="game__dock-uth__label">Under the Hood</span>
+        </button>
       </footer>
+
+      <div id="under-the-hood" class="uth" hidden>
+        <div class="uth__backdrop" id="uth-backdrop" aria-hidden="true"></div>
+        <aside class="uth__panel" id="uth-panel" role="dialog" aria-modal="true" aria-labelledby="uth-title">
+          <header class="uth__head">
+            <div>
+              <h3 class="uth__title" id="uth-title">Under the Hood</h3>
+              <p class="uth__subtitle" id="uth-subtitle">Long-context pipeline, made visible</p>
+            </div>
+            <button type="button" class="uth__close" id="uth-close-btn" aria-label="Close">×</button>
+          </header>
+          <div class="uth__metrics" id="uth-metrics"></div>
+          <ul class="uth__list" id="uth-bullets"></ul>
+        </aside>
+      </div>
 
       <div class="chapter-modal chapter-modal--cinematic" id="chapter-modal" hidden role="dialog" aria-modal="true" aria-labelledby="chapter-modal-title">
         <div class="chapter-modal__veil" aria-hidden="true"></div>
@@ -649,6 +671,8 @@
   <script src="js/lib/api-config.js?v=14"></script>
   <script src="js/brand.js?v=22"></script>
   <script src="js/demo.js?v=15"></script>
+  <script src="js/featured-demo.js?v=1"></script>
+  <script src="js/under-the-hood.js?v=1"></script>
   <script src="js/scene-images.js?v=26" defer></script>
   <script src="js/mood.js?v=19"></script>
   <script src="js/music-picker.js?v=29"></script>
@@ -656,17 +680,17 @@
   <script src="js/lib/ending-labels.js?v=5"></script>
   <script src="js/progress-store.js?v=8"></script>
   <script src="js/share.js?v=3"></script>
-  <script src="js/game.js?v=43"></script>
+  <script src="js/game.js?v=44"></script>
   <script src="js/lib/sse.js?v=10"></script>
   <script src="js/workshop/EditorInput.js?v=13"></script>
   <script src="js/workshop/StylePresets.js?v=20"></script>
   <script src="js/workshop/PipelineView.js?v=17"></script>
-  <script src="js/workshop/CreateFlow.js?v=37"></script>
+  <script src="js/workshop/CreateFlow.js?v=38"></script>
   <script src="js/history.js?v=25"></script>
-  <script src="js/workshop/StudioController.js?v=12"></script>
+  <script src="js/workshop/StudioController.js?v=13"></script>
   <script src="js/magic-editor.js?v=9" defer></script>
   <script src="js/workbench.js?v=11"></script>
-  <script src="js/app.js?v=31"></script>
+  <script src="js/app.js?v=32"></script>
   <script src="js/impeccable-live-loader.js?v=2" data-impeccable-port="8400"></script>
 </body>
 </html>

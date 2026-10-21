@@ -1069,7 +1069,155 @@ body.game-active .vn-choices-panel:not([hidden]) ~ .game__scene-veil,
   display: none !important;
 }
 
+.game__dock-uth {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid rgba(214, 176, 106, 0.28);
+  border-radius: 999px;
+  background: rgba(10, 14, 20, 0.62);
+  color: rgba(250, 246, 237, 0.92);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-base),
+    background var(--transition-base),
+    box-shadow var(--transition-base);
+}
 
+.game__dock-uth:hover,
+.game__dock-uth:focus-visible {
+  border-color: var(--vn-border-gold);
+  background: rgba(214, 176, 106, 0.14);
+}
+
+.game__dock-uth__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.uth {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.uth.is-open {
+  pointer-events: auto;
+}
+
+.uth[hidden] {
+  display: none !important;
+}
+
+.uth__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 8, 12, 0.52);
+}
+
+.uth__panel {
+  position: absolute;
+  top: 72px;
+  right: 18px;
+  width: min(380px, calc(100vw - 28px));
+  max-height: calc(100vh - 110px);
+  overflow: auto;
+  padding: 18px 18px 20px;
+  border: 1px solid rgba(214, 176, 106, 0.28);
+  border-radius: 16px;
+  background: rgba(12, 16, 24, 0.94);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+  color: rgba(250, 246, 237, 0.92);
+}
+
+.uth__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.uth__title {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 0.03em;
+}
+
+.uth__subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: rgba(250, 246, 237, 0.62);
+}
+
+.uth__close {
+  border: 0;
+  background: transparent;
+  color: rgba(250, 246, 237, 0.78);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.uth__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.uth__metric {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(214, 176, 106, 0.14);
+}
+
+.uth__metric-value {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+  color: rgba(255, 232, 180, 0.95);
+}
+
+.uth__metric-label {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: rgba(250, 246, 237, 0.55);
+}
+
+.uth__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.uth__item {
+  margin: 0;
+}
+
+.uth__label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 232, 180, 0.92);
+}
+
+.uth__value {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(250, 246, 237, 0.78);
+}
 
 @media (max-width: 767.98px) {
 

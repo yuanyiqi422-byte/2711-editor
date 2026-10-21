@@ -1,0 +1,242 @@
+{
+  "id": "featured-detective-dilemma",
+  "version": 1,
+  "label_zh": "精选案例",
+  "label_en": "Featured Demo",
+  "tagline_zh": "秒开预览 · 无需等待 API",
+  "tagline_en": "Instant preview · no live API wait",
+  "cache_note": "Static curated story pack. Served from frontend/data; does not call the LLM at play time.",
+  "under_the_hood": {
+    "title": "Under the Hood",
+    "subtitle": "Long-context pipeline, made visible",
+    "mode": "featured_cache",
+    "bullets": [
+      {
+        "label": "Delivery path",
+        "value": "Featured pack loaded from static JSON (offline-capable). Live LLM create remains optional for your own uploads."
+      },
+      {
+        "label": "Smart truncation",
+        "value": "When source text exceeds the LLM budget, the backend keeps head + mid + tail slices (or chapter spans) instead of a naive head cut."
+      },
+      {
+        "label": "Chapter-aware sampling",
+        "value": "If ≥4 chapter headings are detected, chapters are sampled evenly across the book so outline beats stay distributed."
+      },
+      {
+        "label": "Per-node context",
+        "value": "Scene generation attaches a bounded source excerpt per node (default cap 800 chars, env SCENE_EXCERPT_PER_NODE) so dialogue stays grounded."
+      },
+      {
+        "label": "Scene matching",
+        "value": "Mood + image_prompt keywords score against a local scene library (300+ stills); this featured pack pins best-fit scenes via scene_id."
+      },
+      {
+        "label": "This demo snapshot",
+        "value": "Curated mystery branch · 8 playable nodes · 2 endings · pinned rainy / crime-tape / study-hall scenes · style=mystery."
+      }
+    ],
+    "metrics": [
+      { "key": "pack_nodes", "label": "Nodes in pack", "value": "8" },
+      { "key": "endings", "label": "Endings", "value": "2" },
+      { "key": "excerpt_cap", "label": "Per-node excerpt cap", "value": "800 chars" },
+      { "key": "scene_lib", "label": "Scene library", "value": "local stills" },
+      { "key": "api_at_play", "label": "API at play time", "value": "not required" }
+    ]
+  },
+  "game": {
+    "title": "雨巷谜案 · The Detective's Dilemma",
+    "style": "mystery",
+    "style_label": "悬疑推理",
+    "synopsis": "雨夜旧城，一封匿名信把你带回三年前的未结案。选错一步，真相与你都会被冲进雨里。",
+    "start_node_id": "alley",
+    "protagonist_name": "你",
+    "characters": [
+      { "name": "沈知衡", "role": "私家侦探", "trait": "冷静、不信巧合" },
+      { "name": "林晚舟", "role": "报社记者", "trait": "追问到底" },
+      { "name": "顾晏", "role": "嫌疑人", "trait": "礼貌到令人不安" }
+    ],
+    "nodes": {
+      "alley": {
+        "id": "alley",
+        "title": "封条雨巷",
+        "chapter": 1,
+        "chapter_title": "第一章 · 匿名信",
+        "chapter_blurb": "雨把巷口的警戒线打湿成一条细线。你站在三年前离开的地方。",
+        "mood": "dark_mystery",
+        "scene_id": "crime_tape_alley",
+        "image_prompt": "crime tape rainy alley night mystery fog investigation",
+        "lines": [
+          { "speaker": "旁白", "text": "雨下得又急又密，巷口的黄色警戒线在风里轻颤。", "portrait": "none" },
+          { "speaker": "旁白", "text": "你口袋里那封匿名信只写了一行：今晚，旧案会再响一次。", "portrait": "none" },
+          { "speaker": "沈知衡", "text": "别站在警戒线外。有人要你看见，也会有人要你看不见。", "portrait": "left" },
+          { "speaker": "你", "text": "信上的墨迹还没干。像是刚写完就被塞进我的门缝。", "portrait": "right" }
+        ],
+        "after_lines_next": "study",
+        "choices": [],
+        "is_ending": false,
+        "ending_type": ""
+      },
+      "study": {
+        "id": "study",
+        "title": "停电的书房",
+        "chapter": 1,
+        "chapter_title": "第一章 · 匿名信",
+        "chapter_blurb": "",
+        "mood": "tense",
+        "scene_id": "blackout_study_hall",
+        "image_prompt": "blackout study hall candle desk case files rainy window",
+        "lines": [
+          { "speaker": "旁白", "text": "书房灯灭了。窗外雨声忽然变得很近。", "portrait": "none" },
+          { "speaker": "林晚舟", "text": "三年前失踪的那本笔记，封面有一枚银质书签。你还记得吗？", "portrait": "left" },
+          { "speaker": "旁白", "text": "桌面上摊开的卷宗被风掀起一角，露出一张被撕掉半边的照片。", "portrait": "none" },
+          { "speaker": "你", "text": "照片背面写着：顾晏，别再撒谎。", "portrait": "right" }
+        ],
+        "after_lines_next": "fog",
+        "choices": [],
+        "is_ending": false,
+        "ending_type": ""
+      },
+      "fog": {
+        "id": "fog",
+        "title": "河岸雾灯",
+        "chapter": 2,
+        "chapter_title": "第二章 · 两扇门",
+        "chapter_blurb": "雾把河面抬高了一寸。你必须决定：去会顾晏，还是先跟记者去报社核对时间线。",
+        "mood": "mysterious",
+        "scene_id": "mystery_fog",
+        "image_prompt": "mystery fog riverbank night lantern detective tension",
+        "lines": [
+          { "speaker": "沈知衡", "text": "顾晏约你在河对岸。他说有证据，只给你一个人看。", "portrait": "left" },
+          { "speaker": "林晚舟", "text": "别去。报社资料室里有一份未公开的证人笔录，今晚才能调出来。", "portrait": "left" },
+          { "speaker": "旁白", "text": "雾灯一闪一闪。雨声里，两条路同时响起。", "portrait": "none" }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "c_meet",
+            "text": "去河对岸见顾晏",
+            "next": "suspect",
+            "consequence_hint": "直面嫌疑人"
+          },
+          {
+            "id": "c_archive",
+            "text": "先去报社核对笔录",
+            "next": "archive",
+            "consequence_hint": "核对时间线"
+          }
+        ],
+        "is_ending": false,
+        "ending_type": ""
+      },
+      "suspect": {
+        "id": "suspect",
+        "title": "旧宅楼梯",
+        "chapter": 2,
+        "chapter_title": "第二章 · 两扇门",
+        "chapter_blurb": "",
+        "mood": "tense",
+        "scene_id": "haunted_mansion_stair",
+        "image_prompt": "haunted mansion stair dim light suspect waiting mystery",
+        "lines": [
+          { "speaker": "顾晏", "text": "你来了。我以为你会先去报社。", "portrait": "left" },
+          { "speaker": "你", "text": "如果你有证据，就拿出来。", "portrait": "right" },
+          { "speaker": "旁白", "text": "他递来一只铁盒。盒盖内侧刻着你自己的名字。", "portrait": "none" },
+          { "speaker": "顾晏", "text": "真正写匿名信的人，比我更了解你。", "portrait": "left" }
+        ],
+        "after_lines_next": "rain_choice",
+        "choices": [],
+        "is_ending": false,
+        "ending_type": ""
+      },
+      "archive": {
+        "id": "archive",
+        "title": "报社资料室",
+        "chapter": 2,
+        "chapter_title": "第二章 · 两扇门",
+        "chapter_blurb": "",
+        "mood": "mysterious",
+        "scene_id": "library_aisle",
+        "image_prompt": "library aisle night archive files journalist investigation",
+        "lines": [
+          { "speaker": "林晚舟", "text": "笔录写得很清楚：案发当晚，顾晏并不在河岸。", "portrait": "left" },
+          { "speaker": "旁白", "text": "你翻到最后一页，证人栏有一行被涂黑的字。", "portrait": "none" },
+          { "speaker": "你", "text": "涂黑的地方……是我的笔迹？", "portrait": "right" },
+          { "speaker": "林晚舟", "text": "所以匿名信才会找到你。有人要你自己揭开自己。", "portrait": "left" }
+        ],
+        "after_lines_next": "rain_choice",
+        "choices": [],
+        "is_ending": false,
+        "ending_type": ""
+      },
+      "rain_choice": {
+        "id": "rain_choice",
+        "title": "雨街分岔",
+        "chapter": 3,
+        "chapter_title": "第三章 · 真相的代价",
+        "chapter_blurb": "证据齐了，也危险了。你是公开真相，还是用沉默换一夜平安。",
+        "mood": "neon_rain",
+        "scene_id": "rainy_street",
+        "image_prompt": "rainy street night neon mystery decision fork",
+        "lines": [
+          { "speaker": "沈知衡", "text": "把盒子和笔录一起交出去，案子会结，你也会被卷进风暴中心。", "portrait": "left" },
+          { "speaker": "旁白", "text": "雨帘里，有人的脚步停在你身后三步远。", "portrait": "none" },
+          { "speaker": "你", "text": "（手指捏紧那封还带着墨香的信。）", "portrait": "right" }
+        ],
+        "after_lines_next": "",
+        "choices": [
+          {
+            "id": "c_truth",
+            "text": "公开全部证据",
+            "next": "truth_end",
+            "consequence_hint": "真相结局"
+          },
+          {
+            "id": "c_silence",
+            "text": "今夜先沉默，保住线索",
+            "next": "shadow_end",
+            "consequence_hint": "阴影结局"
+          }
+        ],
+        "is_ending": false,
+        "ending_type": ""
+      },
+      "truth_end": {
+        "id": "truth_end",
+        "title": "法庭回声",
+        "chapter": 3,
+        "chapter_title": "第三章 · 真相的代价",
+        "chapter_blurb": "雨停之后，旧案终于有了名字。",
+        "mood": "hopeful",
+        "scene_id": "courtroom",
+        "image_prompt": "courtroom daylight verdict truth revealed mystery",
+        "lines": [
+          { "speaker": "旁白", "text": "证人席上，被涂黑的名字被重新念出。", "portrait": "none" },
+          { "speaker": "林晚舟", "text": "头版会很难写。但至少，不再有下一封匿名信。", "portrait": "left" },
+          { "speaker": "旁白", "text": "你把铁盒放回桌上。盒盖内侧的刻字在灯光下泛着冷光。", "portrait": "none" }
+        ],
+        "choices": [],
+        "is_ending": true,
+        "ending_type": "good"
+      },
+      "shadow_end": {
+        "id": "shadow_end",
+        "title": "未干的墨",
+        "chapter": 3,
+        "chapter_title": "第三章 · 真相的代价",
+        "chapter_blurb": "雨还在下。线索还在，危险也还在。",
+        "mood": "sad",
+        "scene_id": "canal_ancient_night",
+        "image_prompt": "canal ancient night rain unresolved mystery shadow",
+        "lines": [
+          { "speaker": "旁白", "text": "你把盒子塞回大衣内袋，转身走进更深的雨里。", "portrait": "none" },
+          { "speaker": "沈知衡", "text": "我会盯着后门。你盯着自己的影子。", "portrait": "left" },
+          { "speaker": "旁白", "text": "门缝里，又多出一张纸。墨迹未干。", "portrait": "none" }
+        ],
+        "choices": [],
+        "is_ending": true,
+        "ending_type": "neutral"
+      }
+    }
+  }
+}

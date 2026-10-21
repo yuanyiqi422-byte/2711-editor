@@ -255,6 +255,38 @@
   box-shadow: 0 2px 12px rgba(10, 14, 20, 0.18);
 }
 
+.workbench__demo-btn--featured {
+  flex-direction: column;
+  height: auto;
+  min-height: 32px;
+  padding: 4px 14px;
+  gap: 0;
+  border-color: rgba(196, 163, 90, 0.72);
+  background: linear-gradient(180deg, rgba(196, 163, 90, 0.28), rgba(255, 255, 255, 0.1));
+  box-shadow: 0 0 0 1px rgba(196, 163, 90, 0.18);
+}
+
+.workbench__demo-btn--featured .workbench__demo-btn__zh {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: rgba(255, 246, 220, 0.98);
+}
+
+.workbench__demo-btn--featured .workbench__demo-btn__en {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.1;
+}
+
+.workbench__demo-btn--featured.is-loading,
+.workbench__demo-btn--featured:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .workbench__theme-toggle {
   display: inline-flex;
   align-items: center;
