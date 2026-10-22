@@ -1,8 +1,8 @@
 {
   "id": "featured-babel-fragment",
   "version": 2,
-  "label_zh": "精选案例",
-  "label_en": "Featured Demo",
+  "label_zh": "试玩 Demo",
+  "label_en": "Instant Demo",
   "tagline_zh": "14 节点 · 4 结局 · 秒开预览",
   "tagline_en": "14 nodes · 4 endings · instant preview",
   "cache_note": "Static curated story pack. Served from frontend/data; does not call the LLM at play time.",

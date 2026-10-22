@@ -8,16 +8,16 @@
 
   function normalizePayload(raw) {
     if (!raw || typeof raw !== "object") {
-      throw new Error("精选案例数据无效");
+      throw new Error("试玩 Demo 数据无效");
     }
     const game = raw.game || raw.pack || raw;
     if (!game || !game.nodes) {
-      throw new Error("精选案例缺少可玩节点");
+      throw new Error("试玩 Demo 缺少可玩节点");
     }
     return {
       id: raw.id || "featured",
-      label_zh: raw.label_zh || "精选案例",
-      label_en: raw.label_en || "Featured Demo",
+      label_zh: raw.label_zh || "试玩 Demo",
+      label_en: raw.label_en || "Instant Demo",
       tagline_zh: raw.tagline_zh || "",
       tagline_en: raw.tagline_en || "",
       under_the_hood: raw.under_the_hood || null,
@@ -30,7 +30,7 @@
     if (inflight) return inflight;
     inflight = fetch(CACHE_URL, { cache: "force-cache" })
       .then(function (res) {
-        if (!res.ok) throw new Error("精选案例加载失败 (" + res.status + ")");
+        if (!res.ok) throw new Error("试玩 Demo 加载失败 (" + res.status + ")");
         return res.json();
       })
       .then(function (json) {
@@ -78,7 +78,7 @@
       });
     } catch (err) {
       console.error("[FeaturedDemo]", err);
-      onError((err && err.message) || "精选案例打开失败");
+      onError((err && err.message) || "试玩 Demo 打开失败");
     } finally {
       setButtonsBusy(false);
     }

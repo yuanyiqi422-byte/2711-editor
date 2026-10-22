@@ -91,7 +91,6 @@
     CreateFlow.create({
       createBtnEl: document.getElementById("create-btn"),
       demoBtnEl: document.getElementById("nav-demo-btn"),
-      featuredBtnEl: document.getElementById("nav-featured-btn"),
       heroDemoBtnEl: null,
       editor: editor,
       styles: styles,

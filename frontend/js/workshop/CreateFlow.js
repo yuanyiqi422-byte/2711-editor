@@ -32,7 +32,6 @@
   function createCreateFlow(options) {
     const createBtn = options.createBtnEl;
     const demoBtn = options.demoBtnEl;
-    const featuredBtn = options.featuredBtnEl;
     const heroDemoBtn = options.heroDemoBtnEl;
     const editor = options.editor;
     const styles = options.styles;
@@ -103,7 +102,6 @@
       isRunning = loading;
       createBtn.disabled = loading;
       if (demoBtn) demoBtn.disabled = loading;
-      if (featuredBtn) featuredBtn.disabled = loading;
       if (heroDemoBtn) heroDemoBtn.disabled = loading;
       createBtn.classList.toggle("is-loading", loading);
       const label = createBtn.querySelector(".new-game__zh") || createBtn.querySelector(".btn__label");
@@ -187,13 +185,8 @@
     }
 
     function launchDemo() {
-      onError("");
-      NarrativeGame.startDemo();
-    }
-
-    function launchFeatured() {
       if (typeof FeaturedDemo === "undefined" || !FeaturedDemo.launch) {
-        onError("精选案例模块未就绪");
+        onError("试玩 Demo 模块未就绪");
         return;
       }
       FeaturedDemo.launch({
@@ -452,7 +445,6 @@
 
     createBtn.addEventListener("click", startCreate);
     if (demoBtn) demoBtn.addEventListener("click", launchDemo);
-    if (featuredBtn) featuredBtn.addEventListener("click", launchFeatured);
     if (heroDemoBtn) heroDemoBtn.addEventListener("click", launchDemo);
     if (typeof FeaturedDemo !== "undefined" && FeaturedDemo.prefetch) {
       FeaturedDemo.prefetch();
@@ -461,7 +453,6 @@
     return {
       isRunning: function () { return isRunning; },
       launchDemo: launchDemo,
-      launchFeatured: launchFeatured,
     };
   }
 
