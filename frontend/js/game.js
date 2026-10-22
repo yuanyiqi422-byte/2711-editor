@@ -491,8 +491,37 @@ const NarrativeGame = (function () {
   }
 
   function getLines(node) {
+    // Prefer multi-page immersion nodes (pages[]) over legacy single-block lines/text.
+    if (node.pages && node.pages.length) {
+      return node.pages.map(function (p, i) {
+        return {
+          speaker: (p && p.speaker) || "旁白",
+          text: (p && p.text) || "",
+          portrait: (p && p.portrait) || "none",
+          page: (p && p.page) != null ? p.page : i + 1,
+        };
+      });
+    }
     if (node.lines && node.lines.length) return node.lines;
+    if (node.text) {
+      return splitLegacyNarrative(node.text, node.speaker || "旁白");
+    }
     return splitLegacyNarrative(node.narrative || "", node.speaker || "旁白");
+  }
+
+  function pageNumberAt(lines, idx) {
+    const line = lines && lines[idx];
+    if (line && line.page != null) return Number(line.page) || idx + 1;
+    return idx + 1;
+  }
+
+  function choicesUnlocked(node, lines, idx) {
+    if (!node || !node.choices || !node.choices.length || node.is_ending) return false;
+    const trigger = node.choices_trigger_after_page;
+    if (trigger == null || trigger === "") {
+      return idx >= lines.length - 1;
+    }
+    return pageNumberAt(lines, idx) >= Number(trigger);
   }
 
   function splitLegacyNarrative(text, speaker) {
@@ -669,11 +698,15 @@ const NarrativeGame = (function () {
   function applyScene(node, style) {
     try {
       if (typeof MoodBackgrounds !== "undefined" && els.sceneBg) {
+        const asset = node.asset_recommendation || {};
+        const tagPrompt = Array.isArray(asset.image_tags)
+          ? asset.image_tags.join(" ")
+          : "";
         MoodBackgrounds.apply(
           els.sceneBg,
           node.mood || "neutral",
           style || "urban_romance",
-          node.image_prompt || "",
+          node.image_prompt || tagPrompt || "",
           {
             id: node.id,
             nodeId: node.id,
@@ -681,7 +714,8 @@ const NarrativeGame = (function () {
             scene_type: node.scene_type || "",
             scene_id: node.scene_id || "",
             bg_path: node.bg_path || "",
-            lines: node.lines || node._lines || [],
+            image_tags: asset.image_tags || [],
+            lines: node.pages || node.lines || node._lines || [],
           }
         );
       }
@@ -790,15 +824,20 @@ const NarrativeGame = (function () {
     updateCharacterArt(sp);
 
     const isLast = idx >= lines.length - 1;
+    const canChoose = choicesUnlocked(node, lines, idx);
     if (els.continueHint) {
       els.continueHint.hidden = false;
-      els.continueHint.textContent = isLast
-        ? node.choices && node.choices.length
+      if (canChoose && node.choices && node.choices.length && !node.is_ending) {
+        els.continueHint.textContent = isLast
           ? "点击继续 · 进入抉择"
-          : node.is_ending
-            ? "点击继续 · 结局"
-            : "点击继续 · 下一场景"
-        : "点击继续 ▸";
+          : "点击继续 · 进入抉择";
+      } else if (isLast) {
+        els.continueHint.textContent = node.is_ending
+          ? "点击继续 · 结局"
+          : "点击继续 · 下一场景";
+      } else {
+        els.continueHint.textContent = "点击继续 ▸";
+      }
     }
   }
 
@@ -885,6 +924,13 @@ const NarrativeGame = (function () {
 
     if (mode === "choice" || mode === "ending") return;
 
+    // After the trigger page is read, surface choices even if more pages remain.
+    if (choicesUnlocked(node, lines, lineIndex) && !node.is_ending) {
+      if (typeof VnAudio !== "undefined") VnAudio.playClick();
+      afterLinesDone(node);
+      return;
+    }
+
     if (lineIndex < lines.length - 1) {
       lineIndex += 1;
       if (typeof VnAudio !== "undefined") VnAudio.playClick();
@@ -920,8 +966,8 @@ const NarrativeGame = (function () {
   }
 
   async function handleChoice(node, choice, btn) {
-    const nextId = choice.next;
-    if (pack.nodes[nextId]) {
+    const nextId = choice.next || choice.target;
+    if (nextId && pack.nodes[nextId]) {
       enterNode(nextId);
       return;
     }

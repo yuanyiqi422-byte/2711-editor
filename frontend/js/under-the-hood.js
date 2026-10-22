@@ -7,7 +7,7 @@
 
   const FALLBACK = {
     title: "Under the Hood",
-    subtitle: "14-node Branch & Merge · Per-Node Telemetry · Instant Featured Pack",
+    subtitle: "14-node Branch & Merge · Victorian Philology Mystery · Instant Featured Pack",
     bullets: [
       {
         label: "Delivery path",
@@ -20,14 +20,14 @@
           "Four acts, 14 nodes, 4 endings with diamond Branch & Merge: dual investigation lines reconverge at the Central Index before climax forks.",
       },
       {
-        label: "Smart truncation",
+        label: "Immersive pages",
         value:
-          "Per-node telemetry exposes head_anchor / chapter_aware / climax_full_retention strategies instead of a naive head cut.",
+          "Each node uses multi-page dialogue with choices_trigger_after_page so options appear only after the scene is read.",
       },
       {
         label: "Per-node telemetry",
         value:
-          "Each scene ships source_span, truncate_strategy, scene_tag, match_confidence, and tension_score — refreshed live in the Engine HUD.",
+          "Engine HUD stays hidden by default. Open Under the Hood to reveal source_span, strategy, scene_tag, confidence, and tension.",
       },
       {
         label: "Featured vs live",
@@ -39,8 +39,8 @@
       { label: "Nodes in pack", value: "14" },
       { label: "Endings", value: "4" },
       { label: "Topology", value: "Branch & Merge" },
-      { label: "Per-node telemetry", value: "live HUD" },
-      { label: "Per-node excerpt cap", value: "800 chars" },
+      { label: "Per-node telemetry", value: "HUD on demand" },
+      { label: "Total pages", value: "46" },
       { label: "API at play time", value: "not required" },
     ],
   };
@@ -109,6 +109,16 @@
     }
   }
 
+  function syncEngineHud(open) {
+    if (typeof EngineHud === "undefined") return;
+    // Under the Hood reveals / hides the telemetry HUD together with the panel.
+    if (EngineHud.setVisible) EngineHud.setVisible(!!open);
+    if (open && EngineHud.getLastNode && EngineHud.update) {
+      const n = EngineHud.getLastNode();
+      if (n) EngineHud.update(n);
+    }
+  }
+
   function setOpen(open) {
     const e = bindElements();
     if (!e.root) return;
@@ -116,6 +126,7 @@
     e.root.classList.toggle("is-open", !!open);
     if (e.openBtn) e.openBtn.setAttribute("aria-expanded", open ? "true" : "false");
     if (open) render();
+    syncEngineHud(open);
   }
 
   function show() {
