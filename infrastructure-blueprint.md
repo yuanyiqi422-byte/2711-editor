@@ -2,7 +2,7 @@
 
 > 生成时间：2026-06-05  
 > 目标项目：`小说沉浸式游戏/`（2711 Editor — AI 驱动沉浸式分支叙事游戏平台）  
-> 推断任务：在现有 FastAPI + SSE 流式管线基础上，搭建**生产级 DevOps 基础设施**，使老板回来可直接写核心业务（LLM 叙事、生图、长文本 map-reduce、角色状态等）。
+> 范围：在现有 FastAPI + SSE 流式管线基础上，搭建**生产级 DevOps 基础设施**。**Planned / Roadmap（未上线）：** 场景生图、长文本 map-reduce、角色状态等核心扩展，不视为已交付能力。
 
 ---
 
@@ -165,7 +165,7 @@ eslint@^9, @eslint/js, globals, prettier
 
 ## 7. Ready-to-Code 验收标准
 
-老板回来后应能：
+本地应能跑通：
 
 ```powershell
 cd 小说沉浸式游戏
@@ -176,9 +176,9 @@ cd backend && ..\.venv\Scripts\python -m pytest tests/ -q
 .\start.bat                       # 或 restart.bat
 ```
 
-然后直接编辑：
+主要业务入口：
 - `backend/narrative_service.py` — LLM 叙事逻辑
-- `backend/image_service.py` — 场景生图
+- `backend/image_service.py` — 场景生图（**Planned / Roadmap**；接口预留）
 - `frontend/js/workshop/` — 工作室 UI
 - `frontend/js/game.js` — 游玩体验
 
@@ -194,4 +194,4 @@ cd backend && ..\.venv\Scripts\python -m pytest tests/ -q
 
 ---
 
-*本文件由 Agent 自动生成，作为基础设施决策的唯一来源。*
+*基础设施决策备忘（DevOps / 本地栈）；扩展项见上文 Planned / Roadmap。*

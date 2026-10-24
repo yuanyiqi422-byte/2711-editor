@@ -35,7 +35,7 @@ flowchart LR
 | `BIBLE_INPUT_CHARS` | 默认 12000；圣经/故事分析阶段的采样上限（场景节选仍可走全文策略，见 `main._prepare_bible_text`） |
 | `scene_match` | `backend/scene_match.py`：按 `image_prompt` / mood / style / 关键词为节点分配 `scene_id` 与 `bg_path`，避免全图同一张背景 |
 
-后续可扩展里的“长文本分章摘要 / map-reduce”仍是 **roadmap**，请勿写成已上线能力。
+**Planned / Roadmap（未上线）：** 长文本分章摘要 / map-reduce 全书分析 — 现状仅为 `smart_truncate` + 分阶段 LLM，不是已交付能力。
 
 ## 快速开始（一键启动，无需手动重启）
 
