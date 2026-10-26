@@ -267,6 +267,11 @@ body.game-active .game__scene-veil {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
+/* display:inline-block above beats bare [hidden]; keep speaker chip truly gone for narration */
+.vn-dialogue-wrap .vn-name[hidden] {
+  display: none;
+}
+
 .vn-dialogue-wrap .vn-name--protagonist {
   color: #1a150f;
   background: linear-gradient(135deg, #e8c878 0%, #d6b06a 48%, #c9a055 100%);
@@ -953,7 +958,7 @@ body.game-active .vn-choices-panel:not([hidden]) ~ .game__scene-veil,
   bottom: 0;
   z-index: 9;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
   padding: 10px 18px max(10px, env(safe-area-inset-bottom));
@@ -962,6 +967,16 @@ body.game-active .vn-choices-panel:not([hidden]) ~ .game__scene-veil,
   font-size: 11px;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.38);
+}
+
+/* 右下：结局图鉴叠在 Under the Hood 上方，避免与 UTH 面板抢位 */
+.game__dock-actions {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 8px;
+  margin-left: auto;
 }
 
 .game__dock-audio,
@@ -990,6 +1005,21 @@ body.game-active .vn-choices-panel:not([hidden]) ~ .game__scene-veil,
     box-shadow var(--transition-base);
 }
 
+/* Headset cue sits with volume control — never under the dialogue box */
+.game__audio-hint {
+  display: block;
+  max-width: 7.5em;
+  margin-top: 4px;
+  padding: 0 2px;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: rgba(250, 246, 237, 0.42);
+  pointer-events: none;
+  user-select: none;
+}
+
 .game__dock-audio:hover,
 .game__dock-codex:hover,
 .game__dock-audio:focus-visible,
@@ -1008,6 +1038,9 @@ body.game-active .vn-choices-panel:not([hidden]) ~ .game__scene-veil,
 .game__dock-audio-wrap {
   position: relative;
   pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .game__volume-pop {
@@ -1099,6 +1132,15 @@ body.game-active .vn-choices-panel:not([hidden]) ~ .game__scene-veil,
   font-weight: 600;
   letter-spacing: 0.04em;
   white-space: nowrap;
+}
+
+/* UTH 打开时：图鉴面板贴右下、抬高避开对话条与 dock 动作柱 */
+html.uth-panel-open .ending-codex,
+.game.uth-panel-open .ending-codex,
+.uth-panel-open .ending-codex {
+  right: 14px;
+  bottom: max(128px, calc(env(safe-area-inset-bottom) + 118px));
+  max-height: min(36vh, calc(100vh - 220px));
 }
 
 .engine-hud {

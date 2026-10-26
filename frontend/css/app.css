@@ -2034,7 +2034,7 @@ body.game-active .wind-overlay--global {
 .ending-codex {
   position: absolute;
   right: 14px;
-  bottom: max(58px, calc(env(safe-area-inset-bottom) + 52px));
+  bottom: max(108px, calc(env(safe-area-inset-bottom) + 96px));
   top: auto;
   z-index: 15;
   width: min(300px, 90vw);

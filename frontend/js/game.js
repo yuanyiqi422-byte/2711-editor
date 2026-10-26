@@ -11,10 +11,14 @@ const NarrativeGame = (function () {
   let seenChapters = new Set();
   let currentChapterNum = null;
   let activeBgmTrackId = null;
+  /** Featured / static demo: one BGM for the whole session (Chapter 3 track). */
+  let sessionBgmLock = null;
   let pendingNodeId = null;
   let entryId = null;
   let protagonistName = null;
   let shareMode = false;
+  const FEATURED_SESSION_BGM = "audio/bgm/Kevin_MacLeod-Floating_Cities.mp3";
+  const STATIC_SHARE_ENTRY_IDS = { featured: true, demo: true };
   let chapterAutoTimer = null;
   let speakerColorMap = Object.create(null);
 
@@ -148,10 +152,15 @@ const NarrativeGame = (function () {
     const style = pack.style || "urban_romance";
     const mood = node.mood || "neutral";
 
+    // Session lock (featured demo): never swap tracks mid-play.
+    const pinnedBgm = sessionBgmLock || null;
+    const nodeBgm = pinnedBgm || node.bgm || null;
+
     // Featured / curated packs may pin a real local BGM path per node.
-    if (node.bgm) {
-      const fileUrl = encodeAssetUrl(node.bgm);
-      const trackId = "node-bgm:" + node.id + "|" + node.bgm;
+    // Key by file path only so same track across nodes does not restart/jump.
+    if (nodeBgm) {
+      const fileUrl = encodeAssetUrl(nodeBgm);
+      const trackId = "pack-bgm:" + nodeBgm;
       if (activeBgmTrackId === trackId) return;
       activeBgmTrackId = trackId;
       VnAudio.start({
@@ -448,7 +457,8 @@ const NarrativeGame = (function () {
         var closeMatch = ch.match(closeRe);
         if (closeMatch) {
           if (CJK_CHAR_RE.test(inner)) {
-            out += "\u300c" + inner + "\u300d";
+            // Prefer curly doubles; never inject Chinese corner quotes 「」.
+            out += "\u201c" + inner + "\u201d";
           } else {
             out += openQuote + inner + closeMatch[0];
           }
@@ -475,6 +485,8 @@ const NarrativeGame = (function () {
     var s = protectedText.text;
     s = replaceQuotedSegments(s, OPEN_SINGLE_QUOTE_RE, CLOSE_SINGLE_QUOTE_RE);
     s = replaceQuotedSegments(s, OPEN_DOUBLE_QUOTE_RE, CLOSE_DOUBLE_QUOTE_RE);
+    // Hard ban: strip leftover Chinese corner quotes 「」『』 from display text.
+    s = s.replace(/[\u300c\u300d\u300e\u300f]/g, "");
     return restoreEnglishApostrophes(s, protectedText.saved);
   }
 
@@ -544,8 +556,20 @@ const NarrativeGame = (function () {
     return lines.length ? lines : [{ speaker: "旁白", text: "……", portrait: "none" }];
   }
 
+  function isNarrationSpeaker(name) {
+    const sp = String(name || "").trim();
+    if (!sp) return true;
+    const key = sp.toLowerCase();
+    return (
+      sp === "旁白" ||
+      key === "narrator" ||
+      key === "narration" ||
+      key === "narrative"
+    );
+  }
+
   function isProtagonistSpeaker(name) {
-    if (!name || name === "旁白") return false;
+    if (!name || isNarrationSpeaker(name)) return false;
     if (name === "你" || name === "我") return true;
     if (protagonistName && name === protagonistName) return true;
     if (pack && pack.protagonist_name && name === pack.protagonist_name) return true;
@@ -576,7 +600,7 @@ const NarrativeGame = (function () {
     Object.keys(gamePack.nodes).forEach(function (nid) {
       getLines(gamePack.nodes[nid]).forEach(function (line) {
         const sp = String((line && line.speaker) || "").trim();
-        if (!sp || sp === "旁白") return;
+        if (isNarrationSpeaker(sp)) return;
         counts[sp] = (counts[sp] || 0) + 1;
       });
     });
@@ -592,7 +616,7 @@ const NarrativeGame = (function () {
 
     function reserveProtagonist(name) {
       const n = String(name || "").trim();
-      if (!n || n === "旁白" || reserved[n]) return;
+      if (isNarrationSpeaker(n) || reserved[n]) return;
       reserved[n] = true;
       speakerColorMap[n] = "protagonist";
     }
@@ -636,7 +660,7 @@ const NarrativeGame = (function () {
 
   function resolveSpeakerTone(name, line) {
     const sp = String(name || "").trim();
-    if (!sp || sp === "旁白") return "narration";
+    if (isNarrationSpeaker(sp)) return "narration";
     if (line && line.role) {
       if (isMinorCharacterRole(line.role)) return "support";
       if ((line.role || "").indexOf("主") >= 0) return "protagonist";
@@ -800,7 +824,13 @@ const NarrativeGame = (function () {
       els.endingSynopsis.hidden = !ending.synopsis;
     }
     if (els.restartBtn) els.restartBtn.classList.add("is-visible");
-    if (els.shareWorldBtn) els.shareWorldBtn.hidden = shareMode || !entryId;
+    if (els.shareWorldBtn) {
+      els.shareWorldBtn.hidden = shareMode || !entryId;
+      if (!els.shareWorldBtn.hidden) {
+        els.shareWorldBtn.textContent = "分享此世界";
+        els.shareWorldBtn.disabled = false;
+      }
+    }
     const hudReplay = document.getElementById("game-replay");
     if (hudReplay) hudReplay.hidden = false;
   }
@@ -812,7 +842,7 @@ const NarrativeGame = (function () {
 
     if (els.speaker) {
       els.speaker.textContent = sp;
-      els.speaker.hidden = !sp || sp === "旁白";
+      els.speaker.hidden = isNarrationSpeaker(sp);
     }
     applySpeakerAppearance(sp, line);
     if (els.narrative) {
@@ -1053,6 +1083,7 @@ const NarrativeGame = (function () {
     entryId = opts.entryId || entryId;
     protagonistName = opts.protagonistName || gamePack.protagonist_name || null;
     shareMode = Boolean(opts.shareMode);
+    sessionBgmLock = opts.sessionBgm || null;
     pack = ensureChapterMetadata(normalizePack(gamePack));
     buildSpeakerColorMap(pack);
     sourceText = text || "";
@@ -1103,6 +1134,7 @@ const NarrativeGame = (function () {
     enterGame(gamePack, "", {
       entryId: options.entryId || "featured",
       forceRestart: !!options.forceRestart,
+      sessionBgm: options.sessionBgm || FEATURED_SESSION_BGM,
     });
     if (
       options.underTheHood &&
@@ -1125,6 +1157,9 @@ const NarrativeGame = (function () {
     if (typeof EngineHud !== "undefined" && EngineHud.hide) {
       EngineHud.hide();
     }
+    if (typeof UnderTheHood !== "undefined" && UnderTheHood.hide) {
+      UnderTheHood.hide();
+    }
     showStudio();
     pack = null;
     nodeId = null;
@@ -1132,6 +1167,7 @@ const NarrativeGame = (function () {
     seenChapters = new Set();
     currentChapterNum = null;
     activeBgmTrackId = null;
+    sessionBgmLock = null;
     pendingNodeId = null;
     shareMode = false;
     hideChapterModal();
@@ -1269,12 +1305,37 @@ const NarrativeGame = (function () {
       els.shareWorldBtn.addEventListener("click", async function (e) {
         e.stopPropagation();
         if (!entryId || typeof ShareWorld === "undefined") return;
+        const btn = els.shareWorldBtn;
+        const prev = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = "生成中…";
         try {
-          const link = await ShareWorld.createShareLink(entryId);
-          await ShareWorld.copyToClipboard(link.url);
-          els.shareWorldBtn.textContent = "链接已复制";
+          let link;
+          if (STATIC_SHARE_ENTRY_IDS[entryId] && ShareWorld.createFeaturedShareLink) {
+            link = ShareWorld.createFeaturedShareLink();
+          } else {
+            link = await ShareWorld.createShareLink(entryId);
+          }
+          const copied = await ShareWorld.copyToClipboard(link.url);
+          btn.textContent = copied ? "链接已复制" : "已生成（请手动复制）";
+          if (!copied && typeof window.prompt === "function") {
+            window.prompt("复制下方链接分享：", link.url);
+          }
         } catch (err) {
-          els.shareWorldBtn.textContent = "分享失败";
+          const msg = (err && err.message) || "分享失败";
+          btn.textContent = "分享失败";
+          btn.title = msg;
+          console.warn("[ShareWorld]", err);
+          if (typeof window.alert === "function") {
+            window.alert(msg);
+          }
+        } finally {
+          btn.disabled = false;
+          window.setTimeout(function () {
+            if (btn.textContent === "链接已复制" || btn.textContent === "已生成（请手动复制）" || btn.textContent === "分享失败") {
+              btn.textContent = prev || "分享此世界";
+            }
+          }, 2800);
         }
       });
     }

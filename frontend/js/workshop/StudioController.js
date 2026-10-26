@@ -2,10 +2,31 @@
  * StudioController — 创作工坊编排入口
  */
 (function (global) {
+  async function tryFeaturedDeepLink() {
+    if (typeof ShareWorld === "undefined" || !ShareWorld.getFeaturedFlagFromUrl) return false;
+    if (!ShareWorld.getFeaturedFlagFromUrl()) return false;
+    if (typeof FeaturedDemo === "undefined" || !FeaturedDemo.launch) {
+      console.warn("featured deep link: FeaturedDemo unavailable");
+      return false;
+    }
+    ShareWorld.clearPlayParam();
+    await FeaturedDemo.launch({ forceRestart: true });
+    return true;
+  }
+
   async function trySharedPlay() {
     if (typeof ShareWorld === "undefined" || typeof NarrativeGame === "undefined") return false;
+    if (await tryFeaturedDeepLink()) return true;
     const token = ShareWorld.getPlayTokenFromUrl();
     if (!token) return false;
+    if (token === "featured" || token === "demo") {
+      ShareWorld.clearPlayParam();
+      if (typeof FeaturedDemo !== "undefined" && FeaturedDemo.launch) {
+        await FeaturedDemo.launch({ forceRestart: true });
+        return true;
+      }
+      return false;
+    }
     try {
       const data = await ShareWorld.loadSharedGame(token);
       if (!data.game || !data.game.nodes) {

@@ -28,12 +28,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
   <link href="css/tokens.css?v=15" rel="stylesheet" />
-  <link href="css/app.css?v=44" rel="stylesheet" />
+  <link href="css/app.css?v=45" rel="stylesheet" />
   <link href="css/workbench.css?v=22" rel="stylesheet" />
   <link href="css/brand-lockup.css?v=19" rel="stylesheet" />
   <link href="css/workbench-console-cta.css?v=3" rel="stylesheet" />
   <link href="css/workbench-layout.css?v=57" rel="stylesheet" />
-  <link href="css/vn-layout.css?v=15" rel="stylesheet" />
+  <link href="css/vn-layout.css?v=17" rel="stylesheet" />
 </head>
 <body class="workbench-body">
   <a class="skip-link" href="#studio">跳到主内容</a>
@@ -573,7 +573,7 @@
       </div>
 
       <div class="vn-dialogue-wrap" id="vn-dialogue-wrap">
-        <div class="vn-name" id="speaker">旁白</div>
+        <div class="vn-name" id="speaker" hidden>旁白</div>
         <div class="vn-dialogue" id="vn-dialogue" role="log" aria-live="assertive" aria-atomic="true" aria-relevant="additions text">
           <div class="vn-text" id="narrative"></div>
           <div class="vn-continue" id="continue-hint">点击继续 ▸</div>
@@ -615,23 +615,25 @@
               <path class="game__audio-wave" d="M13.5 7.5c1 .9 1 4.1 0 5M15.8 5.2c1.8 1.7 1.8 7.9 0 9.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
             </svg>
           </button>
+          <span class="game__audio-hint" aria-hidden="true">建议佩戴耳机，沉浸体验</span>
           <div class="game__volume-pop" id="bgm-volume-pop" hidden>
             <label class="game__volume-label" for="bgm-volume">音量</label>
             <input type="range" class="game__volume-range" id="bgm-volume" min="0" max="100" value="65" aria-label="背景音乐音量" />
           </div>
         </div>
-        <span class="game__dock-hint">建议佩戴耳机 · 沉浸体验</span>
-        <button type="button" class="game__dock-codex" id="dock-codex-btn" title="结局图鉴" aria-label="结局图鉴" hidden>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
-            <path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-            <circle cx="14" cy="6" r="2.5" fill="currentColor" stroke="none" opacity="0.85"/>
-          </svg>
-          <span class="game__dock-codex__label" id="dock-codex-label">结局图鉴</span>
-        </button>
-        <button type="button" class="game__dock-uth" id="uth-open-btn" title="Under the Hood" aria-label="Under the Hood" aria-expanded="false" aria-controls="uth-panel">
-          <span class="game__dock-uth__label">Under the Hood</span>
-        </button>
+        <div class="game__dock-actions" id="game-dock-actions">
+          <button type="button" class="game__dock-codex" id="dock-codex-btn" title="结局图鉴" aria-label="结局图鉴" hidden>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="14" cy="6" r="2.5" fill="currentColor" stroke="none" opacity="0.85"/>
+            </svg>
+            <span class="game__dock-codex__label" id="dock-codex-label">结局图鉴</span>
+          </button>
+          <button type="button" class="game__dock-uth" id="uth-open-btn" title="Under the Hood" aria-label="Under the Hood" aria-expanded="false" aria-controls="uth-panel">
+            <span class="game__dock-uth__label">Under the Hood</span>
+          </button>
+        </div>
       </footer>
 
       <aside id="engine-hud" class="engine-hud" hidden aria-hidden="true" aria-label="2711 Engine Telemetry">
@@ -690,8 +692,8 @@
   <script src="js/lib/api-config.js?v=14"></script>
   <script src="js/brand.js?v=22"></script>
   <script src="js/demo.js?v=15"></script>
-  <script src="js/featured-demo.js?v=3"></script>
-  <script src="js/under-the-hood.js?v=3"></script>
+  <script src="js/featured-demo.js?v=7"></script>
+  <script src="js/under-the-hood.js?v=4"></script>
   <script src="js/engine-hud.js?v=3"></script>
   <script src="js/scene-images.js?v=26" defer></script>
   <script src="js/mood.js?v=19"></script>
@@ -699,15 +701,15 @@
   <script src="js/audio.js?v=16"></script>
   <script src="js/lib/ending-labels.js?v=5"></script>
   <script src="js/progress-store.js?v=8"></script>
-  <script src="js/share.js?v=3"></script>
-  <script src="js/game.js?v=46"></script>
+  <script src="js/share.js?v=4"></script>
+  <script src="js/game.js?v=50"></script>
   <script src="js/lib/sse.js?v=10"></script>
   <script src="js/workshop/EditorInput.js?v=13"></script>
   <script src="js/workshop/StylePresets.js?v=20"></script>
   <script src="js/workshop/PipelineView.js?v=17"></script>
   <script src="js/workshop/CreateFlow.js?v=38"></script>
   <script src="js/history.js?v=25"></script>
-  <script src="js/workshop/StudioController.js?v=13"></script>
+  <script src="js/workshop/StudioController.js?v=14"></script>
   <script src="js/magic-editor.js?v=9" defer></script>
   <script src="js/workbench.js?v=11"></script>
   <script src="js/app.js?v=32"></script>

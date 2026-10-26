@@ -125,6 +125,9 @@
     e.root.hidden = !open;
     e.root.classList.toggle("is-open", !!open);
     if (e.openBtn) e.openBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    document.documentElement.classList.toggle("uth-panel-open", !!open);
+    const stage = document.getElementById("game-stage") || document.getElementById("vn-stage") || document.querySelector(".game");
+    if (stage) stage.classList.toggle("uth-panel-open", !!open);
     if (open) render();
     syncEngineHud(open);
   }

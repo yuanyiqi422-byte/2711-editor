@@ -2,7 +2,7 @@
  * Featured Demo — load curated story pack from static JSON (no live LLM).
  */
 (function (global) {
-  const CACHE_URL = "data/featured-demo.json?v=4";
+  const CACHE_URL = "data/featured-demo.json?v=7";
   let cachedPayload = null;
   let inflight = null;
 
@@ -75,6 +75,7 @@
         entryId: "featured",
         underTheHood: payload.under_the_hood,
         forceRestart: !!opts.forceRestart,
+        sessionBgm: payload.session_bgm || "audio/bgm/Kevin_MacLeod-Floating_Cities.mp3",
       });
     } catch (err) {
       console.error("[FeaturedDemo]", err);
